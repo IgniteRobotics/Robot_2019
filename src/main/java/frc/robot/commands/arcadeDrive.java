@@ -31,7 +31,7 @@ public class arcadeDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double throddle = xboxController.getY(Hand.kLeft);
+    double throddle = -xboxController.getY(Hand.kLeft);
     double rotation = xboxController.getX(Hand.kRight);
     driveTrain.arcadeDrive(throddle, rotation);
   }

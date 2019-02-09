@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class Elevator extends Subsystem {
   private WPI_TalonSRX upmotor = new WPI_TalonSRX(8);
   private WPI_VictorSPX downmotor = new WPI_VictorSPX(9);
+  Encoder elevatorencoder = new Encoder(8, 9, false);
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 

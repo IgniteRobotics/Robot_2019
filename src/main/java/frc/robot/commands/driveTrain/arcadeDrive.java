@@ -8,16 +8,16 @@
 package frc.robot.commands.driveTrain;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
 public class ArcadeDrive extends Command {
 
-  private Drivetrain driveTrain;
+  private DriveTrain driveTrain;
   private XboxController xboxController;
 
-  public ArcadeDrive(Drivetrain driveTrain, XboxController xboxController) {
+  public ArcadeDrive(DriveTrain driveTrain, XboxController xboxController) {
 
     this.driveTrain = driveTrain;
     this.xboxController = xboxController;

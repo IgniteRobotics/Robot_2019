@@ -34,9 +34,9 @@ public class Carriage extends Subsystem {
   }
   
   public void setCommandDefault(Command command) {
-		this.defaultCommand = command;
-		initDefaultCommand();
-	}
+    this.defaultCommand = command;
+    initDefaultCommand();
+  }
 
   @Override
   public void initDefaultCommand() {

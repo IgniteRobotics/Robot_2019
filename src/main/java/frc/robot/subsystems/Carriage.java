@@ -39,7 +39,7 @@ public class Carriage extends Subsystem {
   }
 
   @Override
-  public void initDefaultCommand() {
+  protected void initDefaultCommand() {
     setDefaultCommand(defaultCommand);
   }
 

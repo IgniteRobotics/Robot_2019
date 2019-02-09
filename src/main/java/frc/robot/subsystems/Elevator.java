@@ -33,7 +33,7 @@ public class Elevator extends Subsystem {
   }
 
   @Override
-  public void initDefaultCommand() {
+  protected void initDefaultCommand() {
     setDefaultCommand(this.defaultCommand);
   }
 }

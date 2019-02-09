@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.arcadeDrive;
+import frc.robot.subsystems.DriveTrain;
+import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -21,8 +24,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
+  public static arcadeDrive arcadeDrive;
   public static OI m_oi;
-
+  DriveTrain driveTrain = new DriveTrain();
+  XboxController xboxController = new XboxController(0);
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -35,6 +40,8 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
+    arcadeDrive = new arcadeDrive(driveTrain, xboxController);
+    driveTrain.setDefault(arcadeDrive);
   }
 
   /**

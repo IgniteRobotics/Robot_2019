@@ -18,7 +18,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
-public class Drivetrain extends Subsystem {
+public class DriveTrain extends Subsystem {
 
   private WPI_TalonSRX leftMaster;
   private WPI_VictorSPX leftFollower;
@@ -31,7 +31,7 @@ public class Drivetrain extends Subsystem {
 
   private Command defaultCommand;
 
-  public Drivetrain (int leftMasterID, int leftFollowerID, int rightMasterID, int rightFollowerID) {
+  public DriveTrain(int leftMasterID, int leftFollowerID, int rightMasterID, int rightFollowerID) {
 
     leftMaster = new WPI_TalonSRX(leftMasterID);
     leftFollower = new WPI_VictorSPX(leftFollowerID);

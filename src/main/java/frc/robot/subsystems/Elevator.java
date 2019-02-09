@@ -22,11 +22,11 @@ public class Elevator extends Subsystem {
   private WPI_VictorSPX elevatorFollower;
 
   private Command defaultCommand;
-
-	private final double kF  = 0;
-	private final double kP = 0;
-	private final double kI = 0;
-	private final double kD = 0;
+  
+  private final double kF  = 0;
+  private final double kP = 0;
+  private final double kI = 0;
+  private final double kD = 0;
 
   private final int MAX_ACCELERATION = 0;
   private final int CRUISE_VELOCITY = 0;
@@ -46,15 +46,15 @@ public class Elevator extends Subsystem {
     // elevatorMaster.setInverted(false); //TODO: set me
     // elevatorFollower.setInverted(InvertType.FollowMaster);
     // elevatorMaster.setSensorPhase(false);
-
-		elevatorMaster.selectProfileSlot(0, 0);
-		elevatorMaster.config_kF(0, kF, 10);
-		elevatorMaster.config_kP(0, kP, 10);
-		elevatorMaster.config_kI(0, kI, 10);
-		elevatorMaster.config_kD(0, kD, 10);
-		
-		elevatorMaster.configMotionCruiseVelocity(CRUISE_VELOCITY, 10);
-		elevatorMaster.configMotionAcceleration(MAX_ACCELERATION, 10);
+    
+    elevatorMaster.selectProfileSlot(0, 0);
+    elevatorMaster.config_kF(0, kF, 10);
+    elevatorMaster.config_kP(0, kP, 10);
+    elevatorMaster.config_kI(0, kI, 10);
+    elevatorMaster.config_kD(0, kD, 10);
+    
+    elevatorMaster.configMotionCruiseVelocity(CRUISE_VELOCITY, 10);
+    elevatorMaster.configMotionAcceleration(MAX_ACCELERATION, 10);
 
   }
 

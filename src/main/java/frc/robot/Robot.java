@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.driveTrain.ArcadeDrive;
 import frc.robot.subsystems.Carriage;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.XboxController;
@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
   private static OI m_oi;
 
   private static Carriage carriage;
-  private static Drivetrain driveTrain;
+  private static DriveTrain driveTrain;
   private static Elevator elevator;
   private static Intake intake;
 
@@ -111,7 +111,7 @@ public class Robot extends TimedRobot {
   private void initializeSubsystems() {
 
     carriage = new Carriage(RobotMap.pcmID, RobotMap.cargoEjectSolenoid, RobotMap.beakSolenoid, RobotMap.hatchEjectSolenoid, RobotMap.beamBreakID);
-    driveTrain =  new Drivetrain(RobotMap.leftMasterID, RobotMap.leftFollowerID, RobotMap.rightMasterID, RobotMap.rightFollowID);
+    driveTrain =  new DriveTrain(RobotMap.leftMasterID, RobotMap.leftFollowerID, RobotMap.rightMasterID, RobotMap.rightFollowID);
     elevator = new Elevator(RobotMap.elevatorMasterID, RobotMap.elevatorFollowerID);
     intake = new Intake(RobotMap.pcmID, RobotMap.intakeMotorID, RobotMap.intakeSolenoid);
 

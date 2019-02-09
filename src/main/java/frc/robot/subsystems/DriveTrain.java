@@ -82,23 +82,23 @@ public class Drivetrain extends Subsystem {
 
   public double getLeftVoltage() {
 		return leftMaster.getMotorOutputVoltage();
-	}
-
-	public double getRightVoltage() {
-		return rightMaster.getMotorOutputVoltage();
-	}
-
-	public double getLeftPercentOutput() {
-		return leftMaster.getMotorOutputPercent();
-	}
-
-	public double getRightPercentOutput() {
-		return rightMaster.getMotorOutputPercent();
+  }
+  
+  public double getRightVoltage() {
+    return rightMaster.getMotorOutputVoltage();
+  }
+  
+  public double getLeftPercentOutput() {
+    return leftMaster.getMotorOutputPercent();
+  }
+  
+  public double getRightPercentOutput() {
+    return rightMaster.getMotorOutputPercent();
   }
   
   public void zeroEncoders() {
-		rightMaster.getSensorCollection().setQuadraturePosition(0, 10);
-		leftMaster.getSensorCollection().setQuadraturePosition(0, 10);
+    rightMaster.getSensorCollection().setQuadraturePosition(0, 10);
+    leftMaster.getSensorCollection().setQuadraturePosition(0, 10);
   }
   
   public void stop() {

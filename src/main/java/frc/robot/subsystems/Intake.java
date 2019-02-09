@@ -12,10 +12,6 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-
-/**
- * Add your docs here.
- */
 public class Intake extends Subsystem {
   
   private WPI_VictorSPX intakeMotor;

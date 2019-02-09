@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.SPI;
 
 import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
@@ -39,14 +40,22 @@ public class Drivetrain extends Subsystem {
 
     navX = new AHRS(SPI.Port.kMXP, (byte)200);
 
+    leftMaster.setNeutralMode(NeutralMode.Brake);
+    rightMaster.setNeutralMode(NeutralMode.Brake);
+
+    leftFollower.setNeutralMode(NeutralMode.Brake);
+    rightFollower.setNeutralMode(NeutralMode.Brake);
+
     leftFollower.follow(leftMaster);
     rightFollower.follow(rightMaster); 
 
     // leftMaster.setInverted(true);
     // leftFollower.setInverted(InvertType.FollowMaster); //TODO: set me
+    // leftMaster.setSensorPhase(false);
 
     // rightMaster.setInverted(true);
     // rightFollower.setInverted(InvertType.FollowMaster);
+    // rightMaster.setSensorPhase(false);
 
   }
   
@@ -68,7 +77,7 @@ public class Drivetrain extends Subsystem {
     return leftMaster.getSensorCollection().getQuadraturePosition();
   }
 
-  public int getRightEncoder() {
+  public int getRightEncoderPos() {
     return rightMaster.getSensorCollection().getQuadraturePosition();
   }
 

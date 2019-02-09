@@ -32,8 +32,8 @@ public class Carriage extends Subsystem {
     beamBreak = new DigitalInput(beamBreakID);
 
   }
-
-	public void setCommandDefault(Command command) {
+  
+  public void setCommandDefault(Command command) {
 		this.defaultCommand = command;
 		initDefaultCommand();
 	}

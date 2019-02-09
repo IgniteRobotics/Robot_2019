@@ -42,6 +42,7 @@ public class Drivetrain extends Subsystem {
     // rightFollower.setInverted(InvertType.FollowMaster);
 
   }
+  
   public void arcadeDrive(double power, double rotation){
     drive.arcadeDrive(power, rotation, true);
   }

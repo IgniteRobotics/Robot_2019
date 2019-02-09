@@ -12,11 +12,14 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.Solenoid;
 
 /**
  * Add your docs here.
  */
 public class Elevator extends Subsystem {
+  private Solenoid solenoid1 = new Solenoid(1, 7);
+  private Solenoid solenoid2 = new Solenoid(2, 7);
   private WPI_TalonSRX upmotor = new WPI_TalonSRX(8);
   private WPI_VictorSPX downmotor = new WPI_VictorSPX(9);
   Encoder elevatorencoder = new Encoder(8, 9, false);

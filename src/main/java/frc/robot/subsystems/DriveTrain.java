@@ -46,8 +46,9 @@ public class Drivetrain extends Subsystem {
     drive.arcadeDrive(power, rotation, true);
   }
 
-  public void setDefault(Command command){
-    defaultCommand = command;
+  public void setCommandDefault(Command command){
+    this.defaultCommand = command;
+    initDefaultCommand();
   }
 
   @Override

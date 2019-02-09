@@ -18,6 +18,10 @@ public class Carriage extends Subsystem {
   private Solenoid hatchEject; 
   private DigitalInput beamBreak;
 
+  private boolean cargoEjectState;
+  private boolean beakState;
+  private boolean hatchEjectState;
+
   private Command defaultCommand;
 
   public Carriage(int pcmID, int cargoEjectSolenoid, int beakSolenoid, int hatchEjectSolenoid, int beamBreakID) {
@@ -36,8 +40,62 @@ public class Carriage extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(defaultCommand);
+  }
+
+  public void pollCargoEject() {
+    cargoEjectState = cargoEject.get();
+  }
+
+  public void pollBeak() {
+    beakState = beak.get();
+  }
+
+  public void pollHatchEject() {
+    hatchEjectState = hatchEject.get();
+  }
+
+  public boolean isCargoEjectOpen() {
+    pollCargoEject();
+    return cargoEjectState;
+  }
+
+  public boolean isBeakOpen() {
+    pollBeak();
+    return beakState;
+  }
+
+  public boolean isHatchEjectOpen() {
+    pollHatchEject();
+    return hatchEjectState;
+  }
+
+  public void ejectCargo() {
+    cargoEject.set(true);
+  }
+
+  public void openBeak() {
+    beak.set(true);
+  }
+
+  public void ejectHatch() {
+    hatchEject.set(true);
+  }
+
+  public void retractEjectCargo() {
+    cargoEject.set(false);
+  }
+
+  public void retractBeak() {
+    beak.set(false);
+  }
+
+  public void retractEjectHatch() {
+    hatchEject.set(false);
+  }
+
+  public boolean isBeakBreakOpen() {
+    return beamBreak.get(); //TODO: may need negation
   }
 
 }

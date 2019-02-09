@@ -27,13 +27,13 @@ public class Elevator extends Subsystem {
     
   }
 
-  public void setDefault(Command command){
-    defaultCommand = command;
+  public void setCommandDefault(Command command){
+    this.defaultCommand = command;
+    initDefaultCommand();
   }
 
   @Override
   public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(this.defaultCommand);
   }
 }

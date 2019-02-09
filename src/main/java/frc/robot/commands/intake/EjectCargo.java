@@ -8,11 +8,18 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.subsystems.Intake;
 
 public class EjectCargo extends Command {
-  public EjectCargo() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+
+  private Intake intake;
+
+  public EjectCargo(Intake intake) {
+
+    this.intake = intake;
+    
+    requires(this.intake);
+
   }
 
   // Called just before this Command runs the first time

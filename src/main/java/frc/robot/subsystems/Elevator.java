@@ -10,23 +10,26 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.Solenoid;
 
-/**
- * Add your docs here.
- */
 public class Elevator extends Subsystem {
-  DigitalInput elevatorlimitswitch = new DigitalInput(9);
-  private Solenoid solenoid1 = new Solenoid(1, 7);
-  private Solenoid solenoid2 = new Solenoid(2, 7);
-  private WPI_TalonSRX upmotor = new WPI_TalonSRX(8);
-  private WPI_VictorSPX downmotor = new WPI_VictorSPX(9);
-  Encoder elevatorencoder = new Encoder(8, 9, false);
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+
+  private WPI_TalonSRX elevatorMaster;
+  private WPI_VictorSPX elevatorFollower;
+
+  private Command defaultCommand;
+
+  public Elevator(int elevatorMasterID, int elevatorFollowerID) {
+
+    elevatorMaster = new WPI_TalonSRX(elevatorMasterID);
+    elevatorFollower = new WPI_VictorSPX(elevatorFollowerID);
+    
+  }
+
+  public void setDefault(Command command){
+    defaultCommand = command;
+  }
 
   @Override
   public void initDefaultCommand() {

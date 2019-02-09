@@ -8,19 +8,22 @@
 package frc.robot.commands.driveTrain;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
-public class arcadeDrive extends Command {
-  private DriveTrain driveTrain;
+public class ArcadeDrive extends Command {
+
+  private Drivetrain driveTrain;
   private XboxController xboxController;
-  public arcadeDrive(DriveTrain driveTrain, XboxController xboxController) {
+
+  public ArcadeDrive(Drivetrain driveTrain, XboxController xboxController) {
+
     this.driveTrain = driveTrain;
     this.xboxController = xboxController;
+    
     requires(this.driveTrain);
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+
   }
 
   // Called just before this Command runs the first time
@@ -31,9 +34,12 @@ public class arcadeDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double throddle = -xboxController.getY(Hand.kLeft);
+
+    double throttle = xboxController.getY(Hand.kLeft);
     double rotation = xboxController.getX(Hand.kRight);
-    driveTrain.arcadeDrive(throddle, rotation);
+
+    driveTrain.arcadeDrive(throttle, rotation);
+    
   }
 
   // Make this return true when this Command no longer needs to run execute()

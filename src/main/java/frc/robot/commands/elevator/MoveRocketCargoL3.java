@@ -8,11 +8,18 @@
 package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.subsystems.Elevator;
 
 public class MoveRocketCargoL3 extends Command {
-  public MoveRocketCargoL3() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+
+  private Elevator elevator;
+
+  public MoveRocketCargoL3(Elevator elevator) {
+
+    this.elevator = elevator;
+
+    requires(this.elevator);
+    
   }
 
   // Called just before this Command runs the first time

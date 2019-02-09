@@ -8,11 +8,18 @@
 package frc.robot.commands.carriage;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.subsystems.Carriage;
 
 public class OpenBeak extends Command {
-  public OpenBeak() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+
+  private Carriage carriage;
+
+  public OpenBeak(Carriage carriage) {
+
+    this.carriage = carriage;
+
+    requires(this.carriage);
+    
   }
 
   // Called just before this Command runs the first time

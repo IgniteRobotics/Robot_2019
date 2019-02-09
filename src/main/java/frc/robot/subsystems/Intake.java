@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 
@@ -16,11 +17,22 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * Add your docs here.
  */
 public class Intake extends Subsystem {
-  // put beam break thingy here
-  private WPI_VictorSPX intakemotor = new WPI_VictorSPX(10);
-  private Solenoid intakesolenoid = new Solenoid(4, 7);
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+  
+  private WPI_VictorSPX intakeMotor;
+  private Solenoid intake;
+
+  private Command defaultCommand;
+
+  public Intake(int pcmID, int intakeMotorID, int intakeSolenoid) {
+
+    intakeMotor = new WPI_VictorSPX(intakeMotorID);
+    intake = new Solenoid(pcmID, intakeSolenoid);
+
+  }
+
+  public void setDefault(Command command){
+    defaultCommand = command;
+  }
 
   @Override
   public void initDefaultCommand() {

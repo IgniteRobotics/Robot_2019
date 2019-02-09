@@ -6,19 +6,38 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-/**
- * Add your docs here.
- */
 public class Carriage extends Subsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
-  private Solenoid Carriagesolenoid = new Solenoid(3, 7);
+
+  private Solenoid cargoEject;
+  private Solenoid beak;
+  private Solenoid hatchEject; 
+  private DigitalInput beamBreak;
+
+  private Command defaultCommand;
+
+  public Carriage(int pcmID, int cargoEjectSolenoid, int beakSolenoid, int hatchEjectSolenoid, int beamBreakID) {
+
+    cargoEject = new Solenoid(pcmID, cargoEjectSolenoid);
+    beak = new Solenoid(pcmID, beakSolenoid);
+    hatchEject = new Solenoid(pcmID, hatchEjectSolenoid);
+    beamBreak = new DigitalInput(beamBreakID);
+
+  }
+
+	public void setCommandDefault(Command command) {
+		this.defaultCommand = command;
+		initDefaultCommand();
+	}
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
+
 }

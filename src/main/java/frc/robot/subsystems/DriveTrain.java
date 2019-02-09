@@ -81,7 +81,7 @@ public class Drivetrain extends Subsystem {
   }
 
   public double getLeftVoltage() {
-		return leftMaster.getMotorOutputVoltage();
+    return leftMaster.getMotorOutputVoltage();
   }
   
   public double getRightVoltage() {

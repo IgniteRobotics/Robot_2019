@@ -7,12 +7,18 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
  * Add your docs here.
  */
 public class Elevator extends Subsystem {
+  private WPI_TalonSRX upmotor = new WPI_TalonSRX(8);
+  private WPI_VictorSPX downmotor = new WPI_VictorSPX(9);
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 

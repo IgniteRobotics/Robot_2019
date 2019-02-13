@@ -46,6 +46,8 @@ public class DriveTrain extends Subsystem {
     leftFollower.setNeutralMode(NeutralMode.Brake);
     rightFollower.setNeutralMode(NeutralMode.Brake);
 
+    drive = new DifferentialDrive(leftMaster, rightMaster);
+
     leftFollower.follow(leftMaster);
     rightFollower.follow(rightMaster); 
 

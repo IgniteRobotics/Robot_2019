@@ -7,7 +7,6 @@
 
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.SPI;
 
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -18,7 +17,9 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
-public class DriveTrain extends Subsystem {
+import frc.robot.subsystems.IgniteSubsystem;
+
+public class DriveTrain extends IgniteSubsystem {
 
   private WPI_TalonSRX leftMaster;
   private WPI_VictorSPX leftFollower;
@@ -60,19 +61,29 @@ public class DriveTrain extends Subsystem {
     // rightMaster.setSensorPhase(false);
 
   }
-  
-  public void arcadeDrive(double power, double rotation){
-    drive.arcadeDrive(power, rotation, true);
-  }
 
-  public void setCommandDefault(Command command){
+  public void establishDefaultCommand(Command command) {
     this.defaultCommand = command;
     initDefaultCommand();
+  }
+
+  public boolean checkSystem() {
+    return true;
+  }
+
+  public void writeToLog() {
+  }
+
+  public void outputTelemetry() {
   }
 
   @Override
   protected void initDefaultCommand() {
     setDefaultCommand(this.defaultCommand);  
+  }
+  
+  public void arcadeDrive(double power, double rotation){
+    drive.arcadeDrive(power, rotation, true);
   }
 
   public int getLeftEncoderPos() {
@@ -107,7 +118,7 @@ public class DriveTrain extends Subsystem {
     return rightMaster.getMotorOutputPercent();
   }
   
-  public void zeroEncoders() {
+  public void zeroSensors() {
     rightMaster.getSensorCollection().setQuadraturePosition(0, 10);
     leftMaster.getSensorCollection().setQuadraturePosition(0, 10);
   }

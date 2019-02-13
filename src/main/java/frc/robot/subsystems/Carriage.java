@@ -9,9 +9,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class Carriage extends Subsystem {
+import frc.robot.subsystems.IgniteSubsystem;
+
+public class Carriage extends IgniteSubsystem {
 
   private Solenoid cargoEject;
   private Solenoid beak;
@@ -33,14 +34,24 @@ public class Carriage extends Subsystem {
 
   }
   
-  public void setCommandDefault(Command command) {
+  public void establishDefaultCommand(Command command) {
     this.defaultCommand = command;
     initDefaultCommand();
   }
 
+  public boolean checkSystem() {
+    return true;
+  }
+
+  public void writeToLog() {
+  }
+
+  public void outputTelemetry() {
+  }
+
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(defaultCommand);
+    setDefaultCommand(this.defaultCommand);  
   }
 
   public void pollCargoEject() {

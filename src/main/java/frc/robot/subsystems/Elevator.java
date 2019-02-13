@@ -13,10 +13,11 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.motorcontrol.*;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.InvertType;
 
-public class Elevator extends Subsystem {
+import frc.robot.subsystems.IgniteSubsystem;
+
+public class Elevator extends IgniteSubsystem {
 
   private WPI_TalonSRX elevatorMaster;
   private WPI_VictorSPX elevatorFollower;
@@ -58,14 +59,24 @@ public class Elevator extends Subsystem {
 
   }
 
-  public void setCommandDefault(Command command){
+  public void establishDefaultCommand(Command command) {
     this.defaultCommand = command;
     initDefaultCommand();
   }
 
+  public boolean checkSystem() {
+    return true;
+  }
+
+  public void writeToLog() {
+  }
+
+  public void outputTelemetry() {
+  }
+
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(this.defaultCommand);
+    setDefaultCommand(this.defaultCommand);  
   }
 
   public void setOpenLoop(double percentage) {
@@ -92,7 +103,7 @@ public class Elevator extends Subsystem {
     return elevatorMaster.getMotorOutputPercent();
   }
   
-  public void zeroEncoder() {
+  public void zeroSensors() {
     elevatorMaster.getSensorCollection().setQuadraturePosition(0, 10);
   }
   

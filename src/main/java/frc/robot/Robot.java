@@ -40,7 +40,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-
+    SmartDashboard.putNumber("elevatorCargoPosition1", 0.0);
+    SmartDashboard.putNumber("elevatorCargoPosition2", 0.0);
+    SmartDashboard.putNumber("elevatorCargoPosition3", 0.0);
+    SmartDashboard.putNumber("elevatorCargoPositionCargoShip", 0.0);
+    SmartDashboard.putNumber("elevatorHatchPosition1", 0.0);
+    SmartDashboard.putNumber("elevatorHatchPosition2", 0.0);
+    SmartDashboard.putNumber("elevatorHatchPosition3", 0.0);
+    SmartDashboard.putNumber("eleatorHatchPositionCargoShip", 0.0);
     initializeSubsystems();
 
   }

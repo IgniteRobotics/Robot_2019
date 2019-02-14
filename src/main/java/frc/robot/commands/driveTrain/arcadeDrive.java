@@ -12,12 +12,12 @@ import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 
-public class ArcadeDrive extends Command {
+public class arcadeDrive extends Command {
 
   private DriveTrain driveTrain;
   private XboxController xboxController;
 
-  public ArcadeDrive(DriveTrain driveTrain, XboxController xboxController) {
+  public arcadeDrive(DriveTrain driveTrain, XboxController xboxController) {
 
     this.driveTrain = driveTrain;
     this.xboxController = xboxController;

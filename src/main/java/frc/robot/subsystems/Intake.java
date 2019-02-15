@@ -11,9 +11,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.ctre.phoenix.motorcontrol.*;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class Intake extends Subsystem {
+import frc.robot.subsystems.IgniteSubsystem;
+
+public class Intake extends IgniteSubsystem {
   
   private WPI_VictorSPX intakeMotor;
   private Solenoid intake;
@@ -29,14 +30,24 @@ public class Intake extends Subsystem {
 
   }
 
-  public void setCommandDefault(Command command){
+  public void establishDefaultCommand(Command command) {
     this.defaultCommand = command;
     initDefaultCommand();
   }
 
+  public boolean checkSystem() {
+    return true;
+  }
+
+  public void writeToLog() {
+  }
+
+  public void outputTelemetry() {
+  }
+
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(this.defaultCommand);
+    setDefaultCommand(this.defaultCommand);  
   }
 
   public void setOpenLoop(double power) {
@@ -63,9 +74,5 @@ public class Intake extends Subsystem {
     pollIntakeSolenoid();
     return intakeState;
   }
-
-  public void outputTelemetry() {
-    
-  }
-
+  
 }

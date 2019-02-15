@@ -133,4 +133,8 @@ public class DriveTrain extends Subsystem {
     return navX.isConnected();
   }
 
+  public void outputTelemetry() {
+    
+  }
+
 }

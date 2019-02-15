@@ -25,6 +25,7 @@ public class CloseBeak extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    carriage.retractBeak();
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -35,7 +36,7 @@ public class CloseBeak extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return !carriage.isBeakOpen();
   }
 
   // Called once after isFinished returns true

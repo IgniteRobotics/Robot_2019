@@ -43,15 +43,15 @@ public class Carriage extends Subsystem {
     setDefaultCommand(defaultCommand);
   }
 
-  public void pollCargoEject() {
+  private void pollCargoEject() {
     cargoEjectState = cargoEject.get();
   }
 
-  public void pollBeak() {
+  private void pollBeak() {
     beakState = beak.get();
   }
 
-  public void pollHatchEject() {
+  private void pollHatchEject() {
     hatchEjectState = hatchEject.get();
   }
 
@@ -96,6 +96,10 @@ public class Carriage extends Subsystem {
 
   public boolean isBeakBreakOpen() {
     return beamBreak.get(); //TODO: may need negation
+  }
+
+  public void outputTelemetry() {
+      
   }
 
 }

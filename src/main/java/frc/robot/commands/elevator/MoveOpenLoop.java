@@ -10,13 +10,15 @@ package frc.robot.commands.elevator;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.Elevator;
 
-public class MoveRocketHatchL2 extends Command {
+public class MoveOpenLoop extends Command {
 
   private Elevator elevator;
+  private double power;
 
-  public MoveRocketHatchL2(Elevator elevator) {
-    
+  public MoveOpenLoop(Elevator elevator, double power) {
+
     this.elevator = elevator;
+    this.power = power;
 
     requires(this.elevator);
 
@@ -30,6 +32,7 @@ public class MoveRocketHatchL2 extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    elevator.setOpenLoop(power);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -41,11 +44,13 @@ public class MoveRocketHatchL2 extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    elevator.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }

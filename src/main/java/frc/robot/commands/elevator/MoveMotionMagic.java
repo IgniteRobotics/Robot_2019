@@ -10,13 +10,16 @@ package frc.robot.commands.elevator;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.Elevator;
 
-public class MoveRocketCargoL3 extends Command {
+public class MoveMotionMagic extends Command {
 
   private Elevator elevator;
+  private int setpoint;
+  private final int TOLERANCE = 50;
 
-  public MoveRocketCargoL3(Elevator elevator) {
+  public MoveMotionMagic(Elevator elevator, int setpoint) {
 
     this.elevator = elevator;
+    this.setpoint = setpoint;
 
     requires(this.elevator);
     
@@ -30,22 +33,25 @@ public class MoveRocketCargoL3 extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    elevator.setMotionMagicPosition(setpoint);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return Math.abs(elevator.getEncoderPos() - setpoint) <= TOLERANCE;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    elevator.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }

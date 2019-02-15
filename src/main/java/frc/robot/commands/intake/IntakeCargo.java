@@ -8,44 +8,56 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.Intake;
 
 public class IntakeCargo extends Command {
 
   private Intake intake;
+  private Carriage carriage;
 
-  public IntakeCargo(Intake intake) {
+  private double power;
+
+  public IntakeCargo(Intake intake, Carriage carriage, double power) {
 
     this.intake = intake;
-    
-    requires(this.intake);
+    this.carriage = carriage;
 
+    this.power = power;
+
+    requires(this.intake);
+    requires(this.carriage);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    intake.openIntake();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    intake.setOpenLoop(power);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return carriage.isBeakBreakOpen();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    intake.closeIntake();
+    intake.stopIntakeMotor();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }

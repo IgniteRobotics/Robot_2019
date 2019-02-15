@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.ctre.phoenix.motorcontrol.*;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -16,6 +17,8 @@ public class Intake extends Subsystem {
   
   private WPI_VictorSPX intakeMotor;
   private Solenoid intake;
+
+  private boolean intakeState;
 
   private Command defaultCommand;
 
@@ -35,4 +38,34 @@ public class Intake extends Subsystem {
   protected void initDefaultCommand() {
     setDefaultCommand(this.defaultCommand);
   }
+
+  public void setOpenLoop(double power) {
+    intakeMotor.set(ControlMode.PercentOutput, power);
+  }
+
+  public void stopIntakeMotor() {
+    intakeMotor.stopMotor();
+  }
+
+  private void pollIntakeSolenoid() {
+    intakeState = intake.get();
+  }
+
+  public void openIntake() {
+    intake.set(true);
+  }
+  
+  public void closeIntake() {
+    intake.set(false);
+  }
+
+  public boolean isIntakeOpen() {
+    pollIntakeSolenoid();
+    return intakeState;
+  }
+
+  public void outputTelemetry() {
+    
+  }
+
 }

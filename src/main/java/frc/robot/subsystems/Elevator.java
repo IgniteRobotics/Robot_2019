@@ -100,4 +100,8 @@ public class Elevator extends Subsystem {
     elevatorMaster.stopMotor();
   }
 
+  public void outputTelemetry() {
+    
+  }
+
 }

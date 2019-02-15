@@ -9,19 +9,21 @@ package frc.robot.commands.driveTrain;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 
-public class arcadeDrive extends Command {
+public class ArcadeDrive extends Command {
 
   private DriveTrain driveTrain;
-  private XboxController xboxController;
 
-  public arcadeDrive(DriveTrain driveTrain, XboxController xboxController) {
+  private double throttle;
+  private double rotation;
+
+  public ArcadeDrive(DriveTrain driveTrain, double throttle, double rotation) {
 
     this.driveTrain = driveTrain;
-    this.xboxController = xboxController;
-    
+
+    this.throttle = throttle;
+    this.rotation = rotation;
+
     requires(this.driveTrain);
 
   }
@@ -35,11 +37,8 @@ public class arcadeDrive extends Command {
   @Override
   protected void execute() {
 
-    double throttle = xboxController.getY(Hand.kLeft);
-    double rotation = xboxController.getX(Hand.kRight);
-
     driveTrain.arcadeDrive(throttle, rotation);
-    
+  
   }
 
   // Make this return true when this Command no longer needs to run execute()

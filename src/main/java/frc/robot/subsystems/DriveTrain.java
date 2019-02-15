@@ -16,8 +16,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.IgniteSubsystem;
+
+import badlog.lib.*;
 
 public class DriveTrain extends IgniteSubsystem {
 
@@ -60,6 +62,8 @@ public class DriveTrain extends IgniteSubsystem {
     // rightFollower.setInverted(InvertType.FollowMaster);
     // rightMaster.setSensorPhase(false);
 
+    writeToLog();
+
   }
 
   public void establishDefaultCommand(Command command) {
@@ -72,9 +76,28 @@ public class DriveTrain extends IgniteSubsystem {
   }
 
   public void writeToLog() {
+    BadLog.createTopic("Drivetrain/Right Percent Output", BadLog.UNITLESS, () -> this.getRightPercentOutput(), "hide", "join:Drivetrain/Output percents");
+    BadLog.createTopic("Drivetrain/Left Percent Output", BadLog.UNITLESS, () -> this.getLeftPercentOutput(), "hide", "join:Drivetrain/Output percents");
+    BadLog.createTopic("Drivetrain/Right Master Current", "A", () -> this.getRightMasterCurrent(), "hide", "join:Drivetrain/Output Currents");
+    BadLog.createTopic("Drivetrain/Left Master Current", "A", () -> this.getLeftMasterCurrent(), "hide", "join:Drivetrain/Output Currents");
+    BadLog.createTopic("Drivetrain/Right Master Voltage", "V", () -> this.getRightMasterVoltage(), "hide", "join:Drivetrain/Output voltages");
+    BadLog.createTopic("Drivetrain/Left Master Voltage", "V", () -> this.getLeftMasterVoltage(), "hide", "join:Drivetrain/Output voltages");
+    BadLog.createTopic("Drivetrain/Right Follower Voltage", "V", () -> this.getRightMasterVoltage(), "hide", "join:Drivetrain/Output voltages");
+    BadLog.createTopic("Drivetrain/Left Follower Voltage", "V", () -> this.getLeftMasterVoltage(), "hide", "join:Drivetrain/Output voltages");
   }
 
   public void outputTelemetry() {
+    SmartDashboard.putNumber("Left enc pos", this.getLeftEncoderPos());
+    SmartDashboard.putNumber("Right enc pos", this.getRightEncoderPos());
+    SmartDashboard.putNumber("Left enc vel", this.getLeftEncoderVel());
+    SmartDashboard.putNumber("Right enc vel", this.getRightEncoderVel());
+    SmartDashboard.putNumber("Left master voltage", this.getLeftMasterVoltage());
+    SmartDashboard.putNumber("Right master voltage", this.getRightMasterVoltage());
+    SmartDashboard.putNumber("Left follower voltage", this.getLeftFollowerVoltage());
+    SmartDashboard.putNumber("Right follower voltage", this.getRightFollowerVoltage());
+    SmartDashboard.putNumber("Left percent out", this.getLeftPercentOutput());
+    SmartDashboard.putNumber("Right percent out", this.getRightPercentOutput());
+    SmartDashboard.putBoolean("Is navX connected?", this.isConnected());
   }
 
   @Override
@@ -102,14 +125,22 @@ public class DriveTrain extends IgniteSubsystem {
     return rightMaster.getSensorCollection().getQuadratureVelocity();
   }
 
-  public double getLeftVoltage() {
+  public double getLeftMasterVoltage() {
     return leftMaster.getMotorOutputVoltage();
   }
   
-  public double getRightVoltage() {
+  public double getRightMasterVoltage() {
     return rightMaster.getMotorOutputVoltage();
   }
   
+  public double getLeftFollowerVoltage() {
+    return leftFollower.getMotorOutputVoltage();
+  }
+  
+  public double getRightFollowerVoltage() {
+    return rightFollower.getMotorOutputVoltage();
+  }
+
   public double getLeftPercentOutput() {
     return leftMaster.getMotorOutputPercent();
   }
@@ -117,10 +148,19 @@ public class DriveTrain extends IgniteSubsystem {
   public double getRightPercentOutput() {
     return rightMaster.getMotorOutputPercent();
   }
-  
+
+  public double getLeftMasterCurrent() {
+    return leftMaster.getOutputCurrent();
+  }
+
+  public double getRightMasterCurrent() {
+    return rightMaster.getOutputCurrent();
+  }
+
   public void zeroSensors() {
     rightMaster.getSensorCollection().setQuadraturePosition(0, 10);
     leftMaster.getSensorCollection().setQuadraturePosition(0, 10);
+    zeroAngle();
   }
   
   public void stop() {

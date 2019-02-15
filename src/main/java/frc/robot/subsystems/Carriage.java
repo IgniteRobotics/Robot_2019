@@ -9,8 +9,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Command;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.IgniteSubsystem;
+
+import badlog.lib.*;
 
 public class Carriage extends IgniteSubsystem {
 
@@ -46,7 +48,10 @@ public class Carriage extends IgniteSubsystem {
   public void writeToLog() {
   }
 
-  public void outputTelemetry() { 
+  public void outputTelemetry() {
+    SmartDashboard.putBoolean("Is beak open?", this.isCargoEjectOpen());
+    SmartDashboard.putBoolean("Is hatch open?", this.isHatchEjectOpen());
+    SmartDashboard.putBoolean("Is beak open?", this.isBeakBreakOpen());
   }
 
   @Override

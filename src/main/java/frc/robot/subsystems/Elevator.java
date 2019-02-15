@@ -10,9 +10,13 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import badlog.lib.*;
+
 import com.ctre.phoenix.motorcontrol.*;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.ctre.phoenix.motorcontrol.InvertType;
 
 import frc.robot.subsystems.IgniteSubsystem;
@@ -57,6 +61,8 @@ public class Elevator extends IgniteSubsystem {
     elevatorMaster.configMotionCruiseVelocity(CRUISE_VELOCITY, 10);
     elevatorMaster.configMotionAcceleration(MAX_ACCELERATION, 10);
 
+    writeToLog();
+
   }
 
   public void establishDefaultCommand(Command command) {
@@ -69,9 +75,23 @@ public class Elevator extends IgniteSubsystem {
   }
 
   public void writeToLog() {
+    BadLog.createTopic("Elevator/Master Percent Output", BadLog.UNITLESS, () -> this.getPercentOutput(), "hide", "join:Elevator/Output percents");
+    BadLog.createTopic("Elevator/Master Voltage", "V", () -> this.getMasterVoltage(), "hide", "join:Elevator/Output Voltages");
+    BadLog.createTopic("Elevator/Follower Voltage", "V", () -> this.getFollowerVoltage(), "hide", "join:Elevator/Output Voltages");
+    BadLog.createTopic("Elevator/Master Current", "A", () -> this.getMasterCurrent(), "hide", "join:Elevator/Output Current");
+    BadLog.createTopicStr("Elevator/Lower limit", "bool", () -> Boolean.toString(this.isLowerLimitTripped()));
+    BadLog.createTopicStr("Elevator/Upper limit", "bool", () -> Boolean.toString(this.isUpperLimitTripped()));
   }
 
   public void outputTelemetry() {
+    SmartDashboard.putNumber("Pos", this.getEncoderPos());
+    SmartDashboard.putNumber("Vel", this.getEncoderVel());
+    SmartDashboard.putNumber("Master voltage", this.getMasterVoltage());
+    SmartDashboard.putNumber("Follower voltage", this.getFollowerVoltage());
+    SmartDashboard.putNumber("Master current", this.getMasterCurrent());
+    SmartDashboard.putNumber("Percent out", this.getPercentOutput());
+    SmartDashboard.putBoolean("Is upper limit switch tripped?", this.isUpperLimitTripped());
+    SmartDashboard.putBoolean("Is lower limit switch tripped?", this.isLowerLimitTripped());
   }
 
   @Override
@@ -95,18 +115,34 @@ public class Elevator extends IgniteSubsystem {
     return elevatorMaster.getSensorCollection().getQuadratureVelocity();
   }
 
-  public double getVoltage() {
+  public double getMasterVoltage() {
     return elevatorMaster.getMotorOutputVoltage();
+  }
+
+  public double getFollowerVoltage() {
+    return elevatorFollower.getMotorOutputVoltage();
   }
   
   public double getPercentOutput() {
     return elevatorMaster.getMotorOutputPercent();
   }
   
+  public double getMasterCurrent() {
+    return elevatorMaster.getOutputCurrent();
+  }
+
   public void zeroSensors() {
     elevatorMaster.getSensorCollection().setQuadraturePosition(0, 10);
   }
   
+  public boolean isUpperLimitTripped() {
+    return elevatorMaster.getSensorCollection().isFwdLimitSwitchClosed();
+  }
+
+  public boolean isLowerLimitTripped() {
+    return elevatorMaster.getSensorCollection().isRevLimitSwitchClosed();
+  }
+
   public void stop() {
     elevatorMaster.stopMotor();
   }

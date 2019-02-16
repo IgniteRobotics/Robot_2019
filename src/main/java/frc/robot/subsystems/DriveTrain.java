@@ -20,8 +20,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-
 import frc.robot.subsystems.IgniteSubsystem;
 
 public class DriveTrain extends IgniteSubsystem {
@@ -30,8 +28,6 @@ public class DriveTrain extends IgniteSubsystem {
   private WPI_VictorSPX leftFollower;
   private WPI_TalonSRX rightMaster;
   private WPI_VictorSPX rightFollower;
-  
-  private DifferentialDrive drive;
   
   private PIDController turnController;
 

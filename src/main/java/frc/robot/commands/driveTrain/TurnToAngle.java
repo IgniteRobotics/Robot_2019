@@ -10,53 +10,50 @@ package frc.robot.commands.driveTrain;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.DriveTrain;
 
-public class ArcadeDrive extends Command {
+public class TurnToAngle extends Command {
 
   private DriveTrain driveTrain;
+  
+  private double setpoint;
 
-  private double throttle;
-  private double rotation;
-  private double deadband;
-
-  public ArcadeDrive(DriveTrain driveTrain, double throttle, double rotation, double deadband) {
+  public TurnToAngle(DriveTrain driveTrain, double setpoint) {
 
     this.driveTrain = driveTrain;
+    this.setpoint = setpoint;
 
-    this.throttle = throttle;
-    this.rotation = rotation;
-    this.deadband = deadband;
-
-    requires(this.driveTrain);
-
+    requires(driveTrain);
+  
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    driveTrain.zeroAngle();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
-    driveTrain.arcadeDrive(throttle, rotation, deadband);
-  
+    driveTrain.turnToAngle(setpoint);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return driveTrain.isTurnCompleted();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    driveTrain.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
+  
 }

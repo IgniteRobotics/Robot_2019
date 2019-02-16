@@ -10,24 +10,15 @@ package frc.robot.commands.driveTrain;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.DriveTrain;
 
-public class ArcadeDrive extends Command {
+public class DriveToDistance extends Command {
 
   private DriveTrain driveTrain;
 
-  private double throttle;
-  private double rotation;
-  private double deadband;
-
-  public ArcadeDrive(DriveTrain driveTrain, double throttle, double rotation, double deadband) {
+  public DriveToDistance(DriveTrain driveTrain) {
 
     this.driveTrain = driveTrain;
-
-    this.throttle = throttle;
-    this.rotation = rotation;
-    this.deadband = deadband;
-
+    
     requires(this.driveTrain);
-
   }
 
   // Called just before this Command runs the first time
@@ -38,9 +29,6 @@ public class ArcadeDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
-    driveTrain.arcadeDrive(throttle, rotation, deadband);
-  
   }
 
   // Make this return true when this Command no longer needs to run execute()

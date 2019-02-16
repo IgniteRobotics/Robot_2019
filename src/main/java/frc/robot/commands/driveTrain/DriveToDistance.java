@@ -13,10 +13,13 @@ import frc.robot.subsystems.DriveTrain;
 public class DriveToDistance extends Command {
 
   private DriveTrain driveTrain;
+  
+  private int setpoint;
 
-  public DriveToDistance(DriveTrain driveTrain) {
+  public DriveToDistance(DriveTrain driveTrain, int setpoint) {
 
     this.driveTrain = driveTrain;
+    this.setpoint = setpoint;
     
     requires(this.driveTrain);
   }
@@ -24,27 +27,31 @@ public class DriveToDistance extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    driveTrain.zeroSensors();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    driveTrain.setMotionMagicPosition(setpoint);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return driveTrain.isMotionMagicDone();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    driveTrain.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }

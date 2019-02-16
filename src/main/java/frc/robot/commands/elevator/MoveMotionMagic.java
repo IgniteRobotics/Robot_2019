@@ -13,8 +13,8 @@ import frc.robot.subsystems.Elevator;
 public class MoveMotionMagic extends Command {
 
   private Elevator elevator;
+  
   private int setpoint;
-  private final int TOLERANCE = 50;
 
   public MoveMotionMagic(Elevator elevator, int setpoint) {
 
@@ -39,7 +39,7 @@ public class MoveMotionMagic extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Math.abs(elevator.getEncoderPos() - setpoint) <= TOLERANCE;
+    return elevator.isMotionMagicDone();
   }
 
   // Called once after isFinished returns true

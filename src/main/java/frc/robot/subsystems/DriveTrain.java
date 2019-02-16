@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
@@ -41,7 +43,16 @@ public class DriveTrain extends IgniteSubsystem {
   private final double kI_TURN = 0;
   private final double kD_TURN = 0;
 
+  private final double kP_DRIVE = 0;
+  private final double kI_DRIVE = 0;
+  private final double kD_DRIVE = 0;
+  private final double kF_DRIVE = 0;
+
+  private final int CRUISE_VELOCITY = 0;
+  private final int MAX_ACCELERATION = 0;
+
   private final double TURN_TOLERANCE = 2.0f;
+  private final double DRIVE_TOLERANCE = 100.0f;
 
   public DriveTrain(int leftMasterID, int leftFollowerID, int rightMasterID, int rightFollowerID) {
 
@@ -58,17 +69,32 @@ public class DriveTrain extends IgniteSubsystem {
     leftFollower.setNeutralMode(NeutralMode.Brake);
     rightFollower.setNeutralMode(NeutralMode.Brake);
 
+    leftFollower.follow(leftMaster);
+    rightFollower.follow(rightMaster); 
+
     // leftMaster.setInverted(true); //TODO: set me
     // leftMaster.setSensorPhase(false);
 
     // rightMaster.setInverted(true);
     // rightMaster.setSensorPhase(false);
 
-    leftFollower.follow(leftMaster);
-    rightFollower.follow(rightMaster); 
-
     leftFollower.setInverted(InvertType.FollowMaster);
     rightFollower.setInverted(InvertType.FollowMaster);
+
+    rightMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 20);
+    rightMaster.setStatusFramePeriod(StatusFrame.Status_10_MotionMagic, 10, 20);
+
+    leftMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 20);
+    leftMaster.setStatusFramePeriod(StatusFrame.Status_10_MotionMagic, 10, 20);
+
+    leftMaster.selectProfileSlot(1, 0);
+    leftMaster.config_kF(0, kF_DRIVE, 10);
+    leftMaster.config_kP(0, kP_DRIVE, 10);
+    leftMaster.config_kI(0, kI_DRIVE, 10);
+    leftMaster.config_kD(0, kD_DRIVE, 10);
+    
+    leftMaster.configMotionCruiseVelocity(CRUISE_VELOCITY, 10);
+    leftMaster.configMotionAcceleration(MAX_ACCELERATION, 10);
 
     turnController = new PIDController(kP_TURN, kI_TURN, kD_TURN, navX, new SpeedControllerGroup(leftMaster, rightMaster));
 
@@ -163,6 +189,15 @@ public class DriveTrain extends IgniteSubsystem {
 
   public double getLeftVoltage() {
     return leftMaster.getMotorOutputVoltage();
+  }
+
+  public void setMotionMagicPosition(double position) {
+    leftMaster.set(ControlMode.MotionMagic, position);
+    rightMaster.set(ControlMode.MotionMagic, position);
+  }
+
+  public boolean isMotionMagicDone() {
+    return Math.abs(this.getLeftEncoderPos() - leftMaster.getClosedLoopError()) < DRIVE_TOLERANCE;
   }
 
   public void turnToAngle(double setpoint) {

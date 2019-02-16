@@ -32,6 +32,8 @@ public class Elevator extends IgniteSubsystem {
   private final int MAX_ACCELERATION = 0;
   private final int CRUISE_VELOCITY = 0;
 
+  private final int TOLERANCE = 100;
+
   public Elevator(int elevatorMasterID, int elevatorFollowerID) {
 
     elevatorMaster = new WPI_TalonSRX(elevatorMasterID);
@@ -42,12 +44,14 @@ public class Elevator extends IgniteSubsystem {
 
     elevatorFollower.follow(elevatorMaster);
 
+    // elevatorMaster.setInverted(false); //TODO: set me
+    // elevatorMaster.setSensorPhase(false);
+
+    elevatorFollower.setInverted(InvertType.FollowMaster);
+
     elevatorMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 20);
     elevatorMaster.setStatusFramePeriod(StatusFrame.Status_10_MotionMagic, 10, 20);
-    // elevatorMaster.setInverted(false); //TODO: set me
-    // elevatorFollower.setInverted(InvertType.FollowMaster);
-    // elevatorMaster.setSensorPhase(false);
-    
+   
     elevatorMaster.selectProfileSlot(0, 0);
     elevatorMaster.config_kF(0, kF, 10);
     elevatorMaster.config_kP(0, kP, 10);
@@ -85,6 +89,10 @@ public class Elevator extends IgniteSubsystem {
 
   public void setMotionMagicPosition(double position) {
     elevatorMaster.set(ControlMode.MotionMagic, position);
+  }
+
+  public boolean isMotionMagicDone() {
+    return Math.abs(this.getEncoderPos() - elevatorMaster.getClosedLoopError()) <= TOLERANCE;
   }
 
   public int getEncoderPos() {

@@ -28,6 +28,8 @@ public class Intake extends IgniteSubsystem {
     intakeMotor = new WPI_VictorSPX(intakeMotorID);
     intake = new Solenoid(pcmID, intakeSolenoid);
 
+    intakeMotor.setNeutralMode(NeutralMode.Brake);
+
   }
 
   public void establishDefaultCommand(Command command) {

@@ -7,15 +7,25 @@
 
 package frc.robot;
 
+import java.util.List;
+import java.util.Optional;
+
+import badlog.lib.*;
+
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.commands.driveTrain.ArcadeDrive;
 import frc.robot.commands.elevator.HoldPosition;
+
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.IgniteSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.OI;
+import frc.robot.util.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -35,6 +45,11 @@ public class Robot extends TimedRobot {
   private static HoldPosition holdPosition;
 
   private static OI oi;
+  private static List<IgniteSubsystem> allSubsystems;
+
+  private BadLog logger;
+
+  private long startTime;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -42,8 +57,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    startTime = System.nanoTime();
+
     initializeSubsystems();
     initializeCommands();
+
+    logger = BadLog.init(Util.genSessionName() + ".bag");
+    writeSystemLog();
+    logger.finishInitialization();
   }
 
   /**
@@ -56,6 +77,21 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    outputAllTelemetry();
+  }
+
+  private void matchInit() {
+    Scheduler.getInstance().run();
+  }
+
+  private void matchPeriodic() {
+    double currentTime = ((double) (System.nanoTime() - startTime)) / 1_000_000_000d;
+		BadLog.publish("Time", currentTime);
+
+    Scheduler.getInstance().run();
+
+    logger.updateTopics();
+    logger.log();
   }
 
   /**
@@ -72,20 +108,10 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
   }
 
-  /**
-   * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable
-   * chooser code works with the Java SmartDashboard. If you prefer the
-   * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-   * getString code to get the auto name from the text box below the Gyro
-   *
-   * <p>You can add additional auto modes by adding additional commands to the
-   * chooser code above (like the commented example) or additional comparisons
-   * to the switch structure below with additional strings & commands.
-   */
   @Override
   public void autonomousInit() {
-
+    zeroAllSensors();
+    matchInit();
   }
 
   /**
@@ -93,12 +119,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    Scheduler.getInstance().run();
+    matchPeriodic();
   }
 
   @Override
   public void teleopInit() {
-
+    matchInit();
   }
 
   /**
@@ -106,7 +132,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    Scheduler.getInstance().run();
+    matchPeriodic();
   }
 
   private void initializeCommands() {
@@ -128,6 +154,38 @@ public class Robot extends TimedRobot {
     elevator = new Elevator(RobotMap.elevatorMasterID, RobotMap.elevatorFollowerID);
     intake = new Intake(RobotMap.pcmID, RobotMap.intakeMotorID, RobotMap.intakeSolenoidOpen, RobotMap.intakeSolenoidClose);
 
+    allSubsystems.add(carriage);
+    allSubsystems.add(driveTrain);
+    allSubsystems.add(elevator);
+    allSubsystems.add(intake);
+
+    zeroAllSensors();
+    outputAllTelemetry();
+
+  }
+
+  private void writeSystemLog() {
+    BadLog.createValue("Start Time", Util.getTimestamp());
+    BadLog.createValue("Event Name", Optional.ofNullable(DriverStation.getInstance().getEventName()).orElse(""));
+    BadLog.createValue("Match Type", DriverStation.getInstance().getMatchType().toString());
+    BadLog.createValue("Match Number", "" + DriverStation.getInstance().getMatchNumber());
+    BadLog.createValue("Alliance", DriverStation.getInstance().getAlliance().toString());
+    BadLog.createValue("Location", "" + DriverStation.getInstance().getLocation());
+
+    BadLog.createTopicSubscriber("Time", "s", DataInferMode.DEFAULT, "hide", "delta", "xaxis");
+
+    BadLog.createTopicStr("System/Browned Out", "bool", () -> Boolean.toString(RobotController.isBrownedOut()));
+    BadLog.createTopic("System/Battery Voltage", "V", () -> RobotController.getBatteryVoltage());
+    BadLog.createTopicStr("System/FPGA Active", "bool", () -> Boolean.toString(RobotController.isSysActive()));
+    BadLog.createTopic("Match Time", "s", () -> DriverStation.getInstance().getMatchTime());
+  }
+
+  private void outputAllTelemetry() {
+    allSubsystems.forEach((s) -> s.outputTelemetry());
+  }
+
+  private void zeroAllSensors() {
+    allSubsystems.forEach((s) -> s.zeroSensors());
   }
   
 }

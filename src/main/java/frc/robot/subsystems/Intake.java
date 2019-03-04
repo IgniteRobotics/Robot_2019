@@ -12,8 +12,10 @@ import com.ctre.phoenix.motorcontrol.*;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.IgniteSubsystem;
+
+import badlog.lib.*;
 
 public class Intake extends IgniteSubsystem {
   
@@ -31,6 +33,8 @@ public class Intake extends IgniteSubsystem {
 
     intakeMotor.setNeutralMode(NeutralMode.Brake);
 
+    writeToLog();
+
   }
 
   public void establishDefaultCommand(Command command) {
@@ -43,9 +47,14 @@ public class Intake extends IgniteSubsystem {
   }
 
   public void writeToLog() {
+    BadLog.createTopic("Intake/Percent Output", BadLog.UNITLESS, () -> this.getPercentOutput(), "hide", "join:Intake/Output percents");
+    BadLog.createTopic("Intake/Voltage", "V", () -> this.getVoltage(), "hide", "join:Intake/Output voltage");
   }
 
   public void outputTelemetry() {
+    SmartDashboard.putNumber("Voltage", this.getVoltage());
+    SmartDashboard.putNumber("Percent out", this.getPercentOutput());
+    SmartDashboard.putBoolean("Is intake open?", this.isIntakeOpen());
   }
 
   @Override
@@ -55,6 +64,14 @@ public class Intake extends IgniteSubsystem {
 
   public void setOpenLoop(double power) {
     intakeMotor.set(ControlMode.PercentOutput, power);
+  }
+
+  public double getVoltage() {
+    return intakeMotor.getMotorOutputVoltage();
+  }
+
+  public double getPercentOutput() {
+    return intakeMotor.getMotorOutputPercent();
   }
 
   public void stopIntakeMotor() {

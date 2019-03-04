@@ -10,13 +10,13 @@ package frc.robot.commands.elevator;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.Elevator;
 
-public class MoveMotionMagic extends Command {
+public class MoveToSetpoint extends Command {
 
   private Elevator elevator;
   
   private int setpoint;
 
-  public MoveMotionMagic(Elevator elevator, int setpoint) {
+  public MoveToSetpoint(Elevator elevator, int setpoint) {
 
     this.elevator = elevator;
     this.setpoint = setpoint;

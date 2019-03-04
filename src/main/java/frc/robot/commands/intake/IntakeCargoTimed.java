@@ -5,49 +5,56 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.carriage;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.subsystems.Carriage;
+import frc.robot.subsystems.Intake;
 
-public class EjectHatch extends Command {
+public class IntakeCargoTimed extends Command {
 
-  private Carriage carriage;
+  private Intake intake;
 
-  public EjectHatch(Carriage carriage) {
+  private final double INTAKE_POWER = 0.5;
 
-    this.carriage = carriage;
+  public IntakeCargoTimed(Intake intake, double timeout) {
 
-    requires(this.carriage);
-    
+    //super(timeout);
+
+    this.intake = intake;
+
+    setTimeout(timeout);
+
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    carriage.ejectHatch();
-    carriage.retractEjectHatch();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+
+    intake.setOpenLoop(INTAKE_POWER);
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return !carriage.isHatchEjectOpen();
+    return isTimedOut();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    intake.stopIntakeMotor();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }

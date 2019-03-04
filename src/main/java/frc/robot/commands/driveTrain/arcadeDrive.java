@@ -7,6 +7,7 @@
 
 package frc.robot.commands.driveTrain;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.DriveTrain;
 
@@ -14,17 +15,21 @@ public class ArcadeDrive extends Command {
 
   private DriveTrain driveTrain;
 
-  private double throttle;
-  private double rotation;
-  private double deadband;
+	private final int THROTTLE_AXIS;
+	private final int TURN_AXIS;
+  private final double DEADBAND;
 
-  public ArcadeDrive(DriveTrain driveTrain, double throttle, double rotation, double deadband) {
+  private Joystick driverJoystick;
+
+  public ArcadeDrive(DriveTrain driveTrain, Joystick driverJoystick, int throttleId, int turnId, double deadband) {
 
     this.driveTrain = driveTrain;
 
-    this.throttle = throttle;
-    this.rotation = rotation;
-    this.deadband = deadband;
+		this.THROTTLE_AXIS = throttleId;
+		this.TURN_AXIS = turnId;
+    this.DEADBAND = deadband;
+
+    this.driverJoystick = driverJoystick;
 
     requires(this.driveTrain);
 
@@ -39,7 +44,10 @@ public class ArcadeDrive extends Command {
   @Override
   protected void execute() {
 
-    driveTrain.arcadeDrive(throttle, rotation, deadband);
+    double throttle = driverJoystick.getRawAxis(THROTTLE_AXIS);
+    double rotation = driverJoystick.getRawAxis(TURN_AXIS);
+
+    driveTrain.arcadeDrive(throttle, rotation, DEADBAND);
   
   }
 

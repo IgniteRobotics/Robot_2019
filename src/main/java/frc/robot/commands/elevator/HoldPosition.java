@@ -5,21 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.carriage;
+package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.subsystems.Carriage;
+import frc.robot.subsystems.Elevator;
 
-public class OpenBeak extends Command {
+public class HoldPosition extends Command {
 
-  private Carriage carriage;
+  private Elevator elevator;
 
-  public OpenBeak(Carriage carriage) {
+  private final double STALL_PERCENT_OUT = 0.15;
 
-    this.carriage = carriage;
+  public HoldPosition(Elevator elevator) {
 
-    requires(this.carriage);
-    
+    this.elevator = elevator;
+
+    requires(this.elevator);
+
   }
 
   // Called just before this Command runs the first time
@@ -30,23 +32,25 @@ public class OpenBeak extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    carriage.openBeak();
+    elevator.setOpenLoop(STALL_PERCENT_OUT);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return carriage.isBeakOpen();
+    return false;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    elevator.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }

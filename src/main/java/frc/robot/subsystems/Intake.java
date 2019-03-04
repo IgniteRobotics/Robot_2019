@@ -7,26 +7,27 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.*;
-import edu.wpi.first.wpilibj.Solenoid;
+
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
 
 import frc.robot.subsystems.IgniteSubsystem;
 
 public class Intake extends IgniteSubsystem {
   
-  private WPI_VictorSPX intakeMotor;
-  private Solenoid intake;
+  private WPI_TalonSRX intakeMotor;
+  private DoubleSolenoid intake;
 
   private boolean intakeState;
 
   private Command defaultCommand;
 
-  public Intake(int pcmID, int intakeMotorID, int intakeSolenoid) {
+  public Intake(int pcmID, int intakeMotorID, int intakeSolenoidOpen, int intakeSolenoidClose) {
 
-    intakeMotor = new WPI_VictorSPX(intakeMotorID);
-    intake = new Solenoid(pcmID, intakeSolenoid);
+    intakeMotor = new WPI_TalonSRX(intakeMotorID);
+    intake = new DoubleSolenoid(pcmID, intakeSolenoidOpen, intakeSolenoidClose);
 
     intakeMotor.setNeutralMode(NeutralMode.Brake);
 
@@ -60,20 +61,17 @@ public class Intake extends IgniteSubsystem {
     intakeMotor.stopMotor();
   }
 
-  private void pollIntakeSolenoid() {
-    intakeState = intake.get();
-  }
-
   public void openIntake() {
-    intake.set(true);
+    intake.set(DoubleSolenoid.Value.kForward);
+    intakeState = true;
   }
   
   public void closeIntake() {
-    intake.set(false);
+    intake.set(DoubleSolenoid.Value.kReverse);
+    intakeState = false;
   }
 
   public boolean isIntakeOpen() {
-    pollIntakeSolenoid();
     return intakeState;
   }
   

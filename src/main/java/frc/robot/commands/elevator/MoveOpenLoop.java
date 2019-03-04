@@ -7,18 +7,26 @@
 
 package frc.robot.commands.elevator;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.Elevator;
 
 public class MoveOpenLoop extends Command {
 
   private Elevator elevator;
-  private double power;
 
-  public MoveOpenLoop(Elevator elevator, double power) {
+  private Joystick manipulatorJoystick;
+  private final int THROTTLE_AXIS;
+  private final double DEADBAND;
+
+  public MoveOpenLoop(Elevator elevator, Joystick manipulatorJoystick, int throttleId, double deadband) {
 
     this.elevator = elevator;
-    this.power = power;
+
+    this.THROTTLE_AXIS = throttleId;
+    this.DEADBAND = deadband;
+
+    this.manipulatorJoystick = manipulatorJoystick;
 
     requires(this.elevator);
 
@@ -32,7 +40,8 @@ public class MoveOpenLoop extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    elevator.setOpenLoop(power);
+    double throttle = manipulatorJoystick.getRawAxis(THROTTLE_AXIS);
+    elevator.setOpenLoop(throttle, DEADBAND);
   }
 
   // Make this return true when this Command no longer needs to run execute()

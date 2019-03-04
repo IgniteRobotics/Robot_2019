@@ -16,20 +16,17 @@ public class Carriage extends IgniteSubsystem {
 
   private Solenoid cargoEject;
   private Solenoid beak;
-  private Solenoid hatchEject; 
   private DigitalInput beamBreak;
 
   private boolean cargoEjectState;
   private boolean beakState;
-  private boolean hatchEjectState;
 
   private Command defaultCommand;
 
-  public Carriage(int pcmID, int cargoEjectSolenoid, int beakSolenoid, int hatchEjectSolenoid, int beamBreakID) {
+  public Carriage(int pcmID, int cargoEjectSolenoid, int beakSolenoid, int beamBreakID) {
 
     cargoEject = new Solenoid(pcmID, cargoEjectSolenoid);
     beak = new Solenoid(pcmID, beakSolenoid);
-    hatchEject = new Solenoid(pcmID, hatchEjectSolenoid);
     beamBreak = new DigitalInput(beamBreakID);
 
   }
@@ -62,10 +59,6 @@ public class Carriage extends IgniteSubsystem {
     beakState = beak.get();
   }
 
-  private void pollHatchEject() {
-    hatchEjectState = hatchEject.get();
-  }
-
   public boolean isCargoEjectOpen() {
     pollCargoEject();
     return cargoEjectState;
@@ -76,11 +69,6 @@ public class Carriage extends IgniteSubsystem {
     return beakState;
   }
 
-  public boolean isHatchEjectOpen() {
-    pollHatchEject();
-    return hatchEjectState;
-  }
-
   public void ejectCargo() {
     cargoEject.set(true);
   }
@@ -89,20 +77,12 @@ public class Carriage extends IgniteSubsystem {
     beak.set(true);
   }
 
-  public void ejectHatch() {
-    hatchEject.set(true);
-  }
-
   public void retractEjectCargo() {
     cargoEject.set(false);
   }
 
   public void retractBeak() {
     beak.set(false);
-  }
-
-  public void retractEjectHatch() {
-    hatchEject.set(false);
   }
 
   public boolean isBeakBreakOpen() {

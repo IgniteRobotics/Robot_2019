@@ -10,11 +10,11 @@ package frc.robot.commands.carriage;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.Carriage;
 
-public class OpenBeak extends Command {
+public class EjectCargo extends Command {
 
   private Carriage carriage;
 
-  public OpenBeak(Carriage carriage) {
+  public EjectCargo(Carriage carriage) {
 
     this.carriage = carriage;
 
@@ -30,13 +30,13 @@ public class OpenBeak extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    carriage.openBeak();
+    carriage.ejectCargo();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return carriage.isBeakOpen();
+    return carriage.isCargoEjectOpen();
   }
 
   // Called once after isFinished returns true

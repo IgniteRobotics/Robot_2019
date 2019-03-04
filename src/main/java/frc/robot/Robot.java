@@ -8,16 +8,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.driveTrain.ArcadeDrive;
+import frc.robot.commands.elevator.HoldPosition;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
-import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.OI;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,12 +26,15 @@ import edu.wpi.first.wpilibj.XboxController;
  */
 public class Robot extends TimedRobot {
 
-  private static OI m_oi;
-
   private static Carriage carriage;
   private static DriveTrain driveTrain;
   private static Elevator elevator;
   private static Intake intake;
+
+  private static ArcadeDrive arcadeDrive;
+  private static HoldPosition holdPosition;
+
+  private static OI oi;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -42,6 +43,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     initializeSubsystems();
+    initializeCommands();
   }
 
   /**
@@ -107,15 +109,25 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
   }
 
-  private void initializeSubsystems() {
+  private void initializeCommands() {
 
-    carriage = new Carriage(RobotMap.pcmID, RobotMap.cargoEjectSolenoid, RobotMap.beakSolenoid, RobotMap.hatchEjectSolenoid, RobotMap.beamBreakID);
-    driveTrain =  new DriveTrain(RobotMap.leftMasterID, RobotMap.leftFollowerID, RobotMap.rightMasterID, RobotMap.rightFollowID);
-    elevator = new Elevator(RobotMap.elevatorMasterID, RobotMap.elevatorFollowerID);
-    intake = new Intake(RobotMap.pcmID, RobotMap.intakeMotorID, RobotMap.intakeSolenoid);
+    oi = new OI(driveTrain, carriage, elevator, intake);
+
+    arcadeDrive = new ArcadeDrive(driveTrain, oi.driverJoystick, oi.AXIS_LEFT_STICK_Y, oi.AXIS_RIGHT_STICK_X, Constants.DRIVE_DEADBAND);
+    driveTrain.establishDefaultCommand(arcadeDrive);
+
+    holdPosition = new HoldPosition(elevator);
+    elevator.establishDefaultCommand(holdPosition);
 
   }
-  
 
+  private void initializeSubsystems() {
+
+    carriage = new Carriage(RobotMap.pcmID, RobotMap.cargoEjectSolenoid, RobotMap.beakSolenoid, RobotMap.beamBreakID);
+    driveTrain =  new DriveTrain(RobotMap.leftMasterID, RobotMap.leftFollowerID, RobotMap.rightMasterID, RobotMap.rightFollowerID);
+    elevator = new Elevator(RobotMap.elevatorMasterID, RobotMap.elevatorFollowerID);
+    intake = new Intake(RobotMap.pcmID, RobotMap.intakeMotorID, RobotMap.intakeSolenoidOpen, RobotMap.intakeSolenoidClose);
+
+  }
   
 }

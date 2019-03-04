@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import com.ctre.phoenix.motorcontrol.InvertType;
 
 import frc.robot.subsystems.IgniteSubsystem;
+import frc.robot.Util;
+import frc.robot.Constants;
 
 public class Elevator extends IgniteSubsystem {
 
@@ -44,7 +46,7 @@ public class Elevator extends IgniteSubsystem {
 
     elevatorFollower.follow(elevatorMaster);
 
-    // elevatorMaster.setInverted(false); //TODO: set me
+    elevatorMaster.setInverted(false);
     // elevatorMaster.setSensorPhase(false);
 
     elevatorFollower.setInverted(InvertType.FollowMaster);
@@ -85,6 +87,11 @@ public class Elevator extends IgniteSubsystem {
 
   public void setOpenLoop(double percentage) {
     elevatorMaster.set(ControlMode.PercentOutput, percentage);
+  }
+
+  public void setOpenLoop(double percentage, double deadband) {
+    percentage = Util.applyDeadband(percentage, Constants.ELEVATOR_JOG_DEADBAND);
+    setOpenLoop(percentage);
   }
 
   public void setMotionMagicPosition(double position) {

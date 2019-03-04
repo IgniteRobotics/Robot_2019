@@ -14,27 +14,27 @@ package frc.robot;
  * floating around.
  */
 public class RobotMap {
-  //TODO: set me!
+
   public static final int pcmID = 0;
   
   // Carriage
-  public static final int cargoEjectSolenoid = 0;
-  public static final int beakSolenoid = 0;
-  public static final int hatchEjectSolenoid = 0;
+  public static final int cargoEjectSolenoid = 5;
+  public static final int beakSolenoid = 4;
   public static final int beamBreakID = 0;
 
   // Drivetrain
-  public static final int leftMasterID = 0;
-  public static final int leftFollowerID = 0;
-  public static final int rightMasterID = 0;
-  public static final int rightFollowID= 0;
+  public static final int leftMasterID = 1;
+  public static final int leftFollowerID = 2;
+  public static final int rightMasterID = 4;
+  public static final int rightFollowerID= 5;
 
   // Elevator
-  public static final int elevatorMasterID = 0;
-  public static final int elevatorFollowerID = 0;
+  public static final int elevatorMasterID = 8;
+  public static final int elevatorFollowerID = 9;
 
   // Intake
-  public static final int intakeSolenoid = 0;
-  public static final int intakeMotorID = 0;
+  public static final int intakeSolenoidOpen = 0;
+  public static final int intakeSolenoidClose = 1;
+  public static final int intakeMotorID = 10;
 
 }

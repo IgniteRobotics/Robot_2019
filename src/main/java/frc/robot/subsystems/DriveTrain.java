@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
+
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SPI;
@@ -21,6 +22,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.subsystems.IgniteSubsystem;
+import frc.robot.Util;
 
 public class DriveTrain extends IgniteSubsystem {
 
@@ -68,11 +70,8 @@ public class DriveTrain extends IgniteSubsystem {
     leftFollower.follow(leftMaster);
     rightFollower.follow(rightMaster); 
 
-    // leftMaster.setInverted(true); //TODO: set me
+    leftMaster.setInverted(true);
     // leftMaster.setSensorPhase(false);
-
-    // rightMaster.setInverted(true);
-    // rightMaster.setSensorPhase(false);
 
     leftFollower.setInverted(InvertType.FollowMaster);
     rightFollower.setInverted(InvertType.FollowMaster);
@@ -126,7 +125,7 @@ public class DriveTrain extends IgniteSubsystem {
 		double leftMotorOutput;
 		double rightMotorOutput;
 
-		double maxInput = Math.copySign(Math.max(Math.abs(throttle), Math.abs(rotation)), rotation);
+		double maxInput = Math.copySign(Math.max(Math.abs(throttle), Math.abs(rotation)), throttle);
 
 		if (throttle >= 0.0) {
 			// First quadrant, else second quadrant
@@ -149,10 +148,10 @@ public class DriveTrain extends IgniteSubsystem {
 		}
 
 		throttle = limit(throttle);
-		rotation = applyDeadband(rotation, deadband);
+		throttle = Util.applyDeadband(throttle, deadband);
 
 		rotation = limit(rotation);
-		rotation = applyDeadband(rotation, deadband);
+		rotation = Util.applyDeadband(rotation, deadband);
 
 		setOpenLoopLeft(leftMotorOutput);
     setOpenLoopRight(rightMotorOutput);
@@ -251,18 +250,5 @@ public class DriveTrain extends IgniteSubsystem {
 		}
 		return value;
 	}
-
-	private double applyDeadband(double value, double deadband) {
-		if (Math.abs(value) > deadband) {
-			if (value > 0.0) {
-				return (value - deadband) / (1.0 - deadband);
-			} else {
-				return (value + deadband) / (1.0 - deadband);
-			}
-		} else {
-			return 0.0;
-		}
-	}
-
 
 }

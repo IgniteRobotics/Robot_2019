@@ -5,21 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.carriage;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.Carriage;
+import frc.robot.subsystems.Intake;
 
-public class OpenBeak extends Command {
+public class CloseIntake extends Command {
 
+  private Intake intake;
   private Carriage carriage;
 
-  public OpenBeak(Carriage carriage) {
+  public CloseIntake(Intake intake, Carriage carriage) {
 
+    this.intake = intake;
     this.carriage = carriage;
 
+    requires(this.intake);
     requires(this.carriage);
-    
   }
 
   // Called just before this Command runs the first time
@@ -30,13 +33,13 @@ public class OpenBeak extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    carriage.openBeak();
+    intake.closeIntake();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return carriage.isBeakOpen();
+    return !intake.isIntakeOpen();
   }
 
   // Called once after isFinished returns true
@@ -49,4 +52,5 @@ public class OpenBeak extends Command {
   @Override
   protected void interrupted() {
   }
+  
 }

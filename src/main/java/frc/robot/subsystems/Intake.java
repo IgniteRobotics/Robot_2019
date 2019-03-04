@@ -49,10 +49,12 @@ public class Intake extends IgniteSubsystem {
   public void writeToLog() {
     BadLog.createTopic("Intake/Percent Output", BadLog.UNITLESS, () -> this.getPercentOutput(), "hide", "join:Intake/Output percents");
     BadLog.createTopic("Intake/Voltage", "V", () -> this.getVoltage(), "hide", "join:Intake/Output voltage");
+    BadLog.createTopic("Intake/Current", "A", () -> this.getCurrent(), "hide", "join:Intake/Output current");
   }
 
   public void outputTelemetry() {
     SmartDashboard.putNumber("Voltage", this.getVoltage());
+    SmartDashboard.putNumber("Current", this.getCurrent());
     SmartDashboard.putNumber("Percent out", this.getPercentOutput());
     SmartDashboard.putBoolean("Is intake open?", this.isIntakeOpen());
   }
@@ -68,6 +70,10 @@ public class Intake extends IgniteSubsystem {
 
   public double getVoltage() {
     return intakeMotor.getMotorOutputVoltage();
+  }
+
+  public double getCurrent() {
+    return intakeMotor.getOutputCurrent();
   }
 
   public double getPercentOutput() {

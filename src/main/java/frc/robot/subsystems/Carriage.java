@@ -12,8 +12,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.IgniteSubsystem;
 
-import badlog.lib.*;
-
 public class Carriage extends IgniteSubsystem {
 
   private Solenoid cargoEject;
@@ -46,9 +44,9 @@ public class Carriage extends IgniteSubsystem {
   }
 
   public void outputTelemetry() {
-    SmartDashboard.putBoolean("Is beak open?", this.isCargoEjectOpen());
-    SmartDashboard.putBoolean("Is hatch open?", this.isHatchEjectOpen());
-    SmartDashboard.putBoolean("Is beak open?", this.isBeakBreakOpen());
+    SmartDashboard.putBoolean("Is cargo eject open?", this.isCargoEjectOpen());
+    SmartDashboard.putBoolean("Is beak open?", this.isBeakOpen());
+    SmartDashboard.putBoolean("Is beam break open?", this.isBeamBreakOpen());
   }
 
   @Override
@@ -90,7 +88,7 @@ public class Carriage extends IgniteSubsystem {
     beak.set(false);
   }
 
-  public boolean isBeakBreakOpen() {
+  public boolean isBeamBreakOpen() {
     return beamBreak.get(); //TODO: may need negation
   }
 

@@ -29,12 +29,13 @@ public class TurnToAngle extends Command {
   @Override
   protected void initialize() {
     driveTrain.zeroAngle();
+    driveTrain.enableTurnController(setpoint);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    driveTrain.turnToAngle(setpoint);
+    driveTrain.turnToAngle();
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -46,6 +47,7 @@ public class TurnToAngle extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    driveTrain.stopTurnController();
     driveTrain.stop();
   }
 

@@ -9,8 +9,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
@@ -27,7 +27,7 @@ import frc.robot.util.Util;
 
 import badlog.lib.*;
 
-public class DriveTrain extends IgniteSubsystem {
+public class DriveTrain extends IgniteSubsystem implements PIDOutput {
 
   private WPI_TalonSRX leftMaster;
   private WPI_VictorSPX leftFollower;
@@ -54,6 +54,8 @@ public class DriveTrain extends IgniteSubsystem {
 
   private final double TURN_TOLERANCE = 2.0f;
   private final double DRIVE_TOLERANCE = 100.0f;
+
+  private double rotateToAngleRate;
 
   public DriveTrain(int leftMasterID, int leftFollowerID, int rightMasterID, int rightFollowerID) {
 
@@ -94,7 +96,7 @@ public class DriveTrain extends IgniteSubsystem {
     leftMaster.configMotionCruiseVelocity(CRUISE_VELOCITY, 10);
     leftMaster.configMotionAcceleration(MAX_ACCELERATION, 10);
 
-    turnController = new PIDController(kP_TURN, kI_TURN, kD_TURN, navX, new SpeedControllerGroup(leftMaster, rightMaster));
+    turnController = new PIDController(kP_TURN, kI_TURN, kD_TURN, navX, this);
 
     turnController.setInputRange(-180.0f,  180.0f);
     turnController.setOutputRange(-1.0, 1.0);
@@ -137,6 +139,8 @@ public class DriveTrain extends IgniteSubsystem {
     SmartDashboard.putNumber("Left percent out", this.getLeftPercentOutput());
     SmartDashboard.putNumber("Right percent out", this.getRightPercentOutput());
     SmartDashboard.putBoolean("Is navX connected?", this.isConnected());
+    SmartDashboard.putNumber("Turn error", this.getTurnError());
+    SmartDashboard.putNumber("Turn setpoint", this.getTurnSetpoint());
   }
 
   @Override
@@ -219,12 +223,37 @@ public class DriveTrain extends IgniteSubsystem {
     return Math.abs(this.getLeftEncoderPos() - leftMaster.getClosedLoopError()) < DRIVE_TOLERANCE;
   }
 
-  public void turnToAngle(double setpoint) {
+  @Override
+  public void pidWrite(double output) {
+    rotateToAngleRate = output;
+  }
+
+  public void enableTurnController(double setpoint) {
     turnController.setSetpoint(setpoint);
+    rotateToAngleRate = 0;
+    turnController.enable();
+  }
+
+  public void turnToAngle() {
+    this.setOpenLoopLeft(rotateToAngleRate);
+    this.setOpenLoopRight(rotateToAngleRate);
   }
 
   public boolean isTurnCompleted() {
-    return Math.abs(turnController.getError() - this.getAngle()) <= TURN_TOLERANCE;
+    return turnController.onTarget();
+  }
+
+  public void stopTurnController() {
+    rotateToAngleRate = 0;
+    turnController.disable();
+  }
+
+  public double getTurnError() {
+    return turnController.getError();
+  }
+
+  public double getTurnSetpoint() {
+    return turnController.getError();
   }
   
   public double getRightMasterVoltage() {

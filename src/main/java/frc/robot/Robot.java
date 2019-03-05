@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-import java.util.List;
 import java.util.Optional;
 
 import badlog.lib.*;
@@ -22,7 +21,6 @@ import frc.robot.commands.elevator.HoldPosition;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.IgniteSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.OI;
 import frc.robot.util.*;
@@ -45,9 +43,10 @@ public class Robot extends TimedRobot {
   private static HoldPosition holdPosition;
 
   private static OI oi;
-  private static List<IgniteSubsystem> allSubsystems;
 
   private BadLog logger;
+
+  private SubsystemManager subsystemManager;
 
   private long startTime;
 
@@ -77,7 +76,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    outputAllTelemetry();
+    subsystemManager.outputTelemetry();
   }
 
   private void matchInit() {
@@ -110,8 +109,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    zeroAllSensors();
-    matchInit();
+    subsystemManager.zeroAllSensors();
+    subsystemManager.outputTelemetry();
   }
 
   /**
@@ -154,13 +153,12 @@ public class Robot extends TimedRobot {
     elevator = new Elevator(RobotMap.elevatorMasterID, RobotMap.elevatorFollowerID);
     intake = new Intake(RobotMap.pcmID, RobotMap.intakeMotorID, RobotMap.intakeSolenoidOpen, RobotMap.intakeSolenoidClose);
 
-    allSubsystems.add(carriage);
-    allSubsystems.add(driveTrain);
-    allSubsystems.add(elevator);
-    allSubsystems.add(intake);
+    subsystemManager = new SubsystemManager();
 
-    zeroAllSensors();
-    outputAllTelemetry();
+    subsystemManager.addSubsystems(carriage, driveTrain, elevator, intake);
+
+    subsystemManager.zeroAllSensors();
+    subsystemManager.outputTelemetry();
 
   }
 
@@ -178,14 +176,6 @@ public class Robot extends TimedRobot {
     BadLog.createTopic("System/Battery Voltage", "V", () -> RobotController.getBatteryVoltage());
     BadLog.createTopicStr("System/FPGA Active", "bool", () -> Boolean.toString(RobotController.isSysActive()));
     BadLog.createTopic("Match Time", "s", () -> DriverStation.getInstance().getMatchTime());
-  }
-
-  private void outputAllTelemetry() {
-    allSubsystems.forEach((s) -> s.outputTelemetry());
-  }
-
-  private void zeroAllSensors() {
-    allSubsystems.forEach((s) -> s.zeroSensors());
   }
   
 }

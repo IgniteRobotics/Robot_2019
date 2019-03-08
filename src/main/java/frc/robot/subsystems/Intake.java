@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.*;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,15 +22,17 @@ public class Intake extends IgniteSubsystem {
   
   private WPI_TalonSRX intakeMotor;
   private DoubleSolenoid intake;
+  private DigitalInput intakeBeamBreak;
 
   private boolean intakeState;
 
   private Command defaultCommand;
 
-  public Intake(int pcmID, int intakeMotorID, int intakeSolenoidOpen, int intakeSolenoidClose) {
+  public Intake(int pcmID, int intakeMotorID, int intakeSolenoidOpen, int intakeSolenoidClose, int intakeBeamBreakID) {
 
     intakeMotor = new WPI_TalonSRX(intakeMotorID);
     intake = new DoubleSolenoid(pcmID, intakeSolenoidOpen, intakeSolenoidClose);
+    intakeBeamBreak = new DigitalInput(intakeBeamBreakID);
 
     intakeMotor.setNeutralMode(NeutralMode.Brake);
 
@@ -57,6 +60,7 @@ public class Intake extends IgniteSubsystem {
     SmartDashboard.putNumber("Current", this.getCurrent());
     SmartDashboard.putNumber("Percent out", this.getPercentOutput());
     SmartDashboard.putBoolean("Is intake open?", this.isIntakeOpen());
+    SmartDashboard.putBoolean("Is intake beam break open", this.isIntakeBeamBreakOpen());
   }
 
   @Override
@@ -96,6 +100,10 @@ public class Intake extends IgniteSubsystem {
 
   public boolean isIntakeOpen() {
     return intakeState;
+  }
+
+  public boolean isIntakeBeamBreakOpen() {
+    return !intakeBeamBreak.get();
   }
   
 }

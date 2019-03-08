@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.carriage.OpenBeak;
 import frc.robot.commands.carriage.RetractCargo;
 import frc.robot.commands.elevator.MoveOpenLoop;
+import frc.robot.commands.elevator.MoveThenEject;
 import frc.robot.commands.carriage.CloseBeak;
 import frc.robot.commands.carriage.EjectCargo;
 import frc.robot.commands.intake.CloseRollIntake;
@@ -57,6 +58,10 @@ public class OI {
 	public Button ejectCargo = new JoystickButton(manipulatorJoystick, BUTTON_X);
     public Button jogSwitch = new JoystickButton(manipulatorJoystick, BUTTON_Y);
 
+	public Button level3 = new JoystickButton(manipulatorJoystick, BUTTON_LEFT_BUMPER);
+	public Button level2 = new JoystickButton(manipulatorJoystick, BUTTON_RIGHT_BUMPER);
+	public Button level1 = new JoystickButton(manipulatorJoystick, BUTTON_BACK);
+
     public OI (DriveTrain driveTrain, Carriage carriage, Elevator elevator, Intake intake) {
 
         openIntake.whileHeld(new OpenIntake(intake, carriage));
@@ -67,6 +72,10 @@ public class OI {
 		
 		ejectCargo.whenPressed(new EjectCargo(carriage));
 		ejectCargo.whenReleased(new RetractCargo(carriage));
+
+		level3.whenPressed(new MoveThenEject(elevator, carriage, Constants.ROCKET_HATCH_L3, Constants.ROCKET_CARGO_L3, 0.5));
+		level2.whenPressed(new MoveThenEject(elevator, carriage, Constants.ROCKET_HATCH_L2, Constants.ROCKET_CARGO_L2, 0.5));
+		level1.whenPressed(new MoveThenEject(elevator, carriage, Constants.ROCKET_HATCH_L1, Constants.ROCKET_CARGO_L1, 0.5));
 
         jogSwitch.whileHeld(new MoveOpenLoop(elevator, manipulatorJoystick, AXIS_LEFT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
 

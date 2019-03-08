@@ -20,7 +20,8 @@ public class RobotMap {
   // Carriage
   public static final int cargoEjectSolenoid = 5;
   public static final int beakSolenoid = 4;
-  public static final int beamBreakID = 0;
+  public static final int carriageBeamBreakID = 30;
+  public static final int hatchLimitSwitchID = 0;
 
   // Drivetrain
   public static final int leftMasterID = 1;
@@ -36,5 +37,6 @@ public class RobotMap {
   public static final int intakeSolenoidOpen = 0;
   public static final int intakeSolenoidClose = 1;
   public static final int intakeMotorID = 10;
+  public static final int intakeBeamBreakID = 1;
 
 }

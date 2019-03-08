@@ -31,12 +31,12 @@ public class Elevator extends IgniteSubsystem {
   private Command defaultCommand;
   
   private final double kF  = 0;
-  private final double kP = 0;
+  private final double kP = 1;
   private final double kI = 0;
   private final double kD = 0;
 
-  private final int MAX_ACCELERATION = 0;
-  private final int CRUISE_VELOCITY = 0;
+  private final int MAX_ACCELERATION = 8000 / 2;
+  private final int CRUISE_VELOCITY = 6000;
 
   private final int TOLERANCE = 100;
 
@@ -50,8 +50,10 @@ public class Elevator extends IgniteSubsystem {
 
     elevatorFollower.follow(elevatorMaster);
 
+    elevatorMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+
+    elevatorMaster.setSensorPhase(true);
     elevatorMaster.setInverted(false);
-    // elevatorMaster.setSensorPhase(false);
 
     elevatorFollower.setInverted(InvertType.FollowMaster);
 
@@ -63,7 +65,7 @@ public class Elevator extends IgniteSubsystem {
     elevatorMaster.config_kP(0, kP, 10);
     elevatorMaster.config_kI(0, kI, 10);
     elevatorMaster.config_kD(0, kD, 10);
-    
+  
     elevatorMaster.configMotionCruiseVelocity(CRUISE_VELOCITY, 10);
     elevatorMaster.configMotionAcceleration(MAX_ACCELERATION, 10);
 
@@ -85,6 +87,8 @@ public class Elevator extends IgniteSubsystem {
     BadLog.createTopic("Elevator/Master Voltage", "V", () -> this.getMasterVoltage(), "hide", "join:Elevator/Output Voltages");
     BadLog.createTopic("Elevator/Follower Voltage", "V", () -> this.getFollowerVoltage(), "hide", "join:Elevator/Output Voltages");
     BadLog.createTopic("Elevator/Master Current", "A", () -> this.getMasterCurrent(), "hide", "join:Elevator/Output Current");
+    BadLog.createTopic("Elevator/Position", "ticks", () -> (double)this.getEncoderPos(), "hide", "join:Elevator/Position");
+    BadLog.createTopic("Elevator/Velocity", "ticks", () -> (double)this.getEncoderVel(), "hide", "join:Elevator/Velocity");
     BadLog.createTopicStr("Elevator/Fwd limit", "bool", () -> Boolean.toString(this.isFwdLimitTripped()));
     BadLog.createTopicStr("Elevator/Rev limit", "bool", () -> Boolean.toString(this.isRevLimitTripped()));
   }
@@ -119,15 +123,15 @@ public class Elevator extends IgniteSubsystem {
   }
 
   public boolean isMotionMagicDone() {
-    return Math.abs(this.getEncoderPos() - elevatorMaster.getClosedLoopError()) <= TOLERANCE;
+    return Math.abs(elevatorMaster.getClosedLoopTarget() - this.getEncoderPos()) <= TOLERANCE;
   }
 
   public int getEncoderPos() {
-    return elevatorMaster.getSensorCollection().getQuadraturePosition();
+    return elevatorMaster.getSelectedSensorPosition();
   }
 
   public double getEncoderVel() {
-    return elevatorMaster.getSensorCollection().getQuadratureVelocity();
+    return elevatorMaster.getSelectedSensorVelocity();
   }
 
   public double getMasterVoltage() {
@@ -147,7 +151,7 @@ public class Elevator extends IgniteSubsystem {
   }
 
   public void zeroSensors() {
-    elevatorMaster.getSensorCollection().setQuadraturePosition(0, 10);
+    elevatorMaster.setSelectedSensorPosition(0);
   }
   
   public boolean isFwdLimitTripped() {

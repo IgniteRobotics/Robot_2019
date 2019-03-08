@@ -5,33 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.driveTrain;
+package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.subsystems.DriveTrain;
 
-public class ArcadeDrive extends Command {
+public class DoNothing extends Command {
 
-  private DriveTrain driveTrain;
+  public DoNothing(double timeout) {
 
-	private final int THROTTLE_AXIS;
-	private final int TURN_AXIS;
-  private final double DEADBAND;
-
-  private Joystick driverJoystick;
-
-  public ArcadeDrive(DriveTrain driveTrain, Joystick driverJoystick, int throttleId, int turnId, double deadband) {
-
-    this.driveTrain = driveTrain;
-
-		this.THROTTLE_AXIS = throttleId;
-		this.TURN_AXIS = turnId;
-    this.DEADBAND = deadband;
-
-    this.driverJoystick = driverJoystick;
-
-    requires(this.driveTrain);
+    setTimeout(timeout);
 
   }
 
@@ -43,18 +25,12 @@ public class ArcadeDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
-    double throttle = driverJoystick.getRawAxis(THROTTLE_AXIS);
-    double rotation = driverJoystick.getRawAxis(TURN_AXIS);
-
-    driveTrain.arcadeDrive(-throttle, rotation, DEADBAND);
-  
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return isTimedOut();
   }
 
   // Called once after isFinished returns true
@@ -66,5 +42,6 @@ public class ArcadeDrive extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }

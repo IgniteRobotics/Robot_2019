@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SPI;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
@@ -75,8 +76,14 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     leftFollower.follow(leftMaster);
     rightFollower.follow(rightMaster); 
 
-    leftMaster.setInverted(true);
+    leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+
+    leftMaster.setInverted(false);
     // leftMaster.setSensorPhase(false);
+
+    rightMaster.setInverted(true);
+    // rightMaster.setSensorPhase(false);
 
     leftFollower.setInverted(InvertType.FollowMaster);
     rightFollower.setInverted(InvertType.FollowMaster);
@@ -150,6 +157,15 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   
   public void arcadeDrive(double throttle, double rotation, double deadband) {
 
+		throttle = limit(throttle);
+		throttle = Util.applyDeadband(throttle, deadband);
+
+		rotation = limit(rotation);
+		rotation = Util.applyDeadband(rotation, deadband);
+
+    throttle = Math.copySign(throttle * throttle, throttle);
+    rotation = Math.copySign(rotation * rotation, rotation);
+
 		double leftMotorOutput;
 		double rightMotorOutput;
 
@@ -175,14 +191,8 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
 			}
 		}
 
-		throttle = limit(throttle);
-		throttle = Util.applyDeadband(throttle, deadband);
-
-		rotation = limit(rotation);
-		rotation = Util.applyDeadband(rotation, deadband);
-
-		setOpenLoopLeft(leftMotorOutput);
-    setOpenLoopRight(rightMotorOutput);
+		setOpenLoopLeft(limit(leftMotorOutput));
+    setOpenLoopRight(limit(rightMotorOutput));
     
   }
 
@@ -195,19 +205,19 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   }
 
   public int getLeftEncoderPos() {
-    return leftMaster.getSensorCollection().getQuadraturePosition();
+    return leftMaster.getSelectedSensorPosition();
   }
 
   public int getRightEncoderPos() {
-    return rightMaster.getSensorCollection().getQuadraturePosition();
+    return rightMaster.getSelectedSensorPosition();
   }
 
   public double getLeftEncoderVel() {
-    return leftMaster.getSensorCollection().getQuadratureVelocity();
+    return leftMaster.getSelectedSensorVelocity();
   }
 
   public double getRightEncoderVel() {
-    return rightMaster.getSensorCollection().getQuadratureVelocity();
+    return rightMaster.getSelectedSensorVelocity();
   }
 
   public double getLeftMasterVoltage() {
@@ -220,7 +230,7 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   }
 
   public boolean isMotionMagicDone() {
-    return Math.abs(this.getLeftEncoderPos() - leftMaster.getClosedLoopError()) < DRIVE_TOLERANCE;
+    return Math.abs(leftMaster.getClosedLoopTarget() - this.getLeftEncoderPos()) < DRIVE_TOLERANCE;
   }
 
   @Override
@@ -285,8 +295,8 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   }
 
   public void zeroSensors() {
-    rightMaster.getSensorCollection().setQuadraturePosition(0, 10);
-    leftMaster.getSensorCollection().setQuadraturePosition(0, 10);
+    rightMaster.setSelectedSensorPosition(0);
+    leftMaster.setSelectedSensorPosition(0);
     zeroAngle();
   }
   

@@ -17,17 +17,19 @@ public class Carriage extends IgniteSubsystem {
   private Solenoid cargoEject;
   private Solenoid beak;
   private DigitalInput beamBreak;
+  private DigitalInput hatchLimitSwitch;
 
   private boolean cargoEjectState;
   private boolean beakState;
 
   private Command defaultCommand;
 
-  public Carriage(int pcmID, int cargoEjectSolenoid, int beakSolenoid, int beamBreakID) {
+  public Carriage(int pcmID, int cargoEjectSolenoid, int beakSolenoid, int beamBreakID, int hatchLimitSwitchID) {
 
     cargoEject = new Solenoid(pcmID, cargoEjectSolenoid);
     beak = new Solenoid(pcmID, beakSolenoid);
     beamBreak = new DigitalInput(beamBreakID);
+    hatchLimitSwitch = new DigitalInput(hatchLimitSwitchID);
 
   }
   
@@ -47,6 +49,7 @@ public class Carriage extends IgniteSubsystem {
     SmartDashboard.putBoolean("Is cargo eject open?", this.isCargoEjectOpen());
     SmartDashboard.putBoolean("Is beak open?", this.isBeakOpen());
     SmartDashboard.putBoolean("Is beam break open?", this.isBeamBreakOpen());
+    SmartDashboard.putBoolean("Is hatch limit switch open?", this.isHatchLimitSwitchOpen());
   }
 
   @Override
@@ -89,8 +92,11 @@ public class Carriage extends IgniteSubsystem {
   }
 
   public boolean isBeamBreakOpen() {
-    return beamBreak.get(); //TODO: may need negation
+    return !beamBreak.get();
   }
 
+  public boolean isHatchLimitSwitchOpen() {
+    return hatchLimitSwitch.get();
+  }
 
 }

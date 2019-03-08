@@ -58,10 +58,11 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     startTime = System.nanoTime();
 
+    logger = BadLog.init("/home/lvuser/log/" + Util.genSessionName() + ".bag");
+
     initializeSubsystems();
     initializeCommands();
 
-    logger = BadLog.init(Util.genSessionName() + ".bag");
     writeSystemLog();
     logger.finishInitialization();
   }
@@ -77,6 +78,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     subsystemManager.outputTelemetry();
+
   }
 
   private void matchInit() {
@@ -104,6 +106,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
+
+    if (elevator.isFwdLimitTripped()) {
+      subsystemManager.zeroAllSensors();
+    }
+
     Scheduler.getInstance().run();
   }
 
@@ -111,6 +118,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     subsystemManager.zeroAllSensors();
     subsystemManager.outputTelemetry();
+    matchInit();
   }
 
   /**
@@ -148,10 +156,10 @@ public class Robot extends TimedRobot {
 
   private void initializeSubsystems() {
 
-    carriage = new Carriage(RobotMap.pcmID, RobotMap.cargoEjectSolenoid, RobotMap.beakSolenoid, RobotMap.beamBreakID);
+    carriage = new Carriage(RobotMap.pcmID, RobotMap.cargoEjectSolenoid, RobotMap.beakSolenoid, RobotMap.carriageBeamBreakID, RobotMap.hatchLimitSwitchID);
     driveTrain =  new DriveTrain(RobotMap.leftMasterID, RobotMap.leftFollowerID, RobotMap.rightMasterID, RobotMap.rightFollowerID);
     elevator = new Elevator(RobotMap.elevatorMasterID, RobotMap.elevatorFollowerID);
-    intake = new Intake(RobotMap.pcmID, RobotMap.intakeMotorID, RobotMap.intakeSolenoidOpen, RobotMap.intakeSolenoidClose);
+    intake = new Intake(RobotMap.pcmID, RobotMap.intakeMotorID, RobotMap.intakeSolenoidOpen, RobotMap.intakeSolenoidClose, RobotMap.intakeBeamBreakID);
 
     subsystemManager = new SubsystemManager();
 

@@ -50,8 +50,8 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   private final double kD_DRIVE = 0;
   private final double kF_DRIVE = 0;
 
-  private final int CRUISE_VELOCITY = 1000;
-  private final int MAX_ACCELERATION = 500;
+  private final int CRUISE_VELOCITY = 2000;
+  private final int MAX_ACCELERATION = 1000;
 
   private final double TURN_TOLERANCE = 2.0f;
   private final double DRIVE_TOLERANCE = 100.0;
@@ -91,17 +91,17 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     leftMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 20);
     leftMaster.setStatusFramePeriod(StatusFrame.Status_10_MotionMagic, 10, 20);
 
-    leftMaster.selectProfileSlot(1, 0);
-    leftMaster.config_kF(0, kF_DRIVE, 10);
-    leftMaster.config_kP(0, kP_DRIVE, 10);
-    leftMaster.config_kI(0, kI_DRIVE, 10);
-    leftMaster.config_kD(0, kD_DRIVE, 10);
-
     leftMaster.selectProfileSlot(2, 0);
-    rightMaster.config_kF(0, kF_DRIVE, 10);
-    rightMaster.config_kP(0, kP_DRIVE, 10);
-    rightMaster.config_kI(0, kI_DRIVE, 10);
-    rightMaster.config_kD(0, kD_DRIVE, 10);
+    leftMaster.config_kF(2, kF_DRIVE, 10);
+    leftMaster.config_kP(2, kP_DRIVE, 10);
+    leftMaster.config_kI(2, kI_DRIVE, 10);
+    leftMaster.config_kD(2, kD_DRIVE, 10);
+
+    rightMaster.selectProfileSlot(1, 0);
+    rightMaster.config_kF(1, kF_DRIVE, 10);
+    rightMaster.config_kP(1, kP_DRIVE, 10);
+    rightMaster.config_kI(1, kI_DRIVE, 10);
+    rightMaster.config_kD(1, kD_DRIVE, 10);
     
     leftMaster.configMotionCruiseVelocity(CRUISE_VELOCITY, 10);
     leftMaster.configMotionAcceleration(MAX_ACCELERATION, 10);
@@ -233,8 +233,9 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   }
 
   public void setMotionMagicPosition(double position_inches) {
-    leftMaster.set(ControlMode.MotionMagic, Util.getEncoderTicksFromInches(position_inches));
-    rightMaster.set(ControlMode.MotionMagic, Util.getEncoderTicksFromInches(position_inches));
+    double ticks = Util.getEncoderTicksFromInches(position_inches);
+    leftMaster.set(ControlMode.MotionMagic, ticks);
+    rightMaster.set(ControlMode.MotionMagic, ticks);
   }
 
   public boolean isMotionMagicDone() {

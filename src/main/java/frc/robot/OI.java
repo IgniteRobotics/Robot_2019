@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.carriage.RetractCargo;
+import frc.robot.commands.driveTrain.AutoDrivePlaceItem;
 import frc.robot.commands.driveTrain.DriveToDistance;
 import frc.robot.commands.elevator.MoveOpenLoop;
 import frc.robot.commands.elevator.MoveThenEject;
@@ -82,7 +83,7 @@ public class OI {
 		level2.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level2, Constants.EJECT_TIMEOUT));
 		level1.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level1, Constants.EJECT_TIMEOUT));
 		
-		mmDriveTest.whenPressed(new DriveToDistance(driveTrain, 36));
+		mmDriveTest.whenPressed(new AutoDrivePlaceItem(elevator, driveTrain, carriage, CarriageLevel.Level2, Constants.EJECT_TIMEOUT));
     }
 
 }

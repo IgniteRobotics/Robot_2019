@@ -45,16 +45,16 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   private final double kI_TURN = 0;
   private final double kD_TURN = 0;
 
-  private final double kP_DRIVE = 0;
+  private final double kP_DRIVE = 1;
   private final double kI_DRIVE = 0;
   private final double kD_DRIVE = 0;
   private final double kF_DRIVE = 0;
 
-  private final int CRUISE_VELOCITY = 0;
-  private final int MAX_ACCELERATION = 0;
+  private final int CRUISE_VELOCITY = 1000;
+  private final int MAX_ACCELERATION = 500;
 
   private final double TURN_TOLERANCE = 2.0f;
-  private final double DRIVE_TOLERANCE = 100.0f;
+  private final double DRIVE_TOLERANCE = 100.0;
 
   private double rotateToAngleRate;
 
@@ -80,10 +80,7 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
     leftMaster.setInverted(false);
-    // leftMaster.setSensorPhase(false);
-
     rightMaster.setInverted(true);
-    // rightMaster.setSensorPhase(false);
 
     leftFollower.setInverted(InvertType.FollowMaster);
     rightFollower.setInverted(InvertType.FollowMaster);
@@ -99,9 +96,18 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     leftMaster.config_kP(0, kP_DRIVE, 10);
     leftMaster.config_kI(0, kI_DRIVE, 10);
     leftMaster.config_kD(0, kD_DRIVE, 10);
+
+    leftMaster.selectProfileSlot(2, 0);
+    rightMaster.config_kF(0, kF_DRIVE, 10);
+    rightMaster.config_kP(0, kP_DRIVE, 10);
+    rightMaster.config_kI(0, kI_DRIVE, 10);
+    rightMaster.config_kD(0, kD_DRIVE, 10);
     
     leftMaster.configMotionCruiseVelocity(CRUISE_VELOCITY, 10);
     leftMaster.configMotionAcceleration(MAX_ACCELERATION, 10);
+
+    rightMaster.configMotionCruiseVelocity(CRUISE_VELOCITY, 10);
+    rightMaster.configMotionAcceleration(MAX_ACCELERATION, 10);
 
     turnController = new PIDController(kP_TURN, kI_TURN, kD_TURN, navX, this);
 
@@ -226,13 +232,17 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     return leftMaster.getMotorOutputVoltage();
   }
 
-  public void setMotionMagicPosition(double position) {
-    leftMaster.set(ControlMode.MotionMagic, position);
-    rightMaster.set(ControlMode.MotionMagic, position);
+  public void setMotionMagicPosition(double position_inches) {
+    leftMaster.set(ControlMode.MotionMagic, Util.getEncoderTicksFromInches(position_inches));
+    rightMaster.set(ControlMode.MotionMagic, Util.getEncoderTicksFromInches(position_inches));
   }
 
   public boolean isMotionMagicDone() {
     return Math.abs(leftMaster.getClosedLoopTarget() - this.getLeftEncoderPos()) < DRIVE_TOLERANCE;
+  }
+
+  public double getClosedLoopTarget() {
+    return leftMaster.getClosedLoopTarget();
   }
 
   @Override

@@ -43,11 +43,11 @@ public class arcadeDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    return;
+    // double throttle = driverJoystick.getRawAxis(THROTTLE_AXIS);
+    // double rotation = driverJoystick.getRawAxis(TURN_AXIS);
 
-    double throttle = driverJoystick.getRawAxis(THROTTLE_AXIS);
-    double rotation = driverJoystick.getRawAxis(TURN_AXIS);
-
-    driveTrain.arcadeDrive(-throttle, rotation, DEADBAND);
+    // driveTrain.arcadeDrive(-throttle, rotation, DEADBAND);
   
   }
 

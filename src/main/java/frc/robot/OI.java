@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.carriage.RetractCargo;
+import frc.robot.commands.driveTrain.DriveToDistance;
 import frc.robot.commands.elevator.MoveOpenLoop;
 import frc.robot.commands.elevator.MoveThenEject;
 import frc.robot.commands.carriage.CloseBeak;
@@ -52,17 +53,20 @@ public class OI {
     
 	public Joystick driverJoystick = new Joystick(DRIVER_JOYSTICK);
     public Joystick manipulatorJoystick = new Joystick(MANIPULATOR_JOYSTICK);
-    
+	
+	//manipulator
     public Button openBeak = new JoystickButton(manipulatorJoystick, BUTTON_A);
 	public Button ejectCargo = new JoystickButton(manipulatorJoystick, BUTTON_X);
     public Button jogSwitch = new JoystickButton(manipulatorJoystick, BUTTON_Y);
 
+	//driver
 	public Button level3 = new JoystickButton(driverJoystick, BUTTON_Y);
 	public Button level2 = new JoystickButton(driverJoystick, BUTTON_B);
 	public Button level1 = new JoystickButton(driverJoystick, BUTTON_A);
+	public Button mmDriveTest = new JoystickButton(driverJoystick, BUTTON_X);
 	public Button openIntake = new JoystickButton(driverJoystick, BUTTON_LEFT_BUMPER);
 
-    public OI (DriveTrain driveTrain, Carriage carriage, Elevator elevator, Intake intake) {
+    public OI (DriveTrain driveTrain, Carriage carriage, Elevator elevator, Intake intake, JetsonSink jetsonSink) {
 
 		//manipulator		
 		openBeak.toggleWhenPressed(new HatchDriveForwardCurrent(carriage, driveTrain));
@@ -78,6 +82,7 @@ public class OI {
 		level2.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level2, Constants.EJECT_TIMEOUT));
 		level1.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level1, Constants.EJECT_TIMEOUT));
 		
+		mmDriveTest.whenPressed(new DriveToDistance(driveTrain, 36));
     }
 
 }

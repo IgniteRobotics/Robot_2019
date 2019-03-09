@@ -14,12 +14,12 @@ public class DriveToDistance extends Command {
 
   private DriveTrain driveTrain;
   
-  private int setpoint;
+  private int setpoint_inches;
 
-  public DriveToDistance(DriveTrain driveTrain, int setpoint) {
+  public DriveToDistance(DriveTrain driveTrain, int setpoint_inches) {
 
     this.driveTrain = driveTrain;
-    this.setpoint = setpoint;
+    this.setpoint_inches = setpoint_inches;
     
     requires(this.driveTrain);
   }
@@ -27,13 +27,13 @@ public class DriveToDistance extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    driveTrain.zeroSensors();
+    //driveTrain.zeroSensors();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    driveTrain.setMotionMagicPosition(setpoint);
+    driveTrain.setMotionMagicPosition(setpoint_inches);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -54,4 +54,5 @@ public class DriveToDistance extends Command {
   protected void interrupted() {
     end();
   }
+  
 }

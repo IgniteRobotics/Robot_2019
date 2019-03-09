@@ -12,6 +12,7 @@ import java.util.Optional;
 import badlog.lib.*;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -41,6 +42,8 @@ public class Robot extends TimedRobot {
 
   private static arcadeDrive arcadeDrive;
   private static HoldPosition holdPosition;
+
+  private static JetsonSink jetsonSink;
 
   private static OI oi;
 
@@ -78,6 +81,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     subsystemManager.outputTelemetry();
+    jetsonSink.outputTelemetry();
 
   }
 
@@ -102,6 +106,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    led.set(Relay.Value.kOff);
   }
 
   @Override
@@ -129,8 +134,11 @@ public class Robot extends TimedRobot {
     matchPeriodic();
   }
 
+  Relay led = new Relay(0);
+
   @Override
   public void teleopInit() {
+    led.set(Relay.Value.kForward);
     matchInit();
   }
 
@@ -144,7 +152,7 @@ public class Robot extends TimedRobot {
 
   private void initializeCommands() {
 
-    oi = new OI(driveTrain, carriage, elevator, intake);
+    oi = new OI(driveTrain, carriage, elevator, intake, jetsonSink);
 
     arcadeDrive = new arcadeDrive(driveTrain, oi.driverJoystick, oi.AXIS_LEFT_STICK_Y, oi.AXIS_RIGHT_STICK_X, Constants.DRIVE_DEADBAND);
     driveTrain.establishDefaultCommand(arcadeDrive);
@@ -160,6 +168,7 @@ public class Robot extends TimedRobot {
     driveTrain =  new DriveTrain(RobotMap.leftMasterID, RobotMap.leftFollowerID, RobotMap.rightMasterID, RobotMap.rightFollowerID);
     elevator = new Elevator(RobotMap.elevatorMasterID, RobotMap.elevatorFollowerID);
     intake = new Intake(RobotMap.pcmID, RobotMap.intakeMotorID, RobotMap.intakeSolenoidOpen, RobotMap.intakeSolenoidClose, RobotMap.intakeBeamBreakID);
+    jetsonSink = new JetsonSink();
 
     subsystemManager = new SubsystemManager();
 
@@ -167,6 +176,7 @@ public class Robot extends TimedRobot {
 
     subsystemManager.zeroAllSensors();
     subsystemManager.outputTelemetry();
+    jetsonSink.outputTelemetry();
 
   }
 

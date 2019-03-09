@@ -11,14 +11,12 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.Intake;
 
-public class CloseRollIntake extends CommandGroup {
+public class IntakeCargo extends CommandGroup {
 
-  private static double INTAKE_STOP_TIME = 2.0;
+  public IntakeCargo(Intake intake, Carriage carriage) {
 
-  public CloseRollIntake(Intake intake, Carriage carriage) {
+    addSequential(new OpenIntake(intake, carriage));
+    addSequential(new CloseRollIntake(intake, carriage));
 
-    addParallel(new CloseIntake(intake, carriage));
-    addSequential(new RollInCargoTimed(carriage, intake, INTAKE_STOP_TIME));
-  
   }
 }

@@ -38,7 +38,7 @@ public class Elevator extends IgniteSubsystem {
   private final int MAX_ACCELERATION = 8000 / 2;
   private final int CRUISE_VELOCITY = 6000;
 
-  private final int TOLERANCE = 100;
+  private final int TOLERANCE = 200;
 
   public Elevator(int elevatorMasterID, int elevatorFollowerID) {
 

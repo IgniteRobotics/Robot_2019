@@ -5,25 +5,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.carriage;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Carriage;
 
-public class IntakeCargoTimed extends Command {
+public class CarriageOpen extends Command {
 
-  private Intake intake;
+  private Carriage carriage;
 
-  private final double INTAKE_POWER = 0.5;
+  public CarriageOpen(Carriage carriage) {
 
-  public IntakeCargoTimed(Intake intake, double timeout) {
+    this.carriage = carriage;
 
-    //super(timeout);
-
-    this.intake = intake;
-
-    setTimeout(timeout);
-
+    requires(this.carriage);
+    
   }
 
   // Called just before this Command runs the first time
@@ -35,20 +31,29 @@ public class IntakeCargoTimed extends Command {
   @Override
   protected void execute() {
 
-    intake.setOpenLoop(INTAKE_POWER);
+    if (carriage.hasHatch()) {
+      carriage.openBeak();
+    } else {
+      carriage.ejectCargo();
+    }
 
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return isTimedOut();
+
+    if (carriage.hasHatch()) {
+      return carriage.isBeakOpen();
+    } else {
+      return carriage.isCargoEjectOpen();
+    }
+    
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    intake.stopIntakeMotor();
   }
 
   // Called when another command which requires one or more of the same

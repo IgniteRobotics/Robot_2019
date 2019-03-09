@@ -143,6 +143,8 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     SmartDashboard.putNumber("Right master voltage", this.getRightMasterVoltage());
     SmartDashboard.putNumber("Left follower voltage", this.getLeftFollowerVoltage());
     SmartDashboard.putNumber("Right follower voltage", this.getRightFollowerVoltage());
+    SmartDashboard.putNumber("Left master current", this.getLeftMasterCurrent());
+    SmartDashboard.putNumber("Right master current", this.getRightMasterCurrent());
     SmartDashboard.putNumber("Left percent out", this.getLeftPercentOutput());
     SmartDashboard.putNumber("Right percent out", this.getRightPercentOutput());
     SmartDashboard.putBoolean("Is navX connected?", this.isConnected());

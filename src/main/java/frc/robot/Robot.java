@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import frc.robot.commands.driveTrain.ArcadeDrive;
+import frc.robot.commands.driveTrain.arcadeDrive;
 import frc.robot.commands.elevator.HoldPosition;
 
 import frc.robot.subsystems.Carriage;
@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
   private static Elevator elevator;
   private static Intake intake;
 
-  private static ArcadeDrive arcadeDrive;
+  private static arcadeDrive arcadeDrive;
   private static HoldPosition holdPosition;
 
   private static OI oi;
@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
 
     oi = new OI(driveTrain, carriage, elevator, intake);
 
-    arcadeDrive = new ArcadeDrive(driveTrain, oi.driverJoystick, oi.AXIS_LEFT_STICK_Y, oi.AXIS_RIGHT_STICK_X, Constants.DRIVE_DEADBAND);
+    arcadeDrive = new arcadeDrive(driveTrain, oi.driverJoystick, oi.AXIS_LEFT_STICK_Y, oi.AXIS_RIGHT_STICK_X, Constants.DRIVE_DEADBAND);
     driveTrain.establishDefaultCommand(arcadeDrive);
 
     holdPosition = new HoldPosition(elevator);

@@ -8,34 +8,23 @@
 package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.CarriageLevel;
 import frc.robot.commands.DoNothing;
-import frc.robot.commands.carriage.CloseBeak;
-import frc.robot.commands.carriage.EjectCargo;
-import frc.robot.commands.carriage.OpenBeak;
-import frc.robot.commands.carriage.RetractCargo;
+import frc.robot.commands.carriage.CarriageClose;
+import frc.robot.commands.carriage.CarriageOpen;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.Elevator;
 
 public class MoveThenEject extends CommandGroup {
-  /**
-   * Add your docs here.
-   */
-  public MoveThenEject(Elevator elevator, Carriage carriage, int hatchSetpoint, int cargoSetpoint, double ejectTimeout) {
-    SmartDashboard.putBoolean("has hatch", !carriage.isHatchLimitSwitchOpen());
-    System.out.println("---------------" + carriage.isHatchLimitSwitchOpen() + "--------------------------------------");
-    if (!carriage.isHatchLimitSwitchOpen()) {
-      addSequential(new MoveToSetpoint(elevator, hatchSetpoint));
-      addSequential(new OpenBeak(carriage));
-      addSequential(new DoNothing(ejectTimeout));
-      addSequential(new MoveToSetpoint(elevator, hatchSetpoint + 2000));
-      addSequential(new CloseBeak(carriage));
-    } else {
-      addSequential(new MoveToSetpoint(elevator, cargoSetpoint));
-      addSequential(new EjectCargo(carriage));
-      addSequential(new DoNothing(ejectTimeout));
-      addSequential(new RetractCargo(carriage));
-    }
+
+  public MoveThenEject(Elevator elevator, Carriage carriage, CarriageLevel level, double ejectTimeout) {
+
+    addSequential(new MoveToSetpoint(elevator, level, carriage));
+    addSequential(new CarriageOpen(carriage));
+    addSequential(new DoNothing(ejectTimeout));
+    addSequential(new CarriageClose(carriage));
+    addSequential(new MoveToSetpoint(elevator, CarriageLevel.Zero, carriage));
+
   }
 
 }

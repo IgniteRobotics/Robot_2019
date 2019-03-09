@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.DriveTrain;
 
-public class ArcadeDrive extends Command {
+public class arcadeDrive extends Command {
 
   private DriveTrain driveTrain;
 
@@ -21,7 +21,7 @@ public class ArcadeDrive extends Command {
 
   private Joystick driverJoystick;
 
-  public ArcadeDrive(DriveTrain driveTrain, Joystick driverJoystick, int throttleId, int turnId, double deadband) {
+  public arcadeDrive(DriveTrain driveTrain, Joystick driverJoystick, int throttleId, int turnId, double deadband) {
 
     this.driveTrain = driveTrain;
 

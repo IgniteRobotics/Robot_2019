@@ -5,21 +5,26 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.carriage;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.Carriage;
+import frc.robot.subsystems.Intake;
 
-public class OpenBeak extends Command {
+public class RollInCargoTimed extends Command {
 
+  private Intake intake;
   private Carriage carriage;
 
-  public OpenBeak(Carriage carriage) {
+  private final double INTAKE_POWER = 0.5;
 
+  public RollInCargoTimed(Carriage carriage, Intake intake, double timeout) {
+
+    this.intake = intake;
     this.carriage = carriage;
 
-    requires(this.carriage);
-    
+    setTimeout(timeout);
+
   }
 
   // Called just before this Command runs the first time
@@ -30,22 +35,21 @@ public class OpenBeak extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
-    carriage.openBeak();
-
+    if (!carriage.hasHatch()) {
+      intake.setOpenLoop(INTAKE_POWER);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-
-    return carriage.isBeakOpen();
-
+    return isTimedOut();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    intake.stopIntakeMotor();
   }
 
   // Called when another command which requires one or more of the same

@@ -35,14 +35,20 @@ public class OpenIntake extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    intake.openIntake();
-    intake.setOpenLoop(INTAKE_POWER);
+    if (carriage.hasHatch()) {
+      intake.closeIntake();
+      intake.stopIntakeMotor();
+      end();
+    } else {
+      intake.openIntake();
+      intake.setOpenLoop(INTAKE_POWER);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return intake.isIntakeOpen();
+    return intake.isIntakeBeamBreakOpen() || carriage.hasHatch();
   }
 
   // Called once after isFinished returns true
@@ -54,7 +60,8 @@ public class OpenIntake extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
+    intake.closeIntake();
+    intake.stopIntakeMotor();
   }
   
 }

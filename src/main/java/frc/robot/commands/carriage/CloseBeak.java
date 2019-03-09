@@ -30,13 +30,17 @@ public class CloseBeak extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+
     carriage.retractBeak();
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
+
     return !carriage.isBeakOpen();
+
   }
 
   // Called once after isFinished returns true
@@ -48,5 +52,7 @@ public class CloseBeak extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
+  
 }

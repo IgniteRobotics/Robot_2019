@@ -5,18 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.carriage;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.Carriage;
+import frc.robot.subsystems.DriveTrain;
 
-public class OpenBeak extends Command {
+public class HatchDriveForwardCurrent extends Command {
 
   private Carriage carriage;
+  private DriveTrain driveTrain;
 
-  public OpenBeak(Carriage carriage) {
+  private final double CURRENT_THRESHOLD = 15;
+
+  public HatchDriveForwardCurrent(Carriage carriage, DriveTrain driveTrain) {
 
     this.carriage = carriage;
+    this.driveTrain = driveTrain;
 
     requires(this.carriage);
     
@@ -31,6 +36,8 @@ public class OpenBeak extends Command {
   @Override
   protected void execute() {
 
+    //driveTrain.arcadeDrive(0.5, 0, 0);
+
     carriage.openBeak();
 
   }
@@ -39,13 +46,14 @@ public class OpenBeak extends Command {
   @Override
   protected boolean isFinished() {
 
-    return carriage.isBeakOpen();
+    return driveTrain.getLeftMasterCurrent() > CURRENT_THRESHOLD;
 
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    carriage.retractBeak();
   }
 
   // Called when another command which requires one or more of the same
@@ -54,4 +62,5 @@ public class OpenBeak extends Command {
   protected void interrupted() {
     end();
   }
+  
 }

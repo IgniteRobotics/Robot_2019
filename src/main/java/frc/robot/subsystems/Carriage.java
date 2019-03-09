@@ -6,10 +6,15 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
+import java.util.HashMap;
+
+import badlog.lib.BadLog;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
+import frc.robot.CarriageLevel;
 import frc.robot.subsystems.IgniteSubsystem;
 
 public class Carriage extends IgniteSubsystem {
@@ -24,6 +29,9 @@ public class Carriage extends IgniteSubsystem {
 
   private Command defaultCommand;
 
+  private HashMap<CarriageLevel, Integer> hatchSetpoints = new HashMap<CarriageLevel, Integer>();
+  private HashMap<CarriageLevel, Integer> cargoSetpoints = new HashMap<CarriageLevel, Integer>();
+
   public Carriage(int pcmID, int cargoEjectSolenoid, int beakSolenoid, int beamBreakID, int hatchLimitSwitchID) {
 
     cargoEject = new Solenoid(pcmID, cargoEjectSolenoid);
@@ -31,6 +39,14 @@ public class Carriage extends IgniteSubsystem {
     beamBreak = new DigitalInput(beamBreakID);
     hatchLimitSwitch = new DigitalInput(hatchLimitSwitchID);
 
+    cargoSetpoints.put(CarriageLevel.Level1, Constants.ROCKET_CARGO_L1);
+    cargoSetpoints.put(CarriageLevel.Level2, Constants.ROCKET_CARGO_L2);
+    cargoSetpoints.put(CarriageLevel.Level3, Constants.ROCKET_CARGO_L3);
+    cargoSetpoints.put(CarriageLevel.Zero, 0);
+    hatchSetpoints.put(CarriageLevel.Level1, Constants.ROCKET_HATCH_L1);
+    hatchSetpoints.put(CarriageLevel.Level2, Constants.ROCKET_HATCH_L2);
+    hatchSetpoints.put(CarriageLevel.Level3, Constants.ROCKET_HATCH_L3);
+    hatchSetpoints.put(CarriageLevel.Zero, 0);
   }
   
   public void establishDefaultCommand(Command command) {
@@ -43,13 +59,17 @@ public class Carriage extends IgniteSubsystem {
   }
 
   public void writeToLog() {
+    BadLog.createTopicStr("Carriage/Is cargo eject open?", "bool", () -> Boolean.toString(this.isCargoEjectOpen()));
+    BadLog.createTopicStr("Carriage/Is beak open?", "bool", () -> Boolean.toString(this.isBeakOpen()));
+    BadLog.createTopicStr("Carriage/Is beam break?", "bool", () -> Boolean.toString(this.isBeamBreakOpen()));
+    BadLog.createTopicStr("Carriage/Has hatch?", "bool", () -> Boolean.toString(this.hasHatch()));
   }
 
   public void outputTelemetry() {
     SmartDashboard.putBoolean("Is cargo eject open?", this.isCargoEjectOpen());
     SmartDashboard.putBoolean("Is beak open?", this.isBeakOpen());
     SmartDashboard.putBoolean("Is beam break open?", this.isBeamBreakOpen());
-    SmartDashboard.putBoolean("Is hatch limit switch open?", this.isHatchLimitSwitchOpen());
+    SmartDashboard.putBoolean("Has hatch?", this.hasHatch());
   }
 
   @Override
@@ -95,8 +115,17 @@ public class Carriage extends IgniteSubsystem {
     return !beamBreak.get();
   }
 
-  public boolean isHatchLimitSwitchOpen() {
-    return hatchLimitSwitch.get();
+  public int getSetpoint(CarriageLevel level)
+  {
+    if (this.hasHatch()) {
+      return hatchSetpoints.get(level);
+    } else {
+      return cargoSetpoints.get(level);
+    }
+  }
+
+  public boolean hasHatch() {
+    return !hatchLimitSwitch.get();
   }
 
 }

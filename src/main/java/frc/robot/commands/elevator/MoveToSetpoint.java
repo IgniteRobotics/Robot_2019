@@ -8,20 +8,22 @@
 package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.CarriageLevel;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.Elevator;
 
 public class MoveToSetpoint extends Command {
 
   private Elevator elevator;
-  
-  private int setpoint;
+  private Carriage carriage;
+  private CarriageLevel level;
 
-  public MoveToSetpoint(Elevator elevator, int setpoint) {
+  public MoveToSetpoint(Elevator elevator, CarriageLevel level, Carriage carriage) {
 
     this.elevator = elevator;
-    this.setpoint = setpoint;
-
+    this.level = level;
+    this.carriage = carriage;
+    
     requires(this.elevator);
     
   }
@@ -35,7 +37,8 @@ public class MoveToSetpoint extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    elevator.setMotionMagicPosition(setpoint);
+    int setPoint = carriage.getSetpoint(level);
+    elevator.setMotionMagicPosition(setPoint);
   }
 
   // Make this return true when this Command no longer needs to run execute()

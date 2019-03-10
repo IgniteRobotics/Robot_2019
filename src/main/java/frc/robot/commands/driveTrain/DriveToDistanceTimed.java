@@ -17,12 +17,15 @@ public class DriveToDistanceTimed extends Command {
   private Carriage carriage;
 
   private double power;
+  private boolean ignoreBeakState;
   
-  public DriveToDistanceTimed(DriveTrain driveTrain, Carriage carriage, double timeout, double power) {
+  public DriveToDistanceTimed(DriveTrain driveTrain, Carriage carriage, double timeout, double power, boolean ignoreBeakState) {
 
     this.driveTrain = driveTrain;
     this.carriage = carriage;
+
     this.power = power;
+    this.ignoreBeakState = ignoreBeakState;
     
     requires(this.driveTrain);
 
@@ -38,7 +41,7 @@ public class DriveToDistanceTimed extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-      if (carriage.isBeakOpen()) {
+      if (ignoreBeakState || carriage.isBeakOpen()) {
         driveTrain.setOpenLoopLeft(power);
         driveTrain.setOpenLoopRight(power);
       }

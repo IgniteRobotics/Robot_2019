@@ -141,21 +141,24 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   }
 
   public void outputTelemetry() {
-    SmartDashboard.putNumber("Left enc pos", this.getLeftEncoderPos());
-    SmartDashboard.putNumber("Right enc pos", this.getRightEncoderPos());
-    SmartDashboard.putNumber("Left enc vel", this.getLeftEncoderVel());
-    SmartDashboard.putNumber("Right enc vel", this.getRightEncoderVel());
-    SmartDashboard.putNumber("Left master voltage", this.getLeftMasterVoltage());
-    SmartDashboard.putNumber("Right master voltage", this.getRightMasterVoltage());
-    SmartDashboard.putNumber("Left follower voltage", this.getLeftFollowerVoltage());
-    SmartDashboard.putNumber("Right follower voltage", this.getRightFollowerVoltage());
-    SmartDashboard.putNumber("Left master current", this.getLeftMasterCurrent());
-    SmartDashboard.putNumber("Right master current", this.getRightMasterCurrent());
-    SmartDashboard.putNumber("Left percent out", this.getLeftPercentOutput());
-    SmartDashboard.putNumber("Right percent out", this.getRightPercentOutput());
-    SmartDashboard.putBoolean("Is navX connected?", this.isConnected());
-    SmartDashboard.putNumber("Turn error", this.getTurnError());
-    SmartDashboard.putNumber("Turn setpoint", this.getTurnSetpoint());
+    SmartDashboard.putNumber("Drivetrain/Left enc pos", this.getLeftEncoderPos());
+    SmartDashboard.putNumber("Drivetrain/Right enc pos", this.getRightEncoderPos());
+    SmartDashboard.putNumber("Drivetrain/Left enc vel", this.getLeftEncoderVel());
+    SmartDashboard.putNumber("Drivetrain/Right enc vel", this.getRightEncoderVel());
+    SmartDashboard.putNumber("Drivetrain/Left master voltage", this.getLeftMasterVoltage());
+    SmartDashboard.putNumber("Drivetrain/Right master voltage", this.getRightMasterVoltage());
+    SmartDashboard.putNumber("Drivetrain/Left follower voltage", this.getLeftFollowerVoltage());
+    SmartDashboard.putNumber("Drivetrain/Right follower voltage", this.getRightFollowerVoltage());
+    SmartDashboard.putNumber("Drivetrain/Left master current", this.getLeftMasterCurrent());
+    SmartDashboard.putNumber("Drivetrain/Right master current", this.getRightMasterCurrent());
+    SmartDashboard.putNumber("Drivetrain/Left percent out", this.getLeftPercentOutput());
+    SmartDashboard.putNumber("Drivetrain/Right percent out", this.getRightPercentOutput());
+    SmartDashboard.putBoolean("Drivetrain/Is navX connected?", this.isConnected());
+    SmartDashboard.putNumber("Drivetrain/Angle", this.getAngle());
+    SmartDashboard.putNumber("Drivetrain/Yaw", this.getYaw());
+    SmartDashboard.putNumber("Drivetrain/Closed loop target", this.getClosedLoopTarget());
+    SmartDashboard.putNumber("Drivetrain/Turn error", this.getTurnError());
+    SmartDashboard.putNumber("Drivetrain/Turn setpoint", this.getTurnSetpoint());
   }
 
   @Override
@@ -239,7 +242,7 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   }
 
   public boolean isMotionMagicDone() {
-    return Math.abs(leftMaster.getClosedLoopTarget() - this.getLeftEncoderPos()) < DRIVE_TOLERANCE;
+    return Math.abs(this.getClosedLoopTarget() - this.getLeftEncoderPos()) < DRIVE_TOLERANCE;
   }
 
   public double getClosedLoopTarget() {

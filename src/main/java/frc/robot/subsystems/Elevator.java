@@ -94,14 +94,14 @@ public class Elevator extends IgniteSubsystem {
   }
 
   public void outputTelemetry() {
-    SmartDashboard.putNumber("Pos", this.getEncoderPos());
-    SmartDashboard.putNumber("Vel", this.getEncoderVel());
-    SmartDashboard.putNumber("Master voltage", this.getMasterVoltage());
-    SmartDashboard.putNumber("Follower voltage", this.getFollowerVoltage());
-    SmartDashboard.putNumber("Master current", this.getMasterCurrent());
-    SmartDashboard.putNumber("Percent out", this.getPercentOutput());
-    SmartDashboard.putBoolean("Is fwd limit switch tripped?", this.isFwdLimitTripped());
-    SmartDashboard.putBoolean("Is lower limit switch tripped?", this.isRevLimitTripped());
+    SmartDashboard.putNumber("Elevator/Pos", this.getEncoderPos());
+    SmartDashboard.putNumber("Elevator/Vel", this.getEncoderVel());
+    SmartDashboard.putNumber("Elevator/Master voltage", this.getMasterVoltage());
+    SmartDashboard.putNumber("Elevator/Follower voltage", this.getFollowerVoltage());
+    SmartDashboard.putNumber("Elevator/Master current", this.getMasterCurrent());
+    SmartDashboard.putNumber("Elevator/Percent out", this.getPercentOutput());
+    SmartDashboard.putBoolean("Elevator/Is fwd limit switch tripped?", this.isFwdLimitTripped());
+    SmartDashboard.putBoolean("Elevator/Is rev limit switch tripped?", this.isRevLimitTripped());
   }
 
   @Override

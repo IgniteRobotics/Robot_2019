@@ -44,10 +44,12 @@ public class Carriage extends IgniteSubsystem {
     cargoSetpoints.put(CarriageLevel.Level3, Constants.ROCKET_CARGO_L3);
     cargoSetpoints.put(CarriageLevel.Zero, 0);
     cargoSetpoints.put(CarriageLevel.CargoShipCargo, Constants.CARGO_SHIP_CARGO);
+    cargoSetpoints.put(CarriageLevel.HatchPickup, Constants.HATCH_PICKUP);
     hatchSetpoints.put(CarriageLevel.Level1, Constants.ROCKET_HATCH_L1);
     hatchSetpoints.put(CarriageLevel.Level2, Constants.ROCKET_HATCH_L2);
     hatchSetpoints.put(CarriageLevel.Level3, Constants.ROCKET_HATCH_L3);
     hatchSetpoints.put(CarriageLevel.Zero, 0);
+    hatchSetpoints.put(CarriageLevel.HatchPickup, Constants.HATCH_PICKUP);
   }
   
   public void establishDefaultCommand(Command command) {
@@ -67,10 +69,10 @@ public class Carriage extends IgniteSubsystem {
   }
 
   public void outputTelemetry() {
-    SmartDashboard.putBoolean("Is cargo eject open?", this.isCargoEjectOpen());
-    SmartDashboard.putBoolean("Is beak open?", this.isBeakOpen());
-    SmartDashboard.putBoolean("Is beam break open?", this.isBeamBreakOpen());
-    SmartDashboard.putBoolean("Has hatch?", this.hasHatch());
+    SmartDashboard.putBoolean("Carriage/Is cargo eject open?", this.isCargoEjectOpen());
+    SmartDashboard.putBoolean("Carriage/Is beak open?", this.isBeakOpen());
+    SmartDashboard.putBoolean("Carriage/Is beam break open?", this.isBeamBreakOpen());
+    SmartDashboard.putBoolean("Carriage/Has hatch?", this.hasHatch());
   }
 
   @Override
@@ -98,6 +100,14 @@ public class Carriage extends IgniteSubsystem {
 
   public void ejectCargo() {
     cargoEject.set(true);
+  }
+
+  public void toggleBeak() {
+    if (isBeakOpen()) {
+      retractBeak();
+    } else {
+      openBeak();
+    }
   }
 
   public void openBeak() {

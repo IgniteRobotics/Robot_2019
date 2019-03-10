@@ -5,29 +5,27 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.elevator;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.CarriageLevel;
-import frc.robot.commands.DoNothing;
-import frc.robot.commands.carriage.CarriageClose;
-import frc.robot.commands.carriage.CarriageOpen;
+import frc.robot.commands.carriage.CloseBeak;
+import frc.robot.commands.carriage.OpenBeak;
 import frc.robot.commands.driveTrain.DriveToDistanceTimed;
+import frc.robot.commands.elevator.MoveToSetpoint;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 
-public class MoveThenEject extends CommandGroup {
+public class RetrieveHatch extends CommandGroup {
 
-  public MoveThenEject(Elevator elevator, Carriage carriage, CarriageLevel level, double ejectTimeout, DriveTrain driveTrain) {
-
-    addSequential(new MoveToSetpoint(elevator, level, carriage));
-    addSequential(new CarriageOpen(carriage));
-    addSequential(new DoNothing(ejectTimeout));
-    addSequential(new DriveToDistanceTimed(driveTrain, carriage, 0.5, -0.2, false));
-    addSequential(new CarriageClose(carriage));
+  public RetrieveHatch(Elevator elevator, Carriage carriage, DriveTrain driveTrain) {
+    
+    addSequential(new OpenBeak(carriage));
+    addSequential(new CloseBeak(carriage));
+    addSequential(new MoveToSetpoint(elevator, CarriageLevel.HatchPickup, carriage));
+    addSequential(new DriveToDistanceTimed(driveTrain, carriage, 0.5, -0.3, true));
     addSequential(new MoveToSetpoint(elevator, CarriageLevel.Zero, carriage));
-
+    
   }
-
 }

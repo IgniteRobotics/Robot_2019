@@ -5,23 +5,18 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.carriage;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.Carriage;
-import frc.robot.subsystems.DriveTrain;
 
-public class HatchDriveForwardCurrent extends Command {
+public class ToggleBeak extends Command {
 
   private Carriage carriage;
-  private DriveTrain driveTrain;
 
-  private final double CURRENT_THRESHOLD = 15;
-
-  public HatchDriveForwardCurrent(Carriage carriage, DriveTrain driveTrain) {
+  public ToggleBeak(Carriage carriage) {
 
     this.carriage = carriage;
-    this.driveTrain = driveTrain;
 
     requires(this.carriage);
     
@@ -30,37 +25,30 @@ public class HatchDriveForwardCurrent extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    carriage.toggleBeak();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
-    //driveTrain.arcadeDrive(0.5, 0, 0);
-
-    carriage.openBeak();
-
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-
-    return driveTrain.getLeftMasterCurrent() > CURRENT_THRESHOLD;
-
+    return true;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    carriage.retractBeak();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
+    carriage.retractBeak();
   }
   
 }

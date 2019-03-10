@@ -56,11 +56,11 @@ public class Intake extends IgniteSubsystem {
   }
 
   public void outputTelemetry() {
-    SmartDashboard.putNumber("Voltage", this.getVoltage());
-    SmartDashboard.putNumber("Current", this.getCurrent());
-    SmartDashboard.putNumber("Percent out", this.getPercentOutput());
-    SmartDashboard.putBoolean("Is intake open?", this.isIntakeOpen());
-    SmartDashboard.putBoolean("Is intake beam break open", this.isIntakeBeamBreakOpen());
+    SmartDashboard.putNumber("Intake/Voltage", this.getVoltage());
+    SmartDashboard.putNumber("Intake/Current", this.getCurrent());
+    SmartDashboard.putNumber("Intake/Percent out", this.getPercentOutput());
+    SmartDashboard.putBoolean("Intake/Is intake open?", this.isIntakeOpen());
+    SmartDashboard.putBoolean("Intake/Is intake beam break open", this.isIntakeBeamBreakOpen());
   }
 
   @Override

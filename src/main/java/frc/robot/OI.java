@@ -18,7 +18,9 @@ import frc.robot.commands.elevator.MoveThenEject;
 import frc.robot.commands.carriage.CloseBeak;
 import frc.robot.commands.carriage.EjectCargo;
 import frc.robot.commands.carriage.OpenBeak;
+import frc.robot.commands.intake.CloseIntake;
 import frc.robot.commands.intake.IntakeCargo;
+import frc.robot.commands.intake.OuttakeCargo;
 import frc.robot.commands.HatchDriveForwardCurrent;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.DriveTrain;
@@ -58,32 +60,41 @@ public class OI {
 	//manipulator
     public Button openBeak = new JoystickButton(manipulatorJoystick, BUTTON_A);
 	public Button ejectCargo = new JoystickButton(manipulatorJoystick, BUTTON_X);
-    public Button jogSwitch = new JoystickButton(manipulatorJoystick, BUTTON_Y);
+	public Button jogSwitch = new JoystickButton(manipulatorJoystick, BUTTON_Y);
+	public Button outtakeCargo = new JoystickButton(manipulatorJoystick, BUTTON_RIGHT_BUMPER);
+	public Button openIntake = new JoystickButton(manipulatorJoystick, BUTTON_LEFT_BUMPER);
 
 	//driver
 	public Button level3 = new JoystickButton(driverJoystick, BUTTON_Y);
 	public Button level2 = new JoystickButton(driverJoystick, BUTTON_B);
 	public Button level1 = new JoystickButton(driverJoystick, BUTTON_A);
-	public Button mmDriveTest = new JoystickButton(driverJoystick, BUTTON_X);
-	public Button openIntake = new JoystickButton(driverJoystick, BUTTON_LEFT_BUMPER);
+	public Button cargoShipCargo = new JoystickButton(driverJoystick, BUTTON_X);
+	//public Button mmDriveTest = new JoystickButton(driverJoystick, BUTTON_X);
 
     public OI (DriveTrain driveTrain, Carriage carriage, Elevator elevator, Intake intake, JetsonSink jetsonSink) {
 
 		//manipulator		
-		openBeak.toggleWhenPressed(new HatchDriveForwardCurrent(carriage, driveTrain));
+		//openBeak.toggleWhenPressed(new HatchDriveForwardCurrent(carriage, driveTrain));
 		
+		openBeak.whileHeld(new OpenBeak(carriage));
+		openBeak.whenReleased(new CloseBeak(carriage));
+
 		ejectCargo.whenPressed(new EjectCargo(carriage));
 		ejectCargo.whenReleased(new RetractCargo(carriage));
 
         jogSwitch.whileHeld(new MoveOpenLoop(elevator, manipulatorJoystick, AXIS_LEFT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
 
-		//driver
+		outtakeCargo.whileHeld(new OuttakeCargo(intake, carriage));
+		outtakeCargo.whenReleased(new CloseIntake(intake, carriage));
 		openIntake.toggleWhenPressed(new IntakeCargo(intake, carriage));
-		level3.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level3, Constants.EJECT_TIMEOUT));
-		level2.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level2, Constants.EJECT_TIMEOUT));
-		level1.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level1, Constants.EJECT_TIMEOUT));
+
+		//driver
+		level3.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level3, Constants.EJECT_TIMEOUT, driveTrain));
+		level2.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level2, Constants.EJECT_TIMEOUT, driveTrain));
+		level1.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level1, Constants.EJECT_TIMEOUT, driveTrain));
+		cargoShipCargo.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.CargoShipCargo, Constants.CARGOSHIP_CARGO_EJECT_TIMEOUT, driveTrain));
 		
-		mmDriveTest.whenPressed(new AutoDrivePlaceItem(elevator, driveTrain, carriage, CarriageLevel.Level2, Constants.EJECT_TIMEOUT));
+		//mmDriveTest.whenPressed(new AutoDrivePlaceItem(elevator, driveTrain, carriage, CarriageLevel.Level2, Constants.EJECT_TIMEOUT));
     }
 
 }

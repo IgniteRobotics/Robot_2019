@@ -43,6 +43,7 @@ public class Carriage extends IgniteSubsystem {
     cargoSetpoints.put(CarriageLevel.Level2, Constants.ROCKET_CARGO_L2);
     cargoSetpoints.put(CarriageLevel.Level3, Constants.ROCKET_CARGO_L3);
     cargoSetpoints.put(CarriageLevel.Zero, 0);
+    cargoSetpoints.put(CarriageLevel.CargoShipCargo, Constants.CARGO_SHIP_CARGO);
     hatchSetpoints.put(CarriageLevel.Level1, Constants.ROCKET_HATCH_L1);
     hatchSetpoints.put(CarriageLevel.Level2, Constants.ROCKET_HATCH_L2);
     hatchSetpoints.put(CarriageLevel.Level3, Constants.ROCKET_HATCH_L3);

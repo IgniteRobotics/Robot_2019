@@ -308,9 +308,8 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   }
 
   public void zeroSensors() {
-    rightMaster.setSelectedSensorPosition(0);
-    leftMaster.setSelectedSensorPosition(0);
     zeroAngle();
+    zeroEncoders();
   }
   
   public void stop() {
@@ -328,6 +327,11 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
 
   public void zeroAngle() {
     navX.reset();
+  }
+
+  public void zeroEncoders() {
+    rightMaster.setSelectedSensorPosition(0);
+    leftMaster.setSelectedSensorPosition(0);
   }
 
   public boolean isConnected() {

@@ -113,7 +113,8 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {
 
     if (elevator.isFwdLimitTripped()) {
-      subsystemManager.zeroAllSensors();
+      elevator.zeroSensors();
+      //driveTrain.zeroEncoders();
     }
 
     Scheduler.getInstance().run();

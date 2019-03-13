@@ -7,36 +7,91 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.carriage.RetractCargo;
+import frc.robot.commands.carriage.ToggleBeak;
+import frc.robot.commands.RetrieveHatch;
+import frc.robot.commands.elevator.MoveOpenLoop;
+import frc.robot.commands.elevator.MoveThenEject;
+import frc.robot.commands.elevator.MoveToSetpoint;
+import frc.robot.commands.carriage.EjectCargo;
+import frc.robot.commands.intake.CloseIntake;
+import frc.robot.commands.intake.IntakeCargo;
+import frc.robot.commands.intake.OuttakeCargo;
+import frc.robot.subsystems.Carriage;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
+
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-  //// CREATING BUTTONS
-  // One type of button is a joystick button which is any button on a
-  //// joystick.
-  // You create one by telling it which joystick it's on and which button
-  // number it is.
-  // Joystick stick = new Joystick(port);
-  // Button button = new JoystickButton(stick, buttonNumber);
+  
+	private final int DRIVER_JOYSTICK = 0;
+	private final int MANIPULATOR_JOYSTICK = 1;
 
-  // There are a few additional built in buttons you can use. Additionally,
-  // by subclassing Button you can create custom triggers and bind those to
-  // commands the same as any other Button.
+	public final int BUTTON_A = 1;
+	public final int BUTTON_B = 2;
+	public final int BUTTON_X = 3;
+	public final int BUTTON_Y = 4;
+	public final int BUTTON_LEFT_BUMPER = 5;
+	public final int BUTTON_RIGHT_BUMPER = 6;
+	public final int BUTTON_BACK = 7;
+	public final int BUTTON_START = 8;
+	public final int BUTTON_LEFT_STICK = 9;
+	public final int BUTTON_RIGHT_STICK = 10;
 
-  //// TRIGGERING COMMANDS WITH BUTTONS
-  // Once you have a button, it's trivial to bind it to a button in one of
-  // three ways:
+	public final int AXIS_LEFT_STICK_X = 0;
+	public final int AXIS_LEFT_STICK_Y = 1;
+	public final int AXIS_LEFT_TRIGGER = 2;
+	public final int AXIS_RIGHT_TRIGGER = 3;
+	public final int AXIS_RIGHT_STICK_X = 4;
+    public final int AXIS_RIGHT_STICK_Y = 5;
+    
+	public Joystick driverJoystick = new Joystick(DRIVER_JOYSTICK);
+    public Joystick manipulatorJoystick = new Joystick(MANIPULATOR_JOYSTICK);
+	
+	//manipulator
+    public Button openBeak = new JoystickButton(manipulatorJoystick, BUTTON_A);
+	public Button ejectCargo = new JoystickButton(manipulatorJoystick, BUTTON_X);
+	public Button jogSwitch = new JoystickButton(manipulatorJoystick, BUTTON_Y);
+	public Button outtakeCargo = new JoystickButton(manipulatorJoystick, BUTTON_RIGHT_BUMPER);
+	public Button openIntake = new JoystickButton(manipulatorJoystick, BUTTON_LEFT_BUMPER);
+	public Button retrieveHatch = new JoystickButton(manipulatorJoystick, BUTTON_B);
 
-  // Start the command when the button is pressed and let it run the command
-  // until it is finished as determined by it's isFinished method.
-  // button.whenPressed(new ExampleCommand());
+	//driver
+	public Button level3 = new JoystickButton(driverJoystick, BUTTON_Y);
+	public Button level2 = new JoystickButton(driverJoystick, BUTTON_B);
+	public Button level1 = new JoystickButton(driverJoystick, BUTTON_A);
+	public Button cargoShipCargo = new JoystickButton(driverJoystick, BUTTON_X);
+	public Button zero = new JoystickButton(driverJoystick, BUTTON_LEFT_BUMPER);
 
-  // Run the command while the button is being held down and interrupt it once
-  // the button is released.
-  // button.whileHeld(new ExampleCommand());
+    public OI (DriveTrain driveTrain, Carriage carriage, Elevator elevator, Intake intake, JetsonSink jetsonSink) {
 
-  // Start the command when the button is released and let it run the command
-  // until it is finished as determined by it's isFinished method.
-  // button.whenReleased(new ExampleCommand());
+		//manipulator				
+		openBeak.whenPressed(new ToggleBeak(carriage));
+
+		ejectCargo.whenPressed(new EjectCargo(carriage));
+		ejectCargo.whenReleased(new RetractCargo(carriage));
+
+        jogSwitch.whileHeld(new MoveOpenLoop(elevator, manipulatorJoystick, AXIS_LEFT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
+
+		outtakeCargo.whileHeld(new OuttakeCargo(intake, carriage));
+		outtakeCargo.whenReleased(new CloseIntake(intake, carriage));
+		openIntake.toggleWhenPressed(new IntakeCargo(intake, carriage));
+
+		retrieveHatch.whenPressed(new RetrieveHatch(elevator, carriage, driveTrain));
+
+		//driver
+		level3.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level3, Constants.EJECT_TIMEOUT, driveTrain));
+		level2.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level2, Constants.EJECT_TIMEOUT, driveTrain));
+		level1.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level1, Constants.EJECT_TIMEOUT, driveTrain));
+		cargoShipCargo.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.CargoShipCargo, Constants.CARGOSHIP_CARGO_EJECT_TIMEOUT, driveTrain));
+		zero.whenPressed(new MoveToSetpoint(elevator, CarriageLevel.Zero, carriage));
+    }
+
 }

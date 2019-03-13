@@ -16,7 +16,7 @@ public class OpenIntake extends Command {
   private Intake intake;
   private Carriage carriage;
 
-  private final double INTAKE_POWER = 0.5;
+  private final double INTAKE_POWER = -0.5;
 
   public OpenIntake(Intake intake, Carriage carriage) {
 

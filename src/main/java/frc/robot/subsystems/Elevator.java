@@ -21,6 +21,7 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 
 import frc.robot.subsystems.IgniteSubsystem;
 import frc.robot.util.Util;
+import frc.robot.util.LogUtil;
 import frc.robot.Constants;
 
 public class Elevator extends IgniteSubsystem {
@@ -89,8 +90,8 @@ public class Elevator extends IgniteSubsystem {
     BadLog.createTopic("Elevator/Master Current", "A", () -> this.getMasterCurrent(), "hide", "join:Elevator/Output Current");
     BadLog.createTopic("Elevator/Position", "ticks", () -> (double)this.getEncoderPos(), "hide", "join:Elevator/Position");
     BadLog.createTopic("Elevator/Velocity", "ticks", () -> (double)this.getEncoderVel(), "hide", "join:Elevator/Velocity");
-    BadLog.createTopicStr("Elevator/Fwd limit", "bool", () -> Boolean.toString(this.isFwdLimitTripped()));
-    BadLog.createTopicStr("Elevator/Rev limit", "bool", () -> Boolean.toString(this.isRevLimitTripped()));
+    BadLog.createTopicStr("Elevator/Fwd limit", "bool", () -> LogUtil.fromBool(this.isFwdLimitTripped()));
+    BadLog.createTopicStr("Elevator/Rev limit", "bool", () -> LogUtil.fromBool(this.isRevLimitTripped()));
   }
 
   public void outputTelemetry() {

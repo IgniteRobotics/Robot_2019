@@ -262,7 +262,7 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
 
   public void turnToAngle() {
     this.setOpenLoopLeft(rotateToAngleRate);
-    this.setOpenLoopRight(rotateToAngleRate);
+    this.setOpenLoopRight(-rotateToAngleRate);
   }
 
   public boolean isTurnCompleted() {

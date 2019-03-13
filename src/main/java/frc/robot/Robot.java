@@ -51,6 +51,8 @@ public class Robot extends TimedRobot {
 
   private SubsystemManager subsystemManager;
 
+  private Relay led;
+
   private long startTime;
 
   /**
@@ -61,7 +63,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     startTime = System.nanoTime();
 
-    logger = BadLog.init("/home/lvuser/log/" + Util.genSessionName() + ".bag");
+    logger = BadLog.init("/home/lvuser/log/" + LogUtil.genSessionName() + ".bag");
 
     initializeSubsystems();
     initializeCommands();
@@ -86,6 +88,7 @@ public class Robot extends TimedRobot {
   }
 
   private void matchInit() {
+    led.set(Relay.Value.kOn);
     Scheduler.getInstance().run();
   }
 
@@ -114,7 +117,6 @@ public class Robot extends TimedRobot {
 
     if (elevator.isFwdLimitTripped()) {
       elevator.zeroSensors();
-      //driveTrain.zeroEncoders();
     }
 
     Scheduler.getInstance().run();
@@ -135,11 +137,9 @@ public class Robot extends TimedRobot {
     matchPeriodic();
   }
 
-  Relay led = new Relay(0);
 
   @Override
   public void teleopInit() {
-    led.set(Relay.Value.kForward);
     matchInit();
   }
 
@@ -170,6 +170,7 @@ public class Robot extends TimedRobot {
     elevator = new Elevator(RobotMap.elevatorMasterID, RobotMap.elevatorFollowerID);
     intake = new Intake(RobotMap.pcmID, RobotMap.intakeMotorID, RobotMap.intakeSolenoidOpen, RobotMap.intakeSolenoidClose, RobotMap.intakeBeamBreakID);
     jetsonSink = new JetsonSink();
+    led = new Relay(RobotMap.relayID);
 
     subsystemManager = new SubsystemManager();
 
@@ -182,7 +183,7 @@ public class Robot extends TimedRobot {
   }
 
   private void writeSystemLog() {
-    BadLog.createValue("Start Time", Util.getTimestamp());
+    BadLog.createValue("Start Time", LogUtil.getTimestamp());
     BadLog.createValue("Event Name", Optional.ofNullable(DriverStation.getInstance().getEventName()).orElse(""));
     BadLog.createValue("Match Type", DriverStation.getInstance().getMatchType().toString());
     BadLog.createValue("Match Number", "" + DriverStation.getInstance().getMatchNumber());

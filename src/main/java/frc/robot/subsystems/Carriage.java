@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.CarriageLevel;
 import frc.robot.subsystems.IgniteSubsystem;
+import frc.robot.util.LogUtil;
 
 public class Carriage extends IgniteSubsystem {
 
@@ -62,10 +63,10 @@ public class Carriage extends IgniteSubsystem {
   }
 
   public void writeToLog() {
-    BadLog.createTopicStr("Carriage/Is cargo eject open?", "bool", () -> Boolean.toString(this.isCargoEjectOpen()));
-    BadLog.createTopicStr("Carriage/Is beak open?", "bool", () -> Boolean.toString(this.isBeakOpen()));
-    BadLog.createTopicStr("Carriage/Is beam break?", "bool", () -> Boolean.toString(this.isBeamBreakOpen()));
-    BadLog.createTopicStr("Carriage/Has hatch?", "bool", () -> Boolean.toString(this.hasHatch()));
+    BadLog.createTopicStr("Carriage/Is cargo eject open?", "bool", () -> LogUtil.fromBool(this.isCargoEjectOpen()));
+    BadLog.createTopicStr("Carriage/Is beak open?", "bool", () -> LogUtil.fromBool(this.isBeakOpen()));
+    BadLog.createTopicStr("Carriage/Is beam break?", "bool", () -> LogUtil.fromBool(this.isBeamBreakOpen()));
+    BadLog.createTopicStr("Carriage/Has hatch?", "bool", () -> LogUtil.fromBool(this.hasHatch()));
   }
 
   public void outputTelemetry() {

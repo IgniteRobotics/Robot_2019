@@ -17,10 +17,12 @@ public class RobotMap {
 
   public static final int pcmID = 0;
   
+  public static final int relayID = 0;
+
   // Carriage
   public static final int cargoEjectSolenoid = 5;
   public static final int beakSolenoid = 4;
-  public static final int carriageBeamBreakID = 30;
+  public static final int carriageBeamBreakID = 2;
   public static final int hatchLimitSwitchID = 0;
 
   // Drivetrain

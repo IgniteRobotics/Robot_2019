@@ -13,12 +13,10 @@ import frc.robot.subsystems.Intake;
 
 public class CloseRollIntake extends CommandGroup {
 
-  private static double INTAKE_STOP_TIME = 2.0;
-
   public CloseRollIntake(Intake intake, Carriage carriage) {
 
     addParallel(new CloseIntake(intake, carriage));
-    addSequential(new RollInCargoTimed(carriage, intake, INTAKE_STOP_TIME));
+    addSequential(new RollInCargoUntilBeam(carriage, intake));
   
   }
 }

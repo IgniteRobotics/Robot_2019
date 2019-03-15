@@ -16,17 +16,18 @@ import frc.robot.commands.driveTrain.DriveToDistanceTimed;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 
 public class MoveThenEject extends CommandGroup {
 
-  public MoveThenEject(Elevator elevator, Carriage carriage, CarriageLevel level, double ejectTimeout, DriveTrain driveTrain) {
+  public MoveThenEject(Intake intake, Elevator elevator, Carriage carriage, CarriageLevel level, double ejectTimeout, DriveTrain driveTrain) {
 
-    addSequential(new MoveToSetpoint(elevator, level, carriage));
-    addSequential(new CarriageOpen(carriage));
+    addSequential(new MoveToSetpoint(elevator, level, carriage, intake));
+    addSequential(new CarriageOpen(carriage, intake));
     addSequential(new DoNothing(ejectTimeout));
     addSequential(new DriveToDistanceTimed(driveTrain, carriage, 0.5, -0.2, false));
     addSequential(new CarriageClose(carriage));
-    addSequential(new MoveToSetpoint(elevator, CarriageLevel.Zero, carriage));
+    addSequential(new MoveToSetpoint(elevator, CarriageLevel.Zero, carriage, intake));
 
   }
 

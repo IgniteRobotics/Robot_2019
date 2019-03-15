@@ -16,16 +16,17 @@ import frc.robot.commands.elevator.MoveToSetpoint;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 
 public class RetrieveHatch extends CommandGroup {
 
-  public RetrieveHatch(Elevator elevator, Carriage carriage, DriveTrain driveTrain) {
+  public RetrieveHatch(Intake intake, Elevator elevator, Carriage carriage, DriveTrain driveTrain) {
     
     addSequential(new OpenBeak(carriage));
     addSequential(new CloseBeak(carriage));
-    addSequential(new MoveToSetpoint(elevator, CarriageLevel.HatchPickup, carriage));
+    addSequential(new MoveToSetpoint(elevator, CarriageLevel.HatchPickup, carriage, intake));
     addSequential(new DriveToDistanceTimed(driveTrain, carriage, 0.5, -0.3, true));
-    addSequential(new MoveToSetpoint(elevator, CarriageLevel.Zero, carriage));
+    addSequential(new MoveToSetpoint(elevator, CarriageLevel.Zero, carriage, intake));
     
   }
 }

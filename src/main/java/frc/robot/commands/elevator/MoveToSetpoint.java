@@ -11,18 +11,21 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.CarriageLevel;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 
 public class MoveToSetpoint extends Command {
 
   private Elevator elevator;
   private Carriage carriage;
   private CarriageLevel level;
+  private Intake intake;
 
-  public MoveToSetpoint(Elevator elevator, CarriageLevel level, Carriage carriage) {
+  public MoveToSetpoint(Elevator elevator, CarriageLevel level, Carriage carriage, Intake intake) {
 
     this.elevator = elevator;
     this.level = level;
     this.carriage = carriage;
+    this.intake = intake;
     
     requires(this.elevator);
     
@@ -37,7 +40,7 @@ public class MoveToSetpoint extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    int setPoint = carriage.getSetpoint(level);
+    int setPoint = carriage.getSetpoint(level, intake);
     elevator.setMotionMagicPosition(setPoint);
   }
 

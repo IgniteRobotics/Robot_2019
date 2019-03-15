@@ -11,23 +11,18 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.Intake;
 
-public class OpenIntake extends Command {
+public class RollInCargoUntilBeam extends Command {
 
   private Intake intake;
   private Carriage carriage;
 
-  private boolean flag;
-
   private final double INTAKE_POWER = -0.5;
 
-  public OpenIntake(Intake intake, Carriage carriage, boolean flag) {
+  public RollInCargoUntilBeam(Carriage carriage, Intake intake) {
 
     this.intake = intake;
     this.carriage = carriage;
-    this.flag = flag;
 
-    // requires(this.intake);
-    // requires(this.carriage);
   }
 
   // Called just before this Command runs the first time
@@ -38,40 +33,27 @@ public class OpenIntake extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
-    if (flag) {
-      if (carriage.hasHatch()) {
-        intake.closeIntake();
-        intake.stopIntakeMotor();
-        end();
-      } else {
-        intake.openIntake();
-        intake.setOpenLoop(INTAKE_POWER);
-      }
-    } else {
-      intake.openIntake();
-      intake.setOpenLoop(0.5);
+    if (!carriage.hasHatch()) {
+      intake.setOpenLoop(INTAKE_POWER);
     }
-
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return intake.isIntakeBeamBreakOpen() || carriage.hasHatch();
+    return carriage.isBeamBreakOpen();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    intake.stopIntakeMotor();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    intake.closeIntake();
-    intake.stopIntakeMotor();
+    end();
   }
-  
 }

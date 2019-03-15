@@ -84,14 +84,14 @@ public class OI {
 		outtakeCargo.whenReleased(new CloseIntake(intake, carriage));
 		openIntake.toggleWhenPressed(new IntakeCargo(intake, carriage));
 
-		retrieveHatch.whenPressed(new RetrieveHatch(elevator, carriage, driveTrain));
+		retrieveHatch.whenPressed(new RetrieveHatch(intake, elevator, carriage, driveTrain));
 
 		//driver
-		level3.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level3, Constants.EJECT_TIMEOUT, driveTrain));
-		level2.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level2, Constants.EJECT_TIMEOUT, driveTrain));
-		level1.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.Level1, Constants.EJECT_TIMEOUT, driveTrain));
-		cargoShipCargo.whenPressed(new MoveThenEject(elevator, carriage, CarriageLevel.CargoShipCargo, Constants.CARGOSHIP_CARGO_EJECT_TIMEOUT, driveTrain));
-		zero.whenPressed(new MoveToSetpoint(elevator, CarriageLevel.Zero, carriage));
+		level3.whenPressed(new MoveThenEject(intake, elevator, carriage, CarriageLevel.Level3, Constants.EJECT_TIMEOUT, driveTrain));
+		level2.whenPressed(new MoveThenEject(intake, elevator, carriage, CarriageLevel.Level2, Constants.EJECT_TIMEOUT, driveTrain));
+		level1.whenPressed(new MoveThenEject(intake, elevator, carriage, CarriageLevel.Level1, Constants.EJECT_TIMEOUT, driveTrain));
+		cargoShipCargo.whenPressed(new MoveThenEject(intake, elevator, carriage, CarriageLevel.CargoShipCargo, Constants.CARGOSHIP_CARGO_EJECT_TIMEOUT, driveTrain));
+		zero.whenPressed(new MoveToSetpoint(elevator, CarriageLevel.Zero, carriage, intake));
     }
 
 }

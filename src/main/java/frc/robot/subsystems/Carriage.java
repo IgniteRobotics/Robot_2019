@@ -127,9 +127,9 @@ public class Carriage extends IgniteSubsystem {
     return !beamBreak.get();
   }
 
-  public int getSetpoint(CarriageLevel level)
+  public int getSetpoint(CarriageLevel level, Intake intake)
   {
-    if (this.hasHatch()) {
+    if (!intake.isIntakeBeamBreakOpen()) {
       return hatchSetpoints.get(level);
     } else {
       return cargoSetpoints.get(level);

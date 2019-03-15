@@ -10,17 +10,18 @@ import frc.robot.commands.elevator.MoveToSetpoint;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 
 public class AutoDrivePlaceItem extends CommandGroup {
 
-    public AutoDrivePlaceItem(Elevator elevator, DriveTrain driveTrain, Carriage carriage, CarriageLevel level, double ejectTimeout) {
+    public AutoDrivePlaceItem(Elevator elevator, Intake intake, DriveTrain driveTrain, Carriage carriage, CarriageLevel level, double ejectTimeout) {
 
     addSequential(new DriveToDistance(driveTrain));
-    addSequential(new MoveToSetpoint(elevator, level, carriage));
-    addSequential(new CarriageOpen(carriage));
+    addSequential(new MoveToSetpoint(elevator, level, carriage, intake));
+    addSequential(new CarriageOpen(carriage, intake));
     addSequential(new DoNothing(ejectTimeout));
     addSequential(new CarriageClose(carriage));
-    addSequential(new MoveToSetpoint(elevator, CarriageLevel.Zero, carriage));
+    addSequential(new MoveToSetpoint(elevator, CarriageLevel.Zero, carriage, intake));
     }
 
 }

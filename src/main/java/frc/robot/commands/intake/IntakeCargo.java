@@ -15,7 +15,7 @@ public class IntakeCargo extends CommandGroup {
 
   public IntakeCargo(Intake intake, Carriage carriage) {
 
-    addSequential(new OpenIntake(intake, carriage));
+    addSequential(new OpenIntake(intake, carriage, true));
     addSequential(new CloseRollIntake(intake, carriage));
 
   }

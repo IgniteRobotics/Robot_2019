@@ -19,7 +19,7 @@ public class Constants {
     public static final int ROCKET_CARGO_L2 = -25500;
     public static final int ROCKET_CARGO_L1 = -9175;
 
-    public static final int CARGO_SHIP_CARGO = -14500;
+    public static final int CARGO_SHIP_CARGO = -14500 - 2000;
     public static final int CARGO_SHIP_HATCH = ROCKET_HATCH_L1;
     public static final int HATCH_PICKUP = -6000;
 

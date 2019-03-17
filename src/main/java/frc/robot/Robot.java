@@ -10,12 +10,13 @@ package frc.robot;
 import java.util.Optional;
 
 import badlog.lib.*;
-
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.driveTrain.arcadeDrive;
 import frc.robot.commands.elevator.HoldPosition;
 
@@ -26,9 +27,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.OI;
 import frc.robot.util.*;
 
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -38,7 +36,7 @@ import java.net.InetAddress;
  */
 public class Robot extends TimedRobot {
 
-  private static Carriage carriage;
+  public static Carriage carriage;
   private static DriveTrain driveTrain;
   private static Elevator elevator;
   private static Intake intake;
@@ -58,6 +56,9 @@ public class Robot extends TimedRobot {
 
   private long startTime;
 
+  private DigitalOutput jetsonPower;
+  private boolean jetsonPowerState;
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -73,6 +74,19 @@ public class Robot extends TimedRobot {
 
     writeSystemLog();
     logger.finishInitialization();
+
+    // loop time is 20ms
+    // Jetson needs high, then low, from the DIO for 200ms each to start
+    // iterate 10 times, 10 * 20 = 200
+    for (int i = 0; i < 10 ; i++) {
+      jetsonPower.set(true);
+    }
+    for (int i = 0; i < 10 ; i++) {
+      jetsonPower.set(false);
+    }
+    jetsonPower.set(true); //default is high
+
+    SmartDashboard.putBoolean("Jetson Power", true);
   }
 
   /**
@@ -84,25 +98,13 @@ public class Robot extends TimedRobot {
    * LiveWindow and SmartDashboard integrated updating.
    */
 
-   //table: Launcher
-   //key : ip_address
-
-  String ip = "";
-
   @Override
   public void robotPeriodic() {
     subsystemManager.outputTelemetry();
     jetsonSink.outputTelemetry();
 
-    // try(final DatagramSocket socket = new DatagramSocket()) {
-    //   socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
-    //   ip = socket.getLocalAddress().getHostAddress();
-    // } catch (Exception e) {
-    //   System.out.println("-----------------IP address retrieval failed------------------------");
-    // }
-
-    // System.out.println(ip);
-
+    jetsonPowerState = SmartDashboard.getBoolean("Jetson Power", true);
+    jetsonPower.set(jetsonPowerState);
   }
 
   private void matchInit() {
@@ -189,6 +191,7 @@ public class Robot extends TimedRobot {
     intake = new Intake(RobotMap.pcmID, RobotMap.intakeMotorID, RobotMap.intakeSolenoidOpen, RobotMap.intakeSolenoidClose, RobotMap.intakeBeamBreakID);
     jetsonSink = new JetsonSink();
     led = new Relay(RobotMap.relayID);
+    jetsonPower = new DigitalOutput(RobotMap.jetsonDIO);
 
     subsystemManager = new SubsystemManager();
 
@@ -210,9 +213,9 @@ public class Robot extends TimedRobot {
 
     BadLog.createTopicSubscriber("Time", "s", DataInferMode.DEFAULT, "hide", "delta", "xaxis");
 
-    BadLog.createTopicStr("System/Browned Out", "bool", () -> Boolean.toString(RobotController.isBrownedOut()));
+    BadLog.createTopicStr("System/Browned Out", "bool", () -> LogUtil.fromBool(RobotController.isBrownedOut()));
     BadLog.createTopic("System/Battery Voltage", "V", () -> RobotController.getBatteryVoltage());
-    BadLog.createTopicStr("System/FPGA Active", "bool", () -> Boolean.toString(RobotController.isSysActive()));
+    BadLog.createTopicStr("System/FPGA Active", "bool", () -> LogUtil.fromBool(RobotController.isSysActive()));
     BadLog.createTopic("Match Time", "s", () -> DriverStation.getInstance().getMatchTime());
   }
   

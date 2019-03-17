@@ -9,17 +9,15 @@ package frc.robot.commands.carriage;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.Carriage;
-import frc.robot.subsystems.Intake;
+import frc.robot.Robot;
 
 public class CarriageOpen extends Command {
 
   private Carriage carriage;
-  private Intake intake;
 
-  public CarriageOpen(Carriage carriage, Intake intake) {
+  public CarriageOpen(Carriage carriage) {
 
     this.carriage = carriage;
-    this.intake = intake;
 
     requires(this.carriage);
     
@@ -34,7 +32,7 @@ public class CarriageOpen extends Command {
   @Override
   protected void execute() {
 
-    if (!intake.isIntakeBeamBreakOpen()) {
+    if (!Robot.carriage.isBeamBreakOpen()) {
       carriage.openBeak();
     } else {
       carriage.ejectCargo();

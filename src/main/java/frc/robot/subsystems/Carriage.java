@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.CarriageLevel;
 import frc.robot.subsystems.IgniteSubsystem;
 import frc.robot.util.LogUtil;
@@ -49,6 +50,7 @@ public class Carriage extends IgniteSubsystem {
     hatchSetpoints.put(CarriageLevel.Level1, Constants.ROCKET_HATCH_L1);
     hatchSetpoints.put(CarriageLevel.Level2, Constants.ROCKET_HATCH_L2);
     hatchSetpoints.put(CarriageLevel.Level3, Constants.ROCKET_HATCH_L3);
+    hatchSetpoints.put(CarriageLevel.CargoShipCargo, Constants.CARGO_SHIP_CARGO);
     hatchSetpoints.put(CarriageLevel.Zero, 0);
     hatchSetpoints.put(CarriageLevel.HatchPickup, Constants.HATCH_PICKUP);
   }
@@ -127,9 +129,9 @@ public class Carriage extends IgniteSubsystem {
     return !beamBreak.get();
   }
 
-  public int getSetpoint(CarriageLevel level, Intake intake)
+  public int getSetpoint(CarriageLevel level)
   {
-    if (!intake.isIntakeBeamBreakOpen()) {
+    if (!Robot.carriage.isBeamBreakOpen()) {
       return hatchSetpoints.get(level);
     } else {
       return cargoSetpoints.get(level);

@@ -408,53 +408,6 @@
           }
         }
       }
-    },
-    {
-      "title": "Driveteam",
-      "autoPopulate": false,
-      "autoPopulatePrefix": "",
-      "widgetPane": {
-        "gridSize": 64.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "tiles": {
-          "0,0": {
-            "size": [
-              19,
-              8
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/Carriage/Is beak open?",
-              "_title": "SmartDashboard/Carriage/Is beak open?",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "14,8": {
-            "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Toggle Switch",
-              "_source0": "network_table:///SmartDashboard/Jetson Power",
-              "_title": "Jetson Power"
-            }
-          },
-          "6,8": {
-            "size": [
-              8,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_title": "Power off instructions"
-            }
-          }
-        }
-      }
     }
   ],
   "windowGeometry": {

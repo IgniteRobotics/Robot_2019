@@ -14,7 +14,7 @@ public class RollOutCargo extends Command {
 
   private Intake intake;
 
-  private final double INTAKE_POWER = 0.1;
+  private final double INTAKE_POWER = 0.5;
 
   public RollOutCargo(Intake intake) {
 
@@ -31,7 +31,6 @@ public class RollOutCargo extends Command {
   @Override
   protected void execute() {
     intake.setOpenLoop(INTAKE_POWER);
-    System.out.println("------------------------------------------------------");
   }
 
   // Make this return true when this Command no longer needs to run execute()

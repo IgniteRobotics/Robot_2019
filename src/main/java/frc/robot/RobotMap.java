@@ -19,6 +19,8 @@ public class RobotMap {
   
   public static final int relayID = 0;
 
+  public static final int jetsonDIO = 5;
+
   // Carriage
   public static final int cargoEjectSolenoid = 5;
   public static final int beakSolenoid = 4;

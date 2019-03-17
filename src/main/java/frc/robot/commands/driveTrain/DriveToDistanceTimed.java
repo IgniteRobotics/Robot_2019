@@ -18,11 +18,13 @@ public class DriveToDistanceTimed extends Command {
 
   private double power;
   private boolean ignoreBeakState;
+  private boolean isRocketCargo;
   
-  public DriveToDistanceTimed(DriveTrain driveTrain, Carriage carriage, double timeout, double power, boolean ignoreBeakState) {
+  public DriveToDistanceTimed(DriveTrain driveTrain, Carriage carriage, double timeout, double power, boolean ignoreBeakState, boolean isRocketCargo) {
 
     this.driveTrain = driveTrain;
     this.carriage = carriage;
+    this.isRocketCargo = isRocketCargo;
 
     this.power = power;
     this.ignoreBeakState = ignoreBeakState;
@@ -41,10 +43,15 @@ public class DriveToDistanceTimed extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    if (isRocketCargo && carriage.isBeamBreakOpen()) {
+      driveTrain.setOpenLoopLeft(power);
+      driveTrain.setOpenLoopRight(power);
+    } else {
       if (ignoreBeakState || carriage.isBeakOpen()) {
         driveTrain.setOpenLoopLeft(power);
         driveTrain.setOpenLoopRight(power);
       }
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

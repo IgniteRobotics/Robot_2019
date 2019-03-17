@@ -15,7 +15,6 @@ public class OpenIntake extends Command {
 
   private Intake intake;
   private Carriage carriage;
-
   private boolean flag;
 
   private final double INTAKE_POWER = -0.5;
@@ -26,8 +25,8 @@ public class OpenIntake extends Command {
     this.carriage = carriage;
     this.flag = flag;
 
-    // requires(this.intake);
-    // requires(this.carriage);
+    requires(this.intake);
+    requires(this.carriage);
   }
 
   // Called just before this Command runs the first time
@@ -38,7 +37,6 @@ public class OpenIntake extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
     if (flag) {
       if (carriage.hasHatch()) {
         intake.closeIntake();

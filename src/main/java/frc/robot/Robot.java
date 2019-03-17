@@ -26,6 +26,9 @@ import frc.robot.subsystems.Intake;
 import frc.robot.OI;
 import frc.robot.util.*;
 
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -80,10 +83,25 @@ public class Robot extends TimedRobot {
    * <p>This runs after the mode specific periodic functions, but before
    * LiveWindow and SmartDashboard integrated updating.
    */
+
+   //table: Launcher
+   //key : ip_address
+
+  String ip = "";
+
   @Override
   public void robotPeriodic() {
     subsystemManager.outputTelemetry();
     jetsonSink.outputTelemetry();
+
+    // try(final DatagramSocket socket = new DatagramSocket()) {
+    //   socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+    //   ip = socket.getLocalAddress().getHostAddress();
+    // } catch (Exception e) {
+    //   System.out.println("-----------------IP address retrieval failed------------------------");
+    // }
+
+    // System.out.println(ip);
 
   }
 

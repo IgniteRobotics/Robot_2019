@@ -8,20 +8,17 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.Intake;
 
 public class RollInCargoTimed extends Command {
 
   private Intake intake;
-  private Carriage carriage;
 
-  private final double INTAKE_POWER = -0.5;
+  private final double INTAKE_POWER = 0.5;
 
-  public RollInCargoTimed(Carriage carriage, Intake intake, double timeout) {
+  public RollInCargoTimed(Intake intake, double timeout) {
 
     this.intake = intake;
-    this.carriage = carriage;
 
     setTimeout(timeout);
 
@@ -35,9 +32,7 @@ public class RollInCargoTimed extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if (!carriage.hasHatch()) {
-      intake.setOpenLoop(INTAKE_POWER);
-    }
+    intake.setOpenLoop(INTAKE_POWER);
   }
 
   // Make this return true when this Command no longer needs to run execute()

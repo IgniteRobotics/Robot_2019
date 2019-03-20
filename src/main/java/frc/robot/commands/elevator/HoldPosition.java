@@ -14,7 +14,7 @@ public class HoldPosition extends Command {
 
   private Elevator elevator;
 
-  private final double STALL_PERCENT_OUT = -0.07;
+  private final double STALL_PERCENT_OUT = -0.07; //TODO: adjust me!
 
   public HoldPosition(Elevator elevator) {
 

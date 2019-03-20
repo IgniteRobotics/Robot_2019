@@ -10,13 +10,10 @@ package frc.robot;
 import java.util.Optional;
 
 import badlog.lib.*;
-import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.driveTrain.arcadeDrive;
 import frc.robot.commands.elevator.HoldPosition;
 
@@ -24,6 +21,7 @@ import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Jetson;
 import frc.robot.OI;
 import frc.robot.util.*;
 
@@ -36,7 +34,7 @@ import frc.robot.util.*;
  */
 public class Robot extends TimedRobot {
 
-  public static Carriage carriage;
+  private static Carriage carriage;
   private static DriveTrain driveTrain;
   private static Elevator elevator;
   private static Intake intake;
@@ -44,20 +42,14 @@ public class Robot extends TimedRobot {
   private static arcadeDrive arcadeDrive;
   private static HoldPosition holdPosition;
 
-  private static JetsonSink jetsonSink;
-
-  private static OI oi;
+  private static Jetson jetson;
 
   private BadLog logger;
 
   private SubsystemManager subsystemManager;
-
-  private Relay led;
+  private static OI oi;
 
   private long startTime;
-
-  private DigitalOutput jetsonPower;
-  private boolean jetsonPowerState;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -69,24 +61,12 @@ public class Robot extends TimedRobot {
 
     logger = BadLog.init("/home/lvuser/log/" + LogUtil.genSessionName() + ".bag");
 
+    writeSystemLog();
+
     initializeSubsystems();
     initializeCommands();
 
-    writeSystemLog();
     logger.finishInitialization();
-
-    // loop time is 20ms
-    // Jetson needs high, then low, from the DIO for 200ms each to start
-    // iterate 10 times, 10 * 20 = 200
-    for (int i = 0; i < 10 ; i++) {
-      jetsonPower.set(true);
-    }
-    for (int i = 0; i < 10 ; i++) {
-      jetsonPower.set(false);
-    }
-    jetsonPower.set(true); //default is high
-
-    SmartDashboard.putBoolean("Jetson Power", true);
   }
 
   /**
@@ -101,14 +81,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     subsystemManager.outputTelemetry();
-    jetsonSink.outputTelemetry();
-
-    jetsonPowerState = SmartDashboard.getBoolean("Jetson Power", true);
-    jetsonPower.set(jetsonPowerState);
+    subsystemManager.zeroSensorsFromDashboard();
+    jetson.turnOffToggle();
   }
 
   private void matchInit() {
-    led.set(Relay.Value.kOn);
+    jetson.turnOnLed();
     Scheduler.getInstance().run();
   }
 
@@ -129,7 +107,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-    led.set(Relay.Value.kOff);
+    jetson.turnOffLed();
   }
 
   @Override
@@ -173,7 +151,7 @@ public class Robot extends TimedRobot {
 
   private void initializeCommands() {
 
-    oi = new OI(driveTrain, carriage, elevator, intake, jetsonSink);
+    oi = new OI(driveTrain, carriage, elevator, intake);
 
     arcadeDrive = new arcadeDrive(driveTrain, oi.driverJoystick, oi.AXIS_LEFT_STICK_Y, oi.AXIS_RIGHT_STICK_X, Constants.DRIVE_DEADBAND);
     driveTrain.establishDefaultCommand(arcadeDrive);
@@ -185,21 +163,18 @@ public class Robot extends TimedRobot {
 
   private void initializeSubsystems() {
 
-    carriage = new Carriage(RobotMap.pcmID, RobotMap.cargoEjectSolenoid, RobotMap.beakSolenoid, RobotMap.carriageBeamBreakID, RobotMap.hatchLimitSwitchID);
+    carriage = new Carriage(RobotMap.pcmID, RobotMap.cargoEjectSolenoid, RobotMap.beakSolenoid, RobotMap.carriageBeamBreakID);
     driveTrain =  new DriveTrain(RobotMap.leftMasterID, RobotMap.leftFollowerID, RobotMap.rightMasterID, RobotMap.rightFollowerID);
     elevator = new Elevator(RobotMap.elevatorMasterID, RobotMap.elevatorFollowerID);
     intake = new Intake(RobotMap.pcmID, RobotMap.intakeMotorID, RobotMap.intakeSolenoidOpen, RobotMap.intakeSolenoidClose, RobotMap.intakeBeamBreakID);
-    jetsonSink = new JetsonSink();
-    led = new Relay(RobotMap.relayID);
-    jetsonPower = new DigitalOutput(RobotMap.jetsonDIO);
+    jetson = new Jetson(RobotMap.jetsonPowerDioID, RobotMap.relayID);
 
     subsystemManager = new SubsystemManager();
 
-    subsystemManager.addSubsystems(carriage, driveTrain, elevator, intake);
+    subsystemManager.addSubsystems(carriage, driveTrain, elevator, intake, jetson);
 
     subsystemManager.zeroAllSensors();
     subsystemManager.outputTelemetry();
-    jetsonSink.outputTelemetry();
 
   }
 

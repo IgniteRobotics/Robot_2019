@@ -5,29 +5,25 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.elevator;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.commands.elevator.ElevatorState;
 import frc.robot.subsystems.Carriage;
-import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 
-public class MoveToSetpoint extends Command {
+public class OpenIntakeUntilBeam extends Command {
 
-  private Elevator elevator;
+  private Intake intake;
   private Carriage carriage;
-  private ElevatorState level;
 
-  public MoveToSetpoint(Elevator elevator, ElevatorState level, Carriage carriage) {
+  public OpenIntakeUntilBeam(Intake intake, Carriage carriage) {
 
-    this.elevator = elevator;
-    this.level = level;
+    this.intake = intake;
     this.carriage = carriage;
-    
-    requires(this.elevator);
-    
-  }
 
+    requires(this.intake);
+    requires(this.carriage);
+  }
 
   // Called just before this Command runs the first time
   @Override
@@ -37,29 +33,26 @@ public class MoveToSetpoint extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    int setPoint = elevator.getSetpoint(level, carriage.hasCargo());
-    elevator.setMotionMagicPosition(setPoint);
+    intake.openIntake();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return elevator.isMotionMagicDone() || elevator.isRevLimitTripped();
+    return intake.hasCargo();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    if (elevator.isRevLimitTripped()) {
-      elevator.zeroSensors();
-    }
-    elevator.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
+    intake.closeIntake();
+    intake.stopIntakeMotor();
   }
+  
 }

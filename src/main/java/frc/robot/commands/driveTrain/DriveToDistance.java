@@ -7,31 +7,18 @@
 
 package frc.robot.commands.driveTrain;
 
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.networktables.NetworkTable;
 import frc.robot.subsystems.DriveTrain;
 
 public class DriveToDistance extends Command {
 
   private DriveTrain driveTrain;
   
-  private int setpoint_inches;
-  private final double CURRENT_THRESHOLD = 15;
-  private static NetworkTableInstance inst = NetworkTableInstance.getDefault();
-  private static NetworkTable table = inst.getTable("Vision");
+  private int setpointInches;
 
-  public DriveToDistance(DriveTrain driveTrain, int setpoint_inches) {
-
+  public DriveToDistance(DriveTrain driveTrain, int setpointInches) {
     this.driveTrain = driveTrain;
-    this.setpoint_inches = setpoint_inches;
-    
-    requires(this.driveTrain);
-  }
-
-  public DriveToDistance(DriveTrain driveTrain)
-  {
-    this.driveTrain = driveTrain;
+    this.setpointInches = setpointInches;
     
     requires(this.driveTrain);
   }
@@ -39,30 +26,19 @@ public class DriveToDistance extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    driveTrain.zeroSensors();
-   
-    if (this.setpoint_inches == 0)
-    {
-      this.setpoint_inches = table.getEntry("DIRECT_DISTANCE").getNumber(0).intValue();
-      this.setpoint_inches += 7;
-    }
-       
-    
+    driveTrain.zeroSensors(); 
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
-   // driveTrain.setOpenLoopLeft(.3);
-   //  driveTrain.setOpenLoopRight(.3);
-   driveTrain.setMotionMagicPosition(setpoint_inches);
+   driveTrain.setMotionMagicPosition(setpointInches);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return driveTrain.isMotionMagicDone() || driveTrain.getLeftMasterCurrent() > CURRENT_THRESHOLD;
+    return driveTrain.isMotionMagicDone();
   }
 
   // Called once after isFinished returns true

@@ -5,55 +5,54 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.elevator;
+package frc.robot.commands.driveTrain;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.commands.elevator.ElevatorState;
-import frc.robot.subsystems.Carriage;
-import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Jetson;
 
-public class MoveToSetpoint extends Command {
+public class DriveToDistanceVision extends Command {
 
-  private Elevator elevator;
-  private Carriage carriage;
-  private ElevatorState level;
+  private DriveTrain driveTrain;
 
-  public MoveToSetpoint(Elevator elevator, ElevatorState level, Carriage carriage) {
+  private Jetson jetson;
+  
+  private final double CURRENT_THRESHOLD = 25;
 
-    this.elevator = elevator;
-    this.level = level;
-    this.carriage = carriage;
-    
-    requires(this.elevator);
-    
+  private double setpointInches;
+
+  public DriveToDistanceVision(DriveTrain driveTrain, Jetson jetson) {
+    this.driveTrain = driveTrain;
+    this.jetson = jetson;
+    requires(this.driveTrain);
   }
-
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    driveTrain.zeroSensors();
+   
+    this.setpointInches = jetson.getDirectDistance();
+    //this.setpointInches += 7; TODO: adjust this
+       
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    int setPoint = elevator.getSetpoint(level, carriage.hasCargo());
-    elevator.setMotionMagicPosition(setPoint);
+   driveTrain.setMotionMagicPosition(setpointInches);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return elevator.isMotionMagicDone() || elevator.isRevLimitTripped();
+    return driveTrain.isMotionMagicDone() || driveTrain.getLeftMasterCurrent() > CURRENT_THRESHOLD;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    if (elevator.isRevLimitTripped()) {
-      elevator.zeroSensors();
-    }
-    elevator.stop();
+    driveTrain.stop();
   }
 
   // Called when another command which requires one or more of the same
@@ -62,4 +61,5 @@ public class MoveToSetpoint extends Command {
   protected void interrupted() {
     end();
   }
+  
 }

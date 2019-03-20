@@ -14,7 +14,7 @@ import frc.robot.subsystems.Intake;
 public class OuttakeCargo extends CommandGroup {
 
   public OuttakeCargo(Intake intake, Carriage carriage) {
-    addSequential(new OpenIntake(intake, carriage, false));
+    addParallel(new OpenIntake(intake));
     addParallel(new RollOutCargo(intake));
   }
 

@@ -9,7 +9,6 @@ package frc.robot.commands.carriage;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.Carriage;
-import frc.robot.Robot;
 
 public class CarriageOpen extends Command {
 
@@ -32,7 +31,7 @@ public class CarriageOpen extends Command {
   @Override
   protected void execute() {
 
-    if (!Robot.carriage.isBeamBreakOpen()) {
+    if (!carriage.hasCargo()) {
       carriage.openBeak();
     } else {
       carriage.ejectCargo();
@@ -43,15 +42,7 @@ public class CarriageOpen extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-
-    // if (carriage.hasHatch()) {
-    //   return carriage.isBeakOpen();
-    // } else {
-    //   return carriage.isCargoEjectOpen();
-    // }
-
     return true;
-    
   }
 
   // Called once after isFinished returns true
@@ -65,4 +56,5 @@ public class CarriageOpen extends Command {
   protected void interrupted() {
     end();
   }
+  
 }

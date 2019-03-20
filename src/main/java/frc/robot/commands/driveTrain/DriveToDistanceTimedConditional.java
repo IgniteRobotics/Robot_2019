@@ -5,55 +5,58 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.elevator;
+package frc.robot.commands.driveTrain;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.commands.elevator.ElevatorState;
 import frc.robot.subsystems.Carriage;
-import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.DriveTrain;
 
-public class MoveToSetpoint extends Command {
+public class DriveToDistanceTimedConditional extends Command {
 
-  private Elevator elevator;
+  private DriveTrain driveTrain;
   private Carriage carriage;
-  private ElevatorState level;
 
-  public MoveToSetpoint(Elevator elevator, ElevatorState level, Carriage carriage) {
+  private double power;
+  
+  public DriveToDistanceTimedConditional(DriveTrain driveTrain, Carriage carriage, double timeout, double power) {
 
-    this.elevator = elevator;
-    this.level = level;
+    this.driveTrain = driveTrain;
     this.carriage = carriage;
-    
-    requires(this.elevator);
-    
-  }
 
+    this.power = power;
+    
+    requires(this.driveTrain);
+
+    setTimeout(timeout);
+  }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    int setPoint = elevator.getSetpoint(level, carriage.hasCargo());
-    elevator.setMotionMagicPosition(setPoint);
+    if (!carriage.hasCargo()) {
+      driveTrain.setOpenLoopLeft(power);
+      driveTrain.setOpenLoopRight(power);
+    } else {
+      end();
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return elevator.isMotionMagicDone() || elevator.isRevLimitTripped();
+    return isTimedOut();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    if (elevator.isRevLimitTripped()) {
-      elevator.zeroSensors();
-    }
-    elevator.stop();
+    driveTrain.stop();
   }
 
   // Called when another command which requires one or more of the same
@@ -62,4 +65,5 @@ public class MoveToSetpoint extends Command {
   protected void interrupted() {
     end();
   }
+  
 }

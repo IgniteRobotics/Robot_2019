@@ -16,7 +16,7 @@ public class RollInCargoUntilBeam extends Command {
   private Intake intake;
   private Carriage carriage;
 
-  private final double INTAKE_POWER = -0.5;
+  private final double INTAKE_POWER = 0.5;
 
   public RollInCargoUntilBeam(Carriage carriage, Intake intake) {
 
@@ -33,15 +33,13 @@ public class RollInCargoUntilBeam extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if (!carriage.hasHatch()) {
-      intake.setOpenLoop(INTAKE_POWER);
-    }
+    intake.setOpenLoop(INTAKE_POWER);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return carriage.isBeamBreakOpen();
+    return carriage.hasCargo();
   }
 
   // Called once after isFinished returns true

@@ -1,6 +1,6 @@
-package frc.robot;
+package frc.robot.commands.elevator;
 
-public enum CarriageLevel {
+public enum ElevatorState {
     Zero,
     Level1,
     Level2,

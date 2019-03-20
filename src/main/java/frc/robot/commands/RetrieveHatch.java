@@ -8,10 +8,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.CarriageLevel;
 import frc.robot.commands.carriage.CloseBeak;
 import frc.robot.commands.carriage.OpenBeak;
 import frc.robot.commands.driveTrain.DriveToDistanceTimed;
+import frc.robot.commands.elevator.ElevatorState;
 import frc.robot.commands.elevator.MoveToSetpoint;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.DriveTrain;
@@ -23,9 +23,9 @@ public class RetrieveHatch extends CommandGroup {
     
     addSequential(new OpenBeak(carriage));
     addSequential(new CloseBeak(carriage));
-    addSequential(new MoveToSetpoint(elevator, CarriageLevel.HatchPickup, carriage));
-    addSequential(new DriveToDistanceTimed(driveTrain, carriage, 0.5, -0.3, true, false));
-    addSequential(new MoveToSetpoint(elevator, CarriageLevel.Zero, carriage));
+    addSequential(new MoveToSetpoint(elevator, ElevatorState.HatchPickup, carriage));
+    addSequential(new DriveToDistanceTimed(driveTrain, 0.5, -0.3));
+    addSequential(new MoveToSetpoint(elevator, ElevatorState.Zero, carriage));
     
   }
 }

@@ -8,27 +8,25 @@
 package frc.robot.commands.elevator;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import frc.robot.CarriageLevel;
+import frc.robot.Constants;
 import frc.robot.commands.DoNothing;
 import frc.robot.commands.carriage.CarriageClose;
 import frc.robot.commands.carriage.CarriageOpen;
-import frc.robot.commands.driveTrain.DriveToDistanceTimed;
+import frc.robot.commands.driveTrain.DriveToDistanceTimedConditional;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 
-public class MoveThenEject extends CommandGroup {
+public class EjectThenHomeRocket extends CommandGroup {
 
-  public MoveThenEject(Elevator elevator, Carriage carriage, CarriageLevel level, double ejectTimeout, DriveTrain driveTrain) {
+  public EjectThenHomeRocket(Elevator elevator, Carriage carriage, double ejectTimeout, DriveTrain driveTrain) {
 
-    addSequential(new DriveToDistanceTimed(driveTrain, carriage, 0.25, -0.2, false, true));
-    addSequential(new MoveToSetpoint(elevator, level, carriage));
     addSequential(new CarriageOpen(carriage));
     addSequential(new DoNothing(ejectTimeout));
-    addSequential(new DriveToDistanceTimed(driveTrain, carriage, 0.5, -0.2, false, false));
+    addSequential(new DriveToDistanceTimedConditional(driveTrain, carriage, Constants.EJECT_THEN_HOME_DRIVE_TIME, Constants.EJECT_THEN_HOME_DRIVE_POWER));
     addSequential(new CarriageClose(carriage));
-    addSequential(new MoveToSetpoint(elevator, CarriageLevel.Zero, carriage));
+    addSequential(new MoveToSetpoint(elevator, ElevatorState.Zero, carriage));
 
   }
-
+  
 }

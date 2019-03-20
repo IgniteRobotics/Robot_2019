@@ -14,7 +14,7 @@ public class RollOutCargo extends Command {
 
   private Intake intake;
 
-  private final double INTAKE_POWER = 0.5;
+  private final double INTAKE_POWER = -0.5;
 
   public RollOutCargo(Intake intake) {
 

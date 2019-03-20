@@ -35,6 +35,8 @@ public class Intake extends IgniteSubsystem {
     intakeBeamBreak = new DigitalInput(intakeBeamBreakID);
 
     intakeMotor.setNeutralMode(NeutralMode.Brake);
+    
+    intakeMotor.setInverted(true);
 
     writeToLog();
 
@@ -60,7 +62,7 @@ public class Intake extends IgniteSubsystem {
     SmartDashboard.putNumber("Intake/Current", this.getCurrent());
     SmartDashboard.putNumber("Intake/Percent out", this.getPercentOutput());
     SmartDashboard.putBoolean("Intake/Is intake open?", this.isIntakeOpen());
-    SmartDashboard.putBoolean("Intake/Is intake beam break open", this.isIntakeBeamBreakOpen());
+    SmartDashboard.putBoolean("Intake/Has cargo?", this.hasCargo());
   }
 
   @Override
@@ -102,7 +104,7 @@ public class Intake extends IgniteSubsystem {
     return intakeState;
   }
 
-  public boolean isIntakeBeamBreakOpen() {
+  public boolean hasCargo() {
     return !intakeBeamBreak.get();
   }
   

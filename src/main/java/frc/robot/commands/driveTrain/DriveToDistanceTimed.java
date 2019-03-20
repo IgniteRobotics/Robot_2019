@@ -8,26 +8,19 @@
 package frc.robot.commands.driveTrain;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.DriveTrain;
 
 public class DriveToDistanceTimed extends Command {
 
   private DriveTrain driveTrain;
-  private Carriage carriage;
 
   private double power;
-  private boolean ignoreBeakState;
-  private boolean isRocketCargo;
   
-  public DriveToDistanceTimed(DriveTrain driveTrain, Carriage carriage, double timeout, double power, boolean ignoreBeakState, boolean isRocketCargo) {
+  public DriveToDistanceTimed(DriveTrain driveTrain, double timeout, double power) {
 
     this.driveTrain = driveTrain;
-    this.carriage = carriage;
-    this.isRocketCargo = isRocketCargo;
 
     this.power = power;
-    this.ignoreBeakState = ignoreBeakState;
     
     requires(this.driveTrain);
 
@@ -43,15 +36,8 @@ public class DriveToDistanceTimed extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if (isRocketCargo && carriage.isBeamBreakOpen()) {
-      driveTrain.setOpenLoopLeft(power);
-      driveTrain.setOpenLoopRight(power);
-    } else {
-      if (ignoreBeakState || carriage.isBeakOpen()) {
-        driveTrain.setOpenLoopLeft(power);
-        driveTrain.setOpenLoopRight(power);
-      }
-    }
+    driveTrain.setOpenLoopLeft(power);
+    driveTrain.setOpenLoopRight(power);
   }
 
   // Make this return true when this Command no longer needs to run execute()

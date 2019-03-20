@@ -12,6 +12,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import badlog.lib.*;
 
+import java.util.HashMap;
+
 import com.ctre.phoenix.motorcontrol.*;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -20,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.InvertType;
 
 import frc.robot.subsystems.IgniteSubsystem;
+import frc.robot.commands.elevator.ElevatorState;
 import frc.robot.util.Util;
 import frc.robot.util.LogUtil;
 import frc.robot.Constants;
@@ -40,6 +43,9 @@ public class Elevator extends IgniteSubsystem {
   private final int CRUISE_VELOCITY = 6000;
 
   private final int TOLERANCE = 200;
+
+  private HashMap<ElevatorState, Integer> hatchSetpoints = new HashMap<ElevatorState, Integer>();
+  private HashMap<ElevatorState, Integer> cargoSetpoints = new HashMap<ElevatorState, Integer>();
 
   public Elevator(int elevatorMasterID, int elevatorFollowerID) {
 
@@ -69,6 +75,8 @@ public class Elevator extends IgniteSubsystem {
   
     elevatorMaster.configMotionCruiseVelocity(CRUISE_VELOCITY, 10);
     elevatorMaster.configMotionAcceleration(MAX_ACCELERATION, 10);
+
+    populateSetpoints();
 
     writeToLog();
 
@@ -165,6 +173,29 @@ public class Elevator extends IgniteSubsystem {
 
   public void stop() {
     elevatorMaster.stopMotor();
+  }
+
+  public int getSetpoint(ElevatorState level, boolean hasCargo) {
+    if (hasCargo) {
+      return cargoSetpoints.get(level);
+    } else {
+      return hatchSetpoints.get(level);
+    }
+  }
+
+  private void populateSetpoints() {
+    cargoSetpoints.put(ElevatorState.Level1, Constants.ROCKET_CARGO_L1);
+    cargoSetpoints.put(ElevatorState.Level2, Constants.ROCKET_CARGO_L2);
+    cargoSetpoints.put(ElevatorState.Level3, Constants.ROCKET_CARGO_L3);
+    cargoSetpoints.put(ElevatorState.Zero, 0);
+    cargoSetpoints.put(ElevatorState.CargoShipCargo, Constants.CARGO_SHIP_CARGO);
+    cargoSetpoints.put(ElevatorState.HatchPickup, Constants.HATCH_PICKUP);
+    hatchSetpoints.put(ElevatorState.Level1, Constants.ROCKET_HATCH_L1);
+    hatchSetpoints.put(ElevatorState.Level2, Constants.ROCKET_HATCH_L2);
+    hatchSetpoints.put(ElevatorState.Level3, Constants.ROCKET_HATCH_L3);
+    hatchSetpoints.put(ElevatorState.CargoShipCargo, Constants.CARGO_SHIP_CARGO);
+    hatchSetpoints.put(ElevatorState.Zero, 0);
+    hatchSetpoints.put(ElevatorState.HatchPickup, Constants.HATCH_PICKUP);
   }
 
 }

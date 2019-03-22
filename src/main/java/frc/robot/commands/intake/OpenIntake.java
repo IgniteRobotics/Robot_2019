@@ -13,10 +13,13 @@ import frc.robot.subsystems.Intake;
 public class OpenIntake extends Command {
 
   private Intake intake;
+  private double power;
 
-  public OpenIntake(Intake intake) {
+  public OpenIntake(Intake intake, double power) {
 
     this.intake = intake;
+    
+    this.power = power;
 
     requires(this.intake);
   }
@@ -29,6 +32,7 @@ public class OpenIntake extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    intake.setOpenLoop(power);
     intake.openIntake();
   }
 

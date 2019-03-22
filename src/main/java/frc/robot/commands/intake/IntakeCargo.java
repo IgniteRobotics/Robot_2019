@@ -8,6 +8,7 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.Constants;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.Intake;
 
@@ -15,7 +16,7 @@ public class IntakeCargo extends CommandGroup {
 
   public IntakeCargo(Intake intake, Carriage carriage) {
 
-    addSequential(new OpenIntakeUntilBeam(intake, carriage));
+    addSequential(new OpenIntakeUntilBeam(intake, carriage, Constants.INTAKE_POWER));
     addSequential(new CloseRollIntake(intake, carriage));
 
   }

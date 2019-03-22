@@ -17,15 +17,18 @@ import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 
-public class EjectThenHomeRocket extends CommandGroup {
+public class EjectThenHome extends CommandGroup {
 
-  public EjectThenHomeRocket(Elevator elevator, Carriage carriage, double ejectTimeout, DriveTrain driveTrain) {
+  public EjectThenHome(Elevator elevator, Carriage carriage, double ejectTimeout, DriveTrain driveTrain) {
+
+    setInterruptible(true);
 
     addSequential(new CarriageOpen(carriage));
     addSequential(new DoNothing(ejectTimeout));
     addSequential(new DriveToDistanceTimedConditional(driveTrain, carriage, Constants.EJECT_THEN_HOME_DRIVE_TIME, Constants.EJECT_THEN_HOME_DRIVE_POWER));
     addSequential(new CarriageClose(carriage));
     addSequential(new MoveToSetpoint(elevator, ElevatorState.Zero, carriage));
+
 
   }
   

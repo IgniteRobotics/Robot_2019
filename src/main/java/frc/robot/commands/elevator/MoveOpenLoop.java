@@ -35,6 +35,7 @@ public class MoveOpenLoop extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    elevator.setState(ElevatorState.Unknown);
   }
 
   // Called repeatedly when this Command is scheduled to run

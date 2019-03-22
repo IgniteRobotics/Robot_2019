@@ -12,9 +12,9 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.carriage.RetractCargo;
 import frc.robot.commands.carriage.ToggleBeak;
+import frc.robot.commands.driveTrain.TurnToAngle;
 import frc.robot.commands.RetrieveHatch;
-import frc.robot.commands.elevator.EjectThenHomeCSCargo;
-import frc.robot.commands.elevator.EjectThenHomeRocket;
+import frc.robot.commands.elevator.EjectThenHome;
 import frc.robot.commands.elevator.ElevatorState;
 import frc.robot.commands.elevator.MoveOpenLoop;
 import frc.robot.commands.elevator.MoveToSetpoint;
@@ -63,28 +63,27 @@ public class OI {
 	public Button jogSwitch = new JoystickButton(manipulatorJoystick, BUTTON_Y);
 	public Button retrieveHatch = new JoystickButton(manipulatorJoystick, BUTTON_B);
 	public Button outtakeCargo = new JoystickButton(manipulatorJoystick, BUTTON_RIGHT_BUMPER);
-	public Button openIntake = new JoystickButton(manipulatorJoystick, BUTTON_LEFT_BUMPER);
+	public Button intakeCargo = new JoystickButton(manipulatorJoystick, BUTTON_LEFT_BUMPER);
 
 	//driver
 	public Button level3 = new JoystickButton(driverJoystick, BUTTON_Y);
 	public Button level2 = new JoystickButton(driverJoystick, BUTTON_B);
 	public Button level1 = new JoystickButton(driverJoystick, BUTTON_A);
 	public Button cargoShipCargo = new JoystickButton(driverJoystick, BUTTON_X);
-	public Button ejectThenHomeCSCargo = new JoystickButton(driverJoystick, BUTTON_LEFT_BUMPER);
-	public Button ejectThenHomeRocket = new JoystickButton(driverJoystick, BUTTON_RIGHT_BUMPER);
+	public Button ejectThenHome = new JoystickButton(driverJoystick, BUTTON_RIGHT_BUMPER);
 
     public OI (DriveTrain driveTrain, Carriage carriage, Elevator elevator, Intake intake) {
+		
 		//manipulator				
 		openBeak.whenPressed(new ToggleBeak(carriage));
-
-		ejectCargo.whenPressed(new EjectCargo(carriage));
+		ejectCargo.whileHeld(new EjectCargo(carriage));
 		ejectCargo.whenReleased(new RetractCargo(carriage));
 
         jogSwitch.whileHeld(new MoveOpenLoop(elevator, manipulatorJoystick, AXIS_LEFT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
 
 		outtakeCargo.whileHeld(new OuttakeCargo(intake, carriage));
 		outtakeCargo.whenReleased(new CloseIntake(intake, carriage));
-		openIntake.toggleWhenPressed(new IntakeCargo(intake, carriage));
+		intakeCargo.toggleWhenPressed(new IntakeCargo(intake, carriage));
 
 		retrieveHatch.whenPressed(new RetrieveHatch(elevator, carriage, driveTrain));
 
@@ -94,8 +93,7 @@ public class OI {
 		level1.whenPressed(new MoveToSetpoint(elevator, ElevatorState.Level1, carriage));
 		cargoShipCargo.whenPressed(new MoveToSetpoint(elevator, ElevatorState.CargoShipCargo, carriage));
 		
-		ejectThenHomeCSCargo.whenPressed(new EjectThenHomeCSCargo(elevator, carriage, driveTrain));
-		ejectThenHomeRocket.whenPressed(new EjectThenHomeRocket(elevator, carriage, Constants.EJECT_TIMEOUT, driveTrain));
+		ejectThenHome.whenPressed(new EjectThenHome(elevator, carriage, Constants.EJECT_TIMEOUT, driveTrain));
     }
 
 }

@@ -15,11 +15,14 @@ public class OpenIntakeUntilBeam extends Command {
 
   private Intake intake;
   private Carriage carriage;
+  private double power;
 
-  public OpenIntakeUntilBeam(Intake intake, Carriage carriage) {
+  public OpenIntakeUntilBeam(Intake intake, Carriage carriage, double power) {
 
     this.intake = intake;
     this.carriage = carriage;
+
+    this.power = power;
 
     requires(this.intake);
     requires(this.carriage);
@@ -33,6 +36,7 @@ public class OpenIntakeUntilBeam extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    intake.setOpenLoop(power);
     intake.openIntake();
   }
 

@@ -49,6 +49,7 @@ public class TurnToAngle extends Command {
   protected void end() {
     driveTrain.stopTurnController();
     driveTrain.stop();
+    driveTrain.zeroAngle();
   }
 
   // Called when another command which requires one or more of the same

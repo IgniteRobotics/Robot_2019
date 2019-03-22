@@ -44,10 +44,14 @@ public class Elevator extends IgniteSubsystem {
 
   private final int TOLERANCE = 200;
 
+  private ElevatorState state;
+
   private HashMap<ElevatorState, Integer> hatchSetpoints = new HashMap<ElevatorState, Integer>();
   private HashMap<ElevatorState, Integer> cargoSetpoints = new HashMap<ElevatorState, Integer>();
 
   public Elevator(int elevatorMasterID, int elevatorFollowerID) {
+
+    this.setState(ElevatorState.Zero);
 
     elevatorMaster = new WPI_TalonSRX(elevatorMasterID);
     elevatorFollower = new WPI_VictorSPX(elevatorFollowerID);
@@ -103,6 +107,7 @@ public class Elevator extends IgniteSubsystem {
   }
 
   public void outputTelemetry() {
+    SmartDashboard.putString("Elevator/State", this.getState().toString());
     SmartDashboard.putNumber("Elevator/Pos", this.getEncoderPos());
     SmartDashboard.putNumber("Elevator/Vel", this.getEncoderVel());
     SmartDashboard.putNumber("Elevator/Master voltage", this.getMasterVoltage());
@@ -175,12 +180,21 @@ public class Elevator extends IgniteSubsystem {
     elevatorMaster.stopMotor();
   }
 
-  public int getSetpoint(ElevatorState level, boolean hasCargo) {
+  public int getSetpoint(ElevatorState state, boolean hasCargo) {
+    setState(state);
     if (hasCargo) {
-      return cargoSetpoints.get(level);
+      return cargoSetpoints.get(state);
     } else {
-      return hatchSetpoints.get(level);
+      return hatchSetpoints.get(state);
     }
+  }
+
+  public void setState(ElevatorState state) {
+    this.state = state;
+  }
+
+  public ElevatorState getState() {
+    return state;
   }
 
   private void populateSetpoints() {
@@ -193,7 +207,6 @@ public class Elevator extends IgniteSubsystem {
     hatchSetpoints.put(ElevatorState.Level1, Constants.ROCKET_HATCH_L1);
     hatchSetpoints.put(ElevatorState.Level2, Constants.ROCKET_HATCH_L2);
     hatchSetpoints.put(ElevatorState.Level3, Constants.ROCKET_HATCH_L3);
-    hatchSetpoints.put(ElevatorState.CargoShipCargo, Constants.CARGO_SHIP_CARGO);
     hatchSetpoints.put(ElevatorState.Zero, 0);
     hatchSetpoints.put(ElevatorState.HatchPickup, Constants.HATCH_PICKUP);
   }

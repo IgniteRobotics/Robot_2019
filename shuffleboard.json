@@ -268,6 +268,17 @@
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
+          },
+          "2,2": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Elevator/State",
+              "_title": "State"
+            }
           }
         }
       }
@@ -284,19 +295,6 @@
         "tiles": {
           "0,0": {
             "size": [
-              2,
-              1
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/Carriage/Has hatch?",
-              "_title": "Has hatch?",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "2,0": {
-            "size": [
               3,
               1
             ],
@@ -304,19 +302,6 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/Carriage/Is beak open?",
               "_title": "Is beak open?",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "2,1": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/Carriage/Is beam break open?",
-              "_title": "Is beam break open?",
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -330,6 +315,19 @@
               "_type": "Boolean Box",
               "_source0": "network_table:///SmartDashboard/Carriage/Is cargo eject open?",
               "_title": "Is cargo eject open?",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "2,1": {
+            "size": [
+              3,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Carriage/Has cargo?",
+              "_title": "Has cargo?",
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -356,19 +354,6 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Intake/Current",
               "_title": "Current"
-            }
-          },
-          "0,3": {
-            "size": [
-              3,
-              1
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_source0": "network_table:///SmartDashboard/Intake/Is intake beam break open",
-              "_title": "Is intake beam break open",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
             }
           },
           "0,4": {
@@ -405,15 +390,28 @@
               "_source0": "network_table:///SmartDashboard/Intake/Voltage",
               "_title": "Voltage"
             }
+          },
+          "0,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Intake/Has cargo?",
+              "_title": "Has cargo?",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
           }
         }
       }
     }
   ],
   "windowGeometry": {
-    "x": 0.0,
-    "y": 0.0,
-    "width": 1599.0,
-    "height": 867.0
+    "x": 5.0,
+    "y": 6.0,
+    "width": 1587.0,
+    "height": 682.0
   }
 }

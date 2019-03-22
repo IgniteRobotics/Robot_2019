@@ -41,9 +41,9 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
 
   private Command defaultCommand;
 
-  private final double kP_TURN = 0;
+  private final double kP_TURN = 0.01;
   private final double kI_TURN = 0;
-  private final double kD_TURN = 0;
+  private final double kD_TURN = 0.009;
 
   private final double kP_DRIVE = 1;
   private final double kI_DRIVE = 0;
@@ -272,6 +272,7 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   public void stopTurnController() {
     rotateToAngleRate = 0;
     turnController.disable();
+    turnController.reset();
   }
 
   public double getTurnError() {
@@ -279,7 +280,7 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   }
 
   public double getTurnSetpoint() {
-    return turnController.getError();
+    return turnController.getSetpoint();
   }
   
   public double getRightMasterVoltage() {

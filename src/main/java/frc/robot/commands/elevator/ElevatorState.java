@@ -6,5 +6,6 @@ public enum ElevatorState {
     Level2,
     Level3,
     CargoShipCargo,
-    HatchPickup
+    HatchPickup,
+    Unknown
 }

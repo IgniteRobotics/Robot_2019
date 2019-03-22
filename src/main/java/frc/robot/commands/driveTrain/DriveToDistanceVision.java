@@ -33,7 +33,7 @@ public class DriveToDistanceVision extends Command {
     driveTrain.zeroSensors();
    
     this.setpointInches = jetson.getDirectDistance();
-    //this.setpointInches += 7; TODO: adjust this
+    //this.setpointInches += 7; TODO: adjust me!
        
   }
 

@@ -27,7 +27,8 @@ public class Jetson extends IgniteSubsystem {
     }
 
     public void turnOnLed() {
-        led.set(Relay.Value.kOn);
+        //led.set(Relay.Value.kOn);
+        led.set(Relay.Value.kForward); //TODO: FOR PRACTICE BOT ONLY
     }
 
     public double getTurn1() {

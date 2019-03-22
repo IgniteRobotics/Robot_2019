@@ -8,13 +8,14 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import frc.robot.Constants;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.Intake;
 
 public class OuttakeCargo extends CommandGroup {
 
   public OuttakeCargo(Intake intake, Carriage carriage) {
-    addParallel(new OpenIntake(intake));
+    addParallel(new OpenIntake(intake, Constants.OUTTAKE_POWER));
     addParallel(new RollOutCargo(intake));
   }
 

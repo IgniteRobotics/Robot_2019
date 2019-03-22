@@ -58,6 +58,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    jetson.turnOn();
     startTime = System.nanoTime();
 
     logger = BadLog.init("/home/lvuser/log/" + LogUtil.genSessionName() + ".bag");

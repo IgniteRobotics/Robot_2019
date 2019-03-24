@@ -88,7 +88,7 @@ public class OI {
 
         jogSwitch.whileHeld(new MoveOpenLoop(elevator, manipulatorJoystick, AXIS_LEFT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
 
-		outtakeCargo.whileHeld(new RollOutCargo(intake));
+		outtakeCargo.whileHeld(new RollOutCargo(intake, Constants.OUTTAKE_POWER));
 		outtakeCargo.whenReleased(new CloseIntake(intake, carriage));
 		intakeCargo.toggleWhenPressed(new IntakeCargo(intake, carriage));
 

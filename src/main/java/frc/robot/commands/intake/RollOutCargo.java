@@ -13,12 +13,12 @@ import frc.robot.subsystems.Intake;
 public class RollOutCargo extends Command {
 
   private Intake intake;
+  private double power;
 
-  private final double INTAKE_POWER = 0.5;
-
-  public RollOutCargo(Intake intake) {
+  public RollOutCargo(Intake intake, double power) {
 
     this.intake = intake;
+    this.power = power;
 
   }
 
@@ -31,7 +31,7 @@ public class RollOutCargo extends Command {
   @Override
   protected void execute() {
     intake.openIntake();
-    intake.setOpenLoop(INTAKE_POWER);
+    intake.setOpenLoop(power);
   }
 
   // Make this return true when this Command no longer needs to run execute()

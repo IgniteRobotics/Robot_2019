@@ -15,13 +15,13 @@ public class RollInCargoUntilBeam extends Command {
 
   private Intake intake;
   private Carriage carriage;
+  private double power;
 
-  private final double INTAKE_POWER = -0.5;
-
-  public RollInCargoUntilBeam(Carriage carriage, Intake intake) {
+  public RollInCargoUntilBeam(Carriage carriage, Intake intake, double power) {
 
     this.intake = intake;
     this.carriage = carriage;
+    this.power = power;
 
   }
 
@@ -33,7 +33,7 @@ public class RollInCargoUntilBeam extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    intake.setOpenLoop(INTAKE_POWER);
+    intake.setOpenLoop(power);
   }
 
   // Make this return true when this Command no longer needs to run execute()

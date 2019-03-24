@@ -207,6 +207,7 @@ public class Elevator extends IgniteSubsystem {
     hatchSetpoints.put(ElevatorState.Level1, Constants.ROCKET_HATCH_L1);
     hatchSetpoints.put(ElevatorState.Level2, Constants.ROCKET_HATCH_L2);
     hatchSetpoints.put(ElevatorState.Level3, Constants.ROCKET_HATCH_L3);
+    hatchSetpoints.put(ElevatorState.CargoShipCargo, Constants.CARGO_SHIP_CARGO);
     hatchSetpoints.put(ElevatorState.Zero, 0);
     hatchSetpoints.put(ElevatorState.HatchPickup, Constants.HATCH_PICKUP);
   }

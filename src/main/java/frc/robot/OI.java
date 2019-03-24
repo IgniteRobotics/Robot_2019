@@ -10,9 +10,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.buttons.POVButton;
 import frc.robot.commands.carriage.RetractCargo;
 import frc.robot.commands.carriage.ToggleBeak;
-import frc.robot.commands.driveTrain.TurnToAngle;
 import frc.robot.commands.RetrieveHatch;
 import frc.robot.commands.elevator.EjectThenHome;
 import frc.robot.commands.elevator.ElevatorState;
@@ -21,7 +21,7 @@ import frc.robot.commands.elevator.MoveToSetpoint;
 import frc.robot.commands.carriage.EjectCargo;
 import frc.robot.commands.intake.CloseIntake;
 import frc.robot.commands.intake.IntakeCargo;
-import frc.robot.commands.intake.OuttakeCargo;
+import frc.robot.commands.intake.RollOutCargo;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
@@ -52,7 +52,12 @@ public class OI {
 	public final int AXIS_LEFT_TRIGGER = 2;
 	public final int AXIS_RIGHT_TRIGGER = 3;
 	public final int AXIS_RIGHT_STICK_X = 4;
-    public final int AXIS_RIGHT_STICK_Y = 5;
+	public final int AXIS_RIGHT_STICK_Y = 5;
+	
+	public final int BUTTON_DPAD_UP = 0;
+	public final int BUTTON_DPAD_LEFT = 270;
+	public final int BUTTON_DPAD_RIGHT = 90;
+	public final int BUTTON_DPAD_DOWN = 180;
     
 	public Joystick driverJoystick = new Joystick(DRIVER_JOYSTICK);
     public Joystick manipulatorJoystick = new Joystick(MANIPULATOR_JOYSTICK);
@@ -64,12 +69,14 @@ public class OI {
 	public Button retrieveHatch = new JoystickButton(manipulatorJoystick, BUTTON_B);
 	public Button outtakeCargo = new JoystickButton(manipulatorJoystick, BUTTON_RIGHT_BUMPER);
 	public Button intakeCargo = new JoystickButton(manipulatorJoystick, BUTTON_LEFT_BUMPER);
+	public Button zero = new JoystickButton(manipulatorJoystick, BUTTON_LEFT_STICK);
+
+	public POVButton level3 = new POVButton(manipulatorJoystick, BUTTON_DPAD_UP);
+	public POVButton level2 = new POVButton(manipulatorJoystick, BUTTON_DPAD_RIGHT);
+	public POVButton level1 = new POVButton(manipulatorJoystick, BUTTON_DPAD_DOWN);
+	public POVButton cargoShipCargo = new POVButton(manipulatorJoystick, BUTTON_DPAD_LEFT);
 
 	//driver
-	public Button level3 = new JoystickButton(driverJoystick, BUTTON_Y);
-	public Button level2 = new JoystickButton(driverJoystick, BUTTON_B);
-	public Button level1 = new JoystickButton(driverJoystick, BUTTON_A);
-	public Button cargoShipCargo = new JoystickButton(driverJoystick, BUTTON_X);
 	public Button ejectThenHome = new JoystickButton(driverJoystick, BUTTON_RIGHT_BUMPER);
 
     public OI (DriveTrain driveTrain, Carriage carriage, Elevator elevator, Intake intake) {
@@ -81,18 +88,19 @@ public class OI {
 
         jogSwitch.whileHeld(new MoveOpenLoop(elevator, manipulatorJoystick, AXIS_LEFT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
 
-		outtakeCargo.whileHeld(new OuttakeCargo(intake, carriage));
+		outtakeCargo.whileHeld(new RollOutCargo(intake));
 		outtakeCargo.whenReleased(new CloseIntake(intake, carriage));
 		intakeCargo.toggleWhenPressed(new IntakeCargo(intake, carriage));
 
 		retrieveHatch.whenPressed(new RetrieveHatch(elevator, carriage, driveTrain));
 
-		//driver
 		level3.whenPressed(new MoveToSetpoint(elevator, ElevatorState.Level3, carriage));
 		level2.whenPressed(new MoveToSetpoint(elevator, ElevatorState.Level2, carriage));
 		level1.whenPressed(new MoveToSetpoint(elevator, ElevatorState.Level1, carriage));
 		cargoShipCargo.whenPressed(new MoveToSetpoint(elevator, ElevatorState.CargoShipCargo, carriage));
-		
+		zero.whenPressed(new MoveToSetpoint(elevator, ElevatorState.Zero, carriage));
+
+		//driver
 		ejectThenHome.whenPressed(new EjectThenHome(elevator, carriage, Constants.EJECT_TIMEOUT, driveTrain));
     }
 

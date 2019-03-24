@@ -14,7 +14,7 @@ public class RollOutCargo extends Command {
 
   private Intake intake;
 
-  private final double INTAKE_POWER = -0.5;
+  private final double INTAKE_POWER = 0.5;
 
   public RollOutCargo(Intake intake) {
 
@@ -30,6 +30,7 @@ public class RollOutCargo extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    intake.openIntake();
     intake.setOpenLoop(INTAKE_POWER);
   }
 
@@ -43,6 +44,7 @@ public class RollOutCargo extends Command {
   @Override
   protected void end() {
     intake.stopIntakeMotor();
+    intake.closeIntake();
   }
 
   // Called when another command which requires one or more of the same

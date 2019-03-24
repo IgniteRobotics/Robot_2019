@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import frc.robot.commands.driveTrain.arcadeDrive;
-import frc.robot.commands.elevator.ElevatorState;
 import frc.robot.commands.elevator.HoldPosition;
 
 import frc.robot.subsystems.Carriage;
@@ -81,9 +80,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    if (elevator.isFwdLimitTripped()) {
-      elevator.setState(ElevatorState.Zero);
-    }
     subsystemManager.outputTelemetry();
     subsystemManager.zeroSensorsFromDashboard();
     jetson.turnOffToggle();
@@ -178,6 +174,7 @@ public class Robot extends TimedRobot {
     subsystemManager.addSubsystems(carriage, driveTrain, elevator, intake, jetson);
 
     subsystemManager.zeroAllSensors();
+    subsystemManager.zeroSensorsFromDashboard();
     subsystemManager.outputTelemetry();
 
   }

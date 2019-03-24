@@ -37,7 +37,7 @@ public class RobotMap {
   public static final int elevatorFollowerID = 9;
 
   // Intake
-  public static final int intakeSolenoidOpen = 0;
+  public static final int intakeSolenoidOpen = 2;
   public static final int intakeSolenoidClose = 1;
   public static final int intakeMotorID = 10;
   public static final int intakeBeamBreakID = 1;

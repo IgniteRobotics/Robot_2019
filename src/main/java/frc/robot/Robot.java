@@ -51,6 +51,13 @@ public class Robot extends TimedRobot {
 
   private long startTime;
 
+  public static double turn1;
+  public static double drive1;
+  public static double turn2;
+  public static double drive2;
+
+  private static boolean lockVisionValues;
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -58,6 +65,8 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     startTime = System.nanoTime();
+
+    lockVisionValues = false;
 
     logger = BadLog.init("/home/lvuser/log/" + LogUtil.genSessionName() + ".bag");
 
@@ -98,6 +107,11 @@ public class Robot extends TimedRobot {
 
     logger.updateTopics();
     logger.log();
+
+    if (!lockVisionValues) {
+      updateVisionValues();
+    }
+
   }
 
   /**
@@ -112,7 +126,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-
     if (elevator.isFwdLimitTripped()) {
       elevator.zeroSensors();
     }
@@ -194,5 +207,20 @@ public class Robot extends TimedRobot {
     BadLog.createTopicStr("System/FPGA Active", "bool", () -> LogUtil.fromBool(RobotController.isSysActive()));
     BadLog.createTopic("Match Time", "s", () -> DriverStation.getInstance().getMatchTime());
   }
-  
+
+  private void updateVisionValues() {
+    turn1 = jetson.getTurn1();
+    drive1 = jetson.getDistance1();
+    turn2 = jetson.getTurn2();
+    drive2 = jetson.getDistance2();
+  }
+
+  public static void lockVision() {
+    lockVisionValues = true;
+  }
+
+  public static void unlockVision() {
+    lockVisionValues = false;
+  }
+
 }

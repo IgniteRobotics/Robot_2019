@@ -29,7 +29,5 @@ public class RetrieveHatch extends CommandGroup {
     addSequential(new DriveToDistanceTimed(driveTrain, 0.5, -0.3));
     addSequential(new MoveToSetpoint(elevator, ElevatorState.Zero, carriage));
     
-
-
   }
 }

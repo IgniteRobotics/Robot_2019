@@ -44,7 +44,11 @@ public class MoveToSetpoint extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return elevator.isMotionMagicDone();
+    if (level == ElevatorState.Zero) {
+      return elevator.isMotionMagicDone() || elevator.isFwdLimitTripped();
+    } else {
+      return elevator.isMotionMagicDone();
+    }
   }
 
   // Called once after isFinished returns true

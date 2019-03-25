@@ -5,30 +5,41 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.driveTrain;
+package frc.robot.commands.vision;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 
-public class TurnToAngle extends Command {
+public class TurnToAngleVision extends Command {
 
   private DriveTrain driveTrain;
-  
-  private double setpoint;
 
-  public TurnToAngle(DriveTrain driveTrain, double setpoint) {
+  private boolean lockVisionValues;
+  private VisionData visionData;
+  private double setpoint;
+  
+  public TurnToAngleVision(DriveTrain driveTrain, boolean lockVisionValues, VisionData visionData) {
 
     this.driveTrain = driveTrain;
-    this.setpoint = setpoint;
+    this.lockVisionValues = lockVisionValues;
+    this.visionData = visionData;
 
     requires(this.driveTrain);
-  
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
     driveTrain.zeroAngle();
+    if (lockVisionValues) {
+        Robot.lockVision();
+    }
+    if (visionData == VisionData.TURN_1) {
+        setpoint = Robot.turn1;
+    } else if (visionData == VisionData.TURN_2) {
+        setpoint = Robot.turn2;
+    }
     driveTrain.enableTurnController(setpoint);
   }
 
@@ -50,12 +61,16 @@ public class TurnToAngle extends Command {
     driveTrain.stopTurnController();
     driveTrain.stop();
     driveTrain.zeroAngle();
+    if (!lockVisionValues) {
+        Robot.unlockVision();
+    }
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    Robot.unlockVision();
     end();
   }
   

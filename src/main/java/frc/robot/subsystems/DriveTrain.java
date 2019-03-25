@@ -235,6 +235,34 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     return leftMaster.getMotorOutputVoltage();
   }
 
+  public double getRightMasterVoltage() {
+    return rightMaster.getMotorOutputVoltage();
+  }
+  
+  public double getLeftFollowerVoltage() {
+    return leftFollower.getMotorOutputVoltage();
+  }
+  
+  public double getRightFollowerVoltage() {
+    return rightFollower.getMotorOutputVoltage();
+  }
+
+  public double getLeftPercentOutput() {
+    return leftMaster.getMotorOutputPercent();
+  }
+  
+  public double getRightPercentOutput() {
+    return rightMaster.getMotorOutputPercent();
+  }
+
+  public double getLeftMasterCurrent() {
+    return leftMaster.getOutputCurrent();
+  }
+
+  public double getRightMasterCurrent() {
+    return rightMaster.getOutputCurrent();
+  }
+
   public void setMotionMagicPosition(double position_inches) {
     double ticks = Util.getEncoderTicksFromInches(position_inches);
     leftMaster.set(ControlMode.MotionMagic, ticks);
@@ -283,34 +311,6 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     return turnController.getSetpoint();
   }
   
-  public double getRightMasterVoltage() {
-    return rightMaster.getMotorOutputVoltage();
-  }
-  
-  public double getLeftFollowerVoltage() {
-    return leftFollower.getMotorOutputVoltage();
-  }
-  
-  public double getRightFollowerVoltage() {
-    return rightFollower.getMotorOutputVoltage();
-  }
-
-  public double getLeftPercentOutput() {
-    return leftMaster.getMotorOutputPercent();
-  }
-  
-  public double getRightPercentOutput() {
-    return rightMaster.getMotorOutputPercent();
-  }
-
-  public double getLeftMasterCurrent() {
-    return leftMaster.getOutputCurrent();
-  }
-
-  public double getRightMasterCurrent() {
-    return rightMaster.getOutputCurrent();
-  }
-
   public void zeroSensors() {
     zeroAngle();
     zeroEncoders();

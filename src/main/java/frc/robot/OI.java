@@ -22,6 +22,7 @@ import frc.robot.commands.carriage.EjectCargo;
 import frc.robot.commands.intake.CloseIntake;
 import frc.robot.commands.intake.IntakeCargo;
 import frc.robot.commands.intake.RollOutCargo;
+import frc.robot.commands.DriveToTargetVision;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
@@ -78,6 +79,7 @@ public class OI {
 
 	//driver
 	public Button ejectThenHome = new JoystickButton(driverJoystick, BUTTON_RIGHT_BUMPER);
+	public Button visionDriveToTarget = new JoystickButton(driverJoystick, BUTTON_A);
 
     public OI (DriveTrain driveTrain, Carriage carriage, Elevator elevator, Intake intake) {
 		
@@ -102,6 +104,8 @@ public class OI {
 
 		//driver
 		ejectThenHome.whenPressed(new EjectThenHome(elevator, carriage, Constants.EJECT_TIMEOUT, driveTrain));
+		visionDriveToTarget.whenPressed(new DriveToTargetVision(driveTrain));
+
     }
 
 }

@@ -41,14 +41,14 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
 
   private Command defaultCommand;
 
-  private final double kP_TURN = 0.01;
-  private final double kI_TURN = 0;
-  private final double kD_TURN = 0.009;
+  private double kP_TURN = 0.01;
+  private double kI_TURN = 0;
+  private double kD_TURN = 0.009;
 
-  private final double kP_DRIVE = 1;
-  private final double kI_DRIVE = 0;
-  private final double kD_DRIVE = 0;
-  private final double kF_DRIVE = 0;
+  private double kP_DRIVE = 1;
+  private double kI_DRIVE = 0;
+  private double kD_DRIVE = 0;
+  private double kF_DRIVE = 0;
 
   private final int CRUISE_VELOCITY = 2000;
   private final int MAX_ACCELERATION = 1000;
@@ -78,6 +78,9 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
 
     leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+
+    leftMaster.setSensorPhase(true);
+    rightMaster.setSensorPhase(true);
 
     leftMaster.setInverted(false);
     rightMaster.setInverted(true);
@@ -115,6 +118,14 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     turnController.setOutputRange(-1.0, 1.0);
     turnController.setAbsoluteTolerance(TURN_TOLERANCE);
     turnController.setContinuous(true);
+
+    SmartDashboard.putNumber("turn P", 0);
+    SmartDashboard.putNumber("turn I", 0);
+    SmartDashboard.putNumber("turn D", 0);
+
+    SmartDashboard.putNumber("drive P", 0);
+    SmartDashboard.putNumber("drive I", 0);
+    SmartDashboard.putNumber("drive D", 0);
 
     writeToLog();
 
@@ -159,6 +170,15 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     SmartDashboard.putNumber("Drivetrain/Closed loop target", this.getClosedLoopTarget());
     SmartDashboard.putNumber("Drivetrain/Turn error", this.getTurnError());
     SmartDashboard.putNumber("Drivetrain/Turn setpoint", this.getTurnSetpoint());
+
+    kP_TURN = SmartDashboard.getNumber("turn P", 0);
+    kI_TURN = SmartDashboard.getNumber("turn I", 0);
+    kD_TURN = SmartDashboard.getNumber("turn D", 0);
+
+    kP_DRIVE = SmartDashboard.getNumber("drive P", 0);
+    kI_DRIVE = SmartDashboard.getNumber("drive I", 0);
+    kD_DRIVE = SmartDashboard.getNumber("drive D", 0);
+
   }
 
   @Override

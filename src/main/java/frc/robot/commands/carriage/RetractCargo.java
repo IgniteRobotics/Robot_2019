@@ -19,7 +19,7 @@ public class RetractCargo extends Command {
     this.carriage = carriage;
 
     requires(this.carriage);
-    
+
   }
 
   // Called just before this Command runs the first time

@@ -34,27 +34,30 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   private WPI_VictorSPX leftFollower;
   private WPI_TalonSRX rightMaster;
   private WPI_VictorSPX rightFollower;
-  
+
   private PIDController turnController;
 
   private AHRS navX;
 
   private Command defaultCommand;
 
-  private double kP_TURN = 0.01;
-  private double kI_TURN = 0;
-  private double kD_TURN = 0.009;
+  private final double kP_TURN = 0.007;
+  private final double kI_TURN = 0;
+  private final double kD_TURN = 0;
 
-  private double kP_DRIVE = 1;
-  private double kI_DRIVE = 0;
-  private double kD_DRIVE = 0;
-  private double kF_DRIVE = 0;
+  private final double kP_DRIVE = 1;
+  private final double kI_DRIVE = 0;
+  private final double kD_DRIVE = 0;
+  private final double kF_DRIVE = 0;
 
   private final int CRUISE_VELOCITY = 2000;
   private final int MAX_ACCELERATION = 1000;
 
   private final double TURN_TOLERANCE = 2.0f;
   private final double DRIVE_TOLERANCE = 100.0;
+
+  private final double MIN_TURN_POWER = 0.35;
+  
 
   private double rotateToAngleRate;
 
@@ -65,7 +68,7 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     rightMaster = new WPI_TalonSRX(rightMasterID);
     rightFollower = new WPI_VictorSPX(rightFollowerID);
 
-    navX = new AHRS(SPI.Port.kMXP, (byte)200);
+    navX = new AHRS(SPI.Port.kMXP, (byte) 200);
 
     leftMaster.setNeutralMode(NeutralMode.Brake);
     rightMaster.setNeutralMode(NeutralMode.Brake);
@@ -74,7 +77,7 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     rightFollower.setNeutralMode(NeutralMode.Brake);
 
     leftFollower.follow(leftMaster);
-    rightFollower.follow(rightMaster); 
+    rightFollower.follow(rightMaster);
 
     leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
@@ -105,7 +108,7 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     rightMaster.config_kP(1, kP_DRIVE, 10);
     rightMaster.config_kI(1, kI_DRIVE, 10);
     rightMaster.config_kD(1, kD_DRIVE, 10);
-    
+
     leftMaster.configMotionCruiseVelocity(CRUISE_VELOCITY, 10);
     leftMaster.configMotionAcceleration(MAX_ACCELERATION, 10);
 
@@ -114,21 +117,13 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
 
     turnController = new PIDController(kP_TURN, kI_TURN, kD_TURN, navX, this);
 
-    turnController.setInputRange(-180.0f,  180.0f);
+    turnController.setInputRange(-180.0f, 180.0f);
     turnController.setOutputRange(-1.0, 1.0);
     turnController.setAbsoluteTolerance(TURN_TOLERANCE);
     turnController.setContinuous(true);
 
-    SmartDashboard.putNumber("turn P", 0);
-    SmartDashboard.putNumber("turn I", 0);
-    SmartDashboard.putNumber("turn D", 0);
-
-    SmartDashboard.putNumber("drive P", 0);
-    SmartDashboard.putNumber("drive I", 0);
-    SmartDashboard.putNumber("drive D", 0);
-
     writeToLog();
-
+    
   }
 
   public void establishDefaultCommand(Command command) {
@@ -141,14 +136,22 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   }
 
   public void writeToLog() {
-    BadLog.createTopic("Drivetrain/Right Percent Output", BadLog.UNITLESS, () -> this.getRightPercentOutput(), "hide", "join:Drivetrain/Output percents");
-    BadLog.createTopic("Drivetrain/Left Percent Output", BadLog.UNITLESS, () -> this.getLeftPercentOutput(), "hide", "join:Drivetrain/Output percents");
-    BadLog.createTopic("Drivetrain/Right Master Current", "A", () -> this.getRightMasterCurrent(), "hide", "join:Drivetrain/Output Currents");
-    BadLog.createTopic("Drivetrain/Left Master Current", "A", () -> this.getLeftMasterCurrent(), "hide", "join:Drivetrain/Output Currents");
-    BadLog.createTopic("Drivetrain/Right Master Voltage", "V", () -> this.getRightMasterVoltage(), "hide", "join:Drivetrain/Output voltages");
-    BadLog.createTopic("Drivetrain/Left Master Voltage", "V", () -> this.getLeftMasterVoltage(), "hide", "join:Drivetrain/Output voltages");
-    BadLog.createTopic("Drivetrain/Right Follower Voltage", "V", () -> this.getRightMasterVoltage(), "hide", "join:Drivetrain/Output voltages");
-    BadLog.createTopic("Drivetrain/Left Follower Voltage", "V", () -> this.getLeftMasterVoltage(), "hide", "join:Drivetrain/Output voltages");
+    BadLog.createTopic("Drivetrain/Right Percent Output", BadLog.UNITLESS, () -> this.getRightPercentOutput(), "hide",
+        "join:Drivetrain/Output percents");
+    BadLog.createTopic("Drivetrain/Left Percent Output", BadLog.UNITLESS, () -> this.getLeftPercentOutput(), "hide",
+        "join:Drivetrain/Output percents");
+    BadLog.createTopic("Drivetrain/Right Master Current", "A", () -> this.getRightMasterCurrent(), "hide",
+        "join:Drivetrain/Output Currents");
+    BadLog.createTopic("Drivetrain/Left Master Current", "A", () -> this.getLeftMasterCurrent(), "hide",
+        "join:Drivetrain/Output Currents");
+    BadLog.createTopic("Drivetrain/Right Master Voltage", "V", () -> this.getRightMasterVoltage(), "hide",
+        "join:Drivetrain/Output voltages");
+    BadLog.createTopic("Drivetrain/Left Master Voltage", "V", () -> this.getLeftMasterVoltage(), "hide",
+        "join:Drivetrain/Output voltages");
+    BadLog.createTopic("Drivetrain/Right Follower Voltage", "V", () -> this.getRightMasterVoltage(), "hide",
+        "join:Drivetrain/Output voltages");
+    BadLog.createTopic("Drivetrain/Left Follower Voltage", "V", () -> this.getLeftMasterVoltage(), "hide",
+        "join:Drivetrain/Output voltages");
   }
 
   public void outputTelemetry() {
@@ -170,61 +173,52 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     SmartDashboard.putNumber("Drivetrain/Closed loop target", this.getClosedLoopTarget());
     SmartDashboard.putNumber("Drivetrain/Turn error", this.getTurnError());
     SmartDashboard.putNumber("Drivetrain/Turn setpoint", this.getTurnSetpoint());
-
-    kP_TURN = SmartDashboard.getNumber("turn P", 0);
-    kI_TURN = SmartDashboard.getNumber("turn I", 0);
-    kD_TURN = SmartDashboard.getNumber("turn D", 0);
-
-    kP_DRIVE = SmartDashboard.getNumber("drive P", 0);
-    kI_DRIVE = SmartDashboard.getNumber("drive I", 0);
-    kD_DRIVE = SmartDashboard.getNumber("drive D", 0);
-
   }
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(this.defaultCommand);  
+    setDefaultCommand(this.defaultCommand);
   }
-  
+
   public void arcadeDrive(double throttle, double rotation, double deadband) {
 
-		throttle = limit(throttle);
-		throttle = Util.applyDeadband(throttle, deadband);
+    throttle = limit(throttle);
+    throttle = Util.applyDeadband(throttle, deadband);
 
-		rotation = limit(rotation);
-		rotation = Util.applyDeadband(rotation, deadband);
+    rotation = limit(rotation);
+    rotation = Util.applyDeadband(rotation, deadband);
 
     throttle = Math.copySign(throttle * throttle, throttle);
     rotation = Math.copySign(rotation * rotation, rotation);
 
-		double leftMotorOutput;
-		double rightMotorOutput;
+    double leftMotorOutput;
+    double rightMotorOutput;
 
-		double maxInput = Math.copySign(Math.max(Math.abs(throttle), Math.abs(rotation)), throttle);
+    double maxInput = Math.copySign(Math.max(Math.abs(throttle), Math.abs(rotation)), throttle);
 
-		if (throttle >= 0.0) {
-			// First quadrant, else second quadrant
-			if (rotation >= 0.0) {
-				leftMotorOutput = maxInput;
-				rightMotorOutput = throttle - rotation;
-			} else {
-				leftMotorOutput = throttle + rotation;
-				rightMotorOutput = maxInput;
-			}
-		} else {
-			// Third quadrant, else fourth quadrant
-			if (rotation >= 0.0) {
-				leftMotorOutput = throttle + rotation;
-				rightMotorOutput = maxInput;
-			} else {
-				leftMotorOutput = maxInput;
-				rightMotorOutput = throttle - rotation;
-			}
-		}
+    if (throttle >= 0.0) {
+      // First quadrant, else second quadrant
+      if (rotation >= 0.0) {
+        leftMotorOutput = maxInput;
+        rightMotorOutput = throttle - rotation;
+      } else {
+        leftMotorOutput = throttle + rotation;
+        rightMotorOutput = maxInput;
+      }
+    } else {
+      // Third quadrant, else fourth quadrant
+      if (rotation >= 0.0) {
+        leftMotorOutput = throttle + rotation;
+        rightMotorOutput = maxInput;
+      } else {
+        leftMotorOutput = maxInput;
+        rightMotorOutput = throttle - rotation;
+      }
+    }
 
-		setOpenLoopLeft(limit(leftMotorOutput));
+    setOpenLoopLeft(limit(leftMotorOutput));
     setOpenLoopRight(limit(rightMotorOutput));
-    
+
   }
 
   public void setOpenLoopLeft(double power) {
@@ -258,11 +252,11 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   public double getRightMasterVoltage() {
     return rightMaster.getMotorOutputVoltage();
   }
-  
+
   public double getLeftFollowerVoltage() {
     return leftFollower.getMotorOutputVoltage();
   }
-  
+
   public double getRightFollowerVoltage() {
     return rightFollower.getMotorOutputVoltage();
   }
@@ -270,7 +264,7 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   public double getLeftPercentOutput() {
     return leftMaster.getMotorOutputPercent();
   }
-  
+
   public double getRightPercentOutput() {
     return rightMaster.getMotorOutputPercent();
   }
@@ -309,8 +303,13 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   }
 
   public void turnToAngle() {
-    this.setOpenLoopLeft(rotateToAngleRate);
-    this.setOpenLoopRight(-rotateToAngleRate);
+    if (Math.abs(rotateToAngleRate) <= MIN_TURN_POWER) {
+      this.setOpenLoopLeft(Math.copySign(MIN_TURN_POWER, rotateToAngleRate));
+      this.setOpenLoopRight(-Math.copySign(MIN_TURN_POWER, rotateToAngleRate));
+    } else {
+      this.setOpenLoopLeft(rotateToAngleRate);
+      this.setOpenLoopRight(-rotateToAngleRate);
+    }
   }
 
   public boolean isTurnCompleted() {
@@ -330,12 +329,12 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   public double getTurnSetpoint() {
     return turnController.getSetpoint();
   }
-  
+
   public void zeroSensors() {
     zeroAngle();
     zeroEncoders();
   }
-  
+
   public void stop() {
     leftMaster.stopMotor();
     rightMaster.stopMotor();
@@ -362,14 +361,14 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     return navX.isConnected();
   }
 
-	private double limit(double value) {
-		if (value > 1.0) {
-			return 1.0;
-		}
-		if (value < -1.0) {
-			return -1.0;
-		}
-		return value;
-	}
+  private double limit(double value) {
+    if (value > 1.0) {
+      return 1.0;
+    }
+    if (value < -1.0) {
+      return -1.0;
+    }
+    return value;
+  }
 
 }

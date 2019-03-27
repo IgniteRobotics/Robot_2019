@@ -58,5 +58,5 @@ public class OpenIntakeUntilBeam extends Command {
     intake.closeIntake();
     intake.stopIntakeMotor();
   }
-  
+
 }

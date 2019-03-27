@@ -5,33 +5,31 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.driveTrain;
+package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Elevator;
 
-public class arcadeDrive extends Command {
+public class ClimbOpenLoop extends Command {
 
-  private DriveTrain driveTrain;
+  private Climber climber;
 
+  private Joystick manipulatorJoystick;
   private final int THROTTLE_AXIS;
-  private final int TURN_AXIS;
   private final double DEADBAND;
 
-  private Joystick driverJoystick;
+  public ClimbOpenLoop(Climber climber, Joystick manipulatorJoystick, int throttleId, double deadband) {
 
-  public arcadeDrive(DriveTrain driveTrain, Joystick driverJoystick, int throttleId, int turnId, double deadband) {
-
-    this.driveTrain = driveTrain;
+    this.climber = climber;
 
     this.THROTTLE_AXIS = throttleId;
-    this.TURN_AXIS = turnId;
     this.DEADBAND = deadband;
 
-    this.driverJoystick = driverJoystick;
+    this.manipulatorJoystick = manipulatorJoystick;
 
-    requires(this.driveTrain);
+    requires(this.climber);
 
   }
 
@@ -44,10 +42,8 @@ public class arcadeDrive extends Command {
   @Override
   protected void execute() {
 
-    double throttle = driverJoystick.getRawAxis(THROTTLE_AXIS);
-    double rotation = driverJoystick.getRawAxis(TURN_AXIS);
-
-    driveTrain.arcadeDrive(-throttle, rotation, DEADBAND);
+    double throttle = manipulatorJoystick.getRawAxis(THROTTLE_AXIS);
+    climber.setOpenLoop(throttle, DEADBAND);
 
   }
 
@@ -60,11 +56,13 @@ public class arcadeDrive extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    climber.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }

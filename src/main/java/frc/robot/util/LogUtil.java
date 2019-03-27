@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class LogUtil {
 
-    private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z",
+	private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z",
 			Locale.US);
 
 	public static String getTimestamp() {

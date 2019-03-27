@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import frc.robot.commands.carriage.RetractCargo;
 import frc.robot.commands.carriage.ToggleBeak;
+import frc.robot.commands.driveTrain.DriveToDistance;
+import frc.robot.commands.driveTrain.TurnToAngle;
 import frc.robot.commands.RetrieveHatch;
 import frc.robot.commands.elevator.EjectThenHome;
 import frc.robot.commands.elevator.ElevatorState;
@@ -23,7 +25,9 @@ import frc.robot.commands.intake.CloseIntake;
 import frc.robot.commands.intake.IntakeCargo;
 import frc.robot.commands.intake.RollOutCargo;
 import frc.robot.commands.DriveToTargetVision;
+import frc.robot.commands.climber.ClimbOpenLoop;
 import frc.robot.subsystems.Carriage;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -33,7 +37,7 @@ import frc.robot.subsystems.Intake;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-  
+
 	private final int DRIVER_JOYSTICK = 0;
 	private final int MANIPULATOR_JOYSTICK = 1;
 
@@ -54,17 +58,17 @@ public class OI {
 	public final int AXIS_RIGHT_TRIGGER = 3;
 	public final int AXIS_RIGHT_STICK_X = 4;
 	public final int AXIS_RIGHT_STICK_Y = 5;
-	
+
 	public final int BUTTON_DPAD_UP = 0;
 	public final int BUTTON_DPAD_LEFT = 270;
 	public final int BUTTON_DPAD_RIGHT = 90;
 	public final int BUTTON_DPAD_DOWN = 180;
-    
-	public Joystick driverJoystick = new Joystick(DRIVER_JOYSTICK);
-    public Joystick manipulatorJoystick = new Joystick(MANIPULATOR_JOYSTICK);
 
-	//manipulator
-    public Button openBeak = new JoystickButton(manipulatorJoystick, BUTTON_A);
+	public Joystick driverJoystick = new Joystick(DRIVER_JOYSTICK);
+	public Joystick manipulatorJoystick = new Joystick(MANIPULATOR_JOYSTICK);
+
+	// manipulator
+	public Button openBeak = new JoystickButton(manipulatorJoystick, BUTTON_A);
 	public Button ejectCargo = new JoystickButton(manipulatorJoystick, BUTTON_X);
 	public Button jogSwitch = new JoystickButton(manipulatorJoystick, BUTTON_Y);
 	public Button retrieveHatch = new JoystickButton(manipulatorJoystick, BUTTON_B);
@@ -77,18 +81,19 @@ public class OI {
 	public POVButton level1 = new POVButton(manipulatorJoystick, BUTTON_DPAD_DOWN);
 	public POVButton cargoShipCargo = new POVButton(manipulatorJoystick, BUTTON_DPAD_LEFT);
 
-	//driver
+	// driver
 	public Button ejectThenHome = new JoystickButton(driverJoystick, BUTTON_RIGHT_BUMPER);
 	public Button visionDriveToTarget = new JoystickButton(driverJoystick, BUTTON_A);
 
-    public OI (DriveTrain driveTrain, Carriage carriage, Elevator elevator, Intake intake) {
-		
-		//manipulator				
+	public OI(DriveTrain driveTrain, Carriage carriage, Elevator elevator, Intake intake, Climber climber) {
+
+		// manipulator
 		openBeak.whenPressed(new ToggleBeak(carriage));
 		ejectCargo.whileHeld(new EjectCargo(carriage));
 		ejectCargo.whenReleased(new RetractCargo(carriage));
 
-        jogSwitch.whileHeld(new MoveOpenLoop(elevator, manipulatorJoystick, AXIS_LEFT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
+		jogSwitch.whileHeld(
+				new MoveOpenLoop(elevator, manipulatorJoystick, AXIS_LEFT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
 
 		outtakeCargo.whileHeld(new RollOutCargo(intake, Constants.OUTTAKE_POWER));
 		outtakeCargo.whenReleased(new CloseIntake(intake, carriage));
@@ -102,10 +107,15 @@ public class OI {
 		cargoShipCargo.whenPressed(new MoveToSetpoint(elevator, ElevatorState.CargoShipCargo, carriage));
 		zero.whenPressed(new MoveToSetpoint(elevator, ElevatorState.Zero, carriage));
 
-		//driver
+		// driver
 		ejectThenHome.whenPressed(new EjectThenHome(elevator, carriage, Constants.EJECT_TIMEOUT, driveTrain));
 		visionDriveToTarget.whenPressed(new DriveToTargetVision(driveTrain));
 
-    }
+		//temp for climber test
+		Joystick joystickClimb = new Joystick(3);
+		Button climbSwitch = new JoystickButton(joystickClimb, BUTTON_Y);
+		climbSwitch.whileHeld(new ClimbOpenLoop(climber, manipulatorJoystick, AXIS_LEFT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
+
+	}
 
 }

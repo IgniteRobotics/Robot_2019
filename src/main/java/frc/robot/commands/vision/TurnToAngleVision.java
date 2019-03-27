@@ -18,7 +18,7 @@ public class TurnToAngleVision extends Command {
   private boolean lockVisionValues;
   private VisionData visionData;
   private double setpoint;
-  
+
   public TurnToAngleVision(DriveTrain driveTrain, boolean lockVisionValues, VisionData visionData) {
 
     this.driveTrain = driveTrain;
@@ -33,12 +33,12 @@ public class TurnToAngleVision extends Command {
   protected void initialize() {
     driveTrain.zeroAngle();
     if (lockVisionValues) {
-        Robot.lockVision();
+      Robot.lockVision();
     }
     if (visionData == VisionData.TURN_1) {
-        setpoint = Robot.turn1;
+      setpoint = Robot.turn1;
     } else if (visionData == VisionData.TURN_2) {
-        setpoint = Robot.turn2;
+      setpoint = Robot.turn2;
     }
     driveTrain.enableTurnController(setpoint);
   }
@@ -62,7 +62,7 @@ public class TurnToAngleVision extends Command {
     driveTrain.stop();
     driveTrain.zeroAngle();
     if (!lockVisionValues) {
-        Robot.unlockVision();
+      Robot.unlockVision();
     }
   }
 
@@ -73,5 +73,5 @@ public class TurnToAngleVision extends Command {
     Robot.unlockVision();
     end();
   }
-  
+
 }

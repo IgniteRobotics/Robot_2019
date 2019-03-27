@@ -18,6 +18,6 @@ public class CloseRollIntake extends CommandGroup {
 
     addParallel(new CloseIntake(intake, carriage));
     addSequential(new RollInCargoUntilBeam(carriage, intake, Constants.INTAKE_POWER));
-  
+
   }
 }

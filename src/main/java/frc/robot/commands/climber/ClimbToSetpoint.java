@@ -5,33 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.driveTrain;
+package frc.robot.commands.climber;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Climber;
 
-public class arcadeDrive extends Command {
+public class ClimbToSetpoint extends Command {
 
-  private DriveTrain driveTrain;
+  private Climber climber;
 
-  private final int THROTTLE_AXIS;
-  private final int TURN_AXIS;
-  private final double DEADBAND;
+  private int setpoint;
 
-  private Joystick driverJoystick;
+  public ClimbToSetpoint(Climber climber, int setpoint) {
 
-  public arcadeDrive(DriveTrain driveTrain, Joystick driverJoystick, int throttleId, int turnId, double deadband) {
+    this.climber = climber;
+    this.setpoint = setpoint;
 
-    this.driveTrain = driveTrain;
-
-    this.THROTTLE_AXIS = throttleId;
-    this.TURN_AXIS = turnId;
-    this.DEADBAND = deadband;
-
-    this.driverJoystick = driverJoystick;
-
-    requires(this.driveTrain);
+    requires(this.climber);
 
   }
 
@@ -43,28 +33,33 @@ public class arcadeDrive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
-    double throttle = driverJoystick.getRawAxis(THROTTLE_AXIS);
-    double rotation = driverJoystick.getRawAxis(TURN_AXIS);
-
-    driveTrain.arcadeDrive(-throttle, rotation, DEADBAND);
-
+    climber.setMotionMagicPosition(setpoint);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    if (setpoint == 0) {
+      return climber.isMotionMagicDone() || climber.isFwdLimitTripped(); // TODO: DETERMINE IF FWD IS BOTTON
+    } else {
+      return climber.isMotionMagicDone();
+    }
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    if (climber.isFwdLimitTripped()) {
+      climber.zeroSensors();
+    }
+    climber.stop();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
+  
 }

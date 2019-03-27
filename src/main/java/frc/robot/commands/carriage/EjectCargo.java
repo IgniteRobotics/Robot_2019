@@ -19,7 +19,7 @@ public class EjectCargo extends Command {
     this.carriage = carriage;
 
     requires(this.carriage);
-    
+
   }
 
   // Called just before this Command runs the first time

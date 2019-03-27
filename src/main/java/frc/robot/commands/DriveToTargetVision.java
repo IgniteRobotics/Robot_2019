@@ -19,7 +19,7 @@ public class DriveToTargetVision extends CommandGroup {
     addSequential(new DriveToDistanceVision(driveTrain, true, VisionData.DISTANCE_1));
     addSequential(new TurnToAngleVision(driveTrain, true, VisionData.TURN_2));
     addSequential(new DriveToDistanceVision(driveTrain, false, VisionData.DISTANCE_2));
-    
+
   }
 
 }

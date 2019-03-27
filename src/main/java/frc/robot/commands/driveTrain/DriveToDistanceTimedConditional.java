@@ -17,14 +17,13 @@ public class DriveToDistanceTimedConditional extends Command {
   private Carriage carriage;
 
   private double power;
-  
-  public DriveToDistanceTimedConditional(DriveTrain driveTrain, Carriage carriage, double timeout, double power) {
 
+  public DriveToDistanceTimedConditional(DriveTrain driveTrain, Carriage carriage, double timeout, double power) {
     this.driveTrain = driveTrain;
     this.carriage = carriage;
 
     this.power = power;
-    
+
     requires(this.driveTrain);
 
     setTimeout(timeout);
@@ -33,7 +32,7 @@ public class DriveToDistanceTimedConditional extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    
+
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -65,5 +64,5 @@ public class DriveToDistanceTimedConditional extends Command {
   protected void interrupted() {
     end();
   }
-  
+
 }

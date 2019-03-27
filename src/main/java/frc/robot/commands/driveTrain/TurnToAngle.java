@@ -13,7 +13,7 @@ import frc.robot.subsystems.DriveTrain;
 public class TurnToAngle extends Command {
 
   private DriveTrain driveTrain;
-  
+
   private double setpoint;
 
   public TurnToAngle(DriveTrain driveTrain, double setpoint) {
@@ -22,7 +22,7 @@ public class TurnToAngle extends Command {
     this.setpoint = setpoint;
 
     requires(this.driveTrain);
-  
+
   }
 
   // Called just before this Command runs the first time
@@ -58,5 +58,5 @@ public class TurnToAngle extends Command {
   protected void interrupted() {
     end();
   }
-  
+
 }

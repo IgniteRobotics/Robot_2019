@@ -2,16 +2,16 @@ package frc.robot;
 
 public class Constants {
 
-    //intake
+    // intake
     public static final double OUTTAKE_POWER = 0.5;
     public static final double INTAKE_POWER = -0.5;
 
-    //drivetrain
+    // drivetrain
     public static final double DRIVE_DEADBAND = 0.03;
     public static final double EJECT_THEN_HOME_DRIVE_TIME = 0.5;
     public static final double EJECT_THEN_HOME_DRIVE_POWER = -0.2;
 
-    //elevator
+    // elevator
     public static final double ELEVATOR_JOG_DEADBAND = 0.1;
 
     public static final double EJECT_TIMEOUT = 0.5;

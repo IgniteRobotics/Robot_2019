@@ -18,13 +18,13 @@ public class DriveToDistanceVision extends Command {
   private boolean lockVisionValues;
   private VisionData visionData;
   private int setpoint;
-  
+
   public DriveToDistanceVision(DriveTrain driveTrain, boolean lockVisionValues, VisionData visionData) {
 
     this.driveTrain = driveTrain;
     this.lockVisionValues = lockVisionValues;
     this.visionData = visionData;
-    
+
     requires(this.driveTrain);
   }
 
@@ -36,9 +36,9 @@ public class DriveToDistanceVision extends Command {
       Robot.lockVision();
     }
     if (visionData == VisionData.DISTANCE_1) {
-      setpoint = (int)Robot.drive1;
+      setpoint = (int) Robot.drive1;
     } else if (visionData == VisionData.DISTANCE_2) {
-      setpoint = (int)Robot.drive2;
+      setpoint = (int) Robot.drive2;
     }
 
   }
@@ -46,7 +46,7 @@ public class DriveToDistanceVision extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-   driveTrain.setMotionMagicPosition(setpoint);
+    driveTrain.setMotionMagicPosition(setpoint);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -71,5 +71,5 @@ public class DriveToDistanceVision extends Command {
     Robot.unlockVision();
     end();
   }
-  
+
 }

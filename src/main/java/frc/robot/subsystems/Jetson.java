@@ -56,6 +56,11 @@ public class Jetson extends IgniteSubsystem {
         return (double) table.getEntry("DIRECT_DISTANCE").getNumber(0);
     }
 
+    public double getTargetAngle() {
+        return (double) table.getEntry("X_ANGLE").getNumber(0);
+    }
+    
+
     public void turnOn() {
         for (int i = 0; i < 10; i++) {
             jetsonPower.set(true);

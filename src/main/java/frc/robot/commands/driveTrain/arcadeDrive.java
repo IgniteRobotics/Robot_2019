@@ -9,6 +9,7 @@ package frc.robot.commands.driveTrain;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Jetson;
 
@@ -38,6 +39,9 @@ public class arcadeDrive extends Command {
 
     this.jetson = jetson;
 
+    SmartDashboard.putNumber("VisionDrive/Max Power", -0.4);
+    SmartDashboard.putNumber("VisionDrive/Angle Tolerance", 0.5);
+
     requires(this.driveTrain);
 
   }
@@ -53,14 +57,21 @@ public class arcadeDrive extends Command {
 
     double throttle = driverJoystick.getRawAxis(THROTTLE_AXIS);
     double rotation = driverJoystick.getRawAxis(TURN_AXIS);
+    SmartDashboard.putNumber("VisionDrive/Throttle", throttle);
+    double maxPower = -0.60; //SmartDashboard.getNumber("VisionDrive/Max Power", );
+    double angleTolerance = 3.0; // SmartDashboard.getNumber("VisionDrive/Angle Tolerance");
 
     
-    if (driverJoystick.getRawButton(2)) { //button pushed
+    if (driverJoystick.getRawButton(1)) { //button pushed
       double targetAngle = 0;
       targetAngle = jetson.getDirectTurn();
       if (targetAngle != 0) { // got a value in NT
-        double angle = limitOutput((kP * targetAngle), 0.45);  
-        driveTrain.arcadeDrive(-throttle*.6, angle, DEADBAND);
+        if (targetAngle >= -angleTolerance && targetAngle <= angleTolerance)
+          targetAngle = 0;
+        double angle = limitOutput((kP * targetAngle), 0.45); 
+        if (throttle < maxPower)
+          throttle = maxPower; 
+        driveTrain.arcadeDrive(-throttle, angle, DEADBAND);
       } else {
         driveTrain.arcadeDrive(-throttle, rotation, DEADBAND);
       }      

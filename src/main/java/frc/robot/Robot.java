@@ -112,7 +112,7 @@ public class Robot extends TimedRobot {
     logger.log();
 
     if (!lockVisionValues) {
-      updateVisionValues();
+      //updateVisionValues();
     }
 
   }

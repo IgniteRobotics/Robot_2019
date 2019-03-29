@@ -20,7 +20,7 @@ public class arcadeDrive extends Command {
   private final int TURN_AXIS;
   private final double DEADBAND;
 
-  private final double kP = 1.7;
+  private final double kP = 2.0;
 
   private Joystick driverJoystick;
 
@@ -56,16 +56,20 @@ public class arcadeDrive extends Command {
 
     
     if (driverJoystick.getRawButton(2)) { //button pushed
-      double targetAngle = jetson.getDirectTurn();
+      double targetAngle = 0;
+      targetAngle = jetson.getDirectTurn();
       if (targetAngle != 0) { // got a value in NT
-        double angle = limitOutput(kP * targetAngle, 0.45);  
-        driveTrain.arcadeDrive(-throttle*.75, angle, DEADBAND);
+        double angle = limitOutput((kP * targetAngle), 0.45);  
+        driveTrain.arcadeDrive(-throttle*.6, angle, DEADBAND);
       } else {
         driveTrain.arcadeDrive(-throttle, rotation, DEADBAND);
       }      
     } else {
       driveTrain.arcadeDrive(-throttle, rotation, DEADBAND); 
     }
+
+  
+
     
 
   }

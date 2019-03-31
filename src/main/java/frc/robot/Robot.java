@@ -75,14 +75,14 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     startTime = System.nanoTime();
-    jetsonPower = new DigitalOutput(5);
-    for (int i = 0; i < 10; i++) {
-      jetsonPower.set(true);
-  }
-  for (int i = 0; i < 10; i++) {
-      jetsonPower.set(false);
-  }
-  jetsonPower.set(true);
+  //   jetsonPower = new DigitalOutput(5);
+  //   for (int i = 0; i < 10; i++) {
+  //     jetsonPower.set(true);
+  // }
+  // for (int i = 0; i < 10; i++) {
+  //     jetsonPower.set(false);
+  // }
+  // jetsonPower.set(true);
 
     lockVisionValues = false;
 
@@ -114,8 +114,8 @@ public class Robot extends TimedRobot {
     subsystemManager.zeroSensorsFromDashboard();
     //jetson.turnOffToggle();
     
-    boolean jetsonPowerState = SmartDashboard.getBoolean("Jetson Power", true);
-    jetsonPower.set(jetsonPowerState);
+    // boolean jetsonPowerState = SmartDashboard.getBoolean("Jetson Power", true);
+    // jetsonPower.set(jetsonPowerState);
   }
 
   private void matchInit() {

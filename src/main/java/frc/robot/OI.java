@@ -83,7 +83,7 @@ public class OI {
 
 	// driver
 	public Button ejectThenHome = new JoystickButton(driverJoystick, BUTTON_RIGHT_BUMPER);
-	public Button visionDriveToTarget = new JoystickButton(driverJoystick, BUTTON_A);
+	//public Button visionDriveToTarget = new JoystickButton(driverJoystick, BUTTON_A);
 
 	public OI(DriveTrain driveTrain, Carriage carriage, Elevator elevator, Intake intake, Climber climber) {
 

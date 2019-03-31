@@ -11,10 +11,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
+import edu.wpi.first.wpilibj.buttons.Trigger;
 import frc.robot.commands.carriage.RetractCargo;
 import frc.robot.commands.carriage.ToggleBeak;
-import frc.robot.commands.driveTrain.DriveToDistance;
-import frc.robot.commands.driveTrain.TurnToAngle;
 import frc.robot.commands.RetrieveHatch;
 import frc.robot.commands.elevator.EjectThenHome;
 import frc.robot.commands.elevator.ElevatorState;
@@ -26,6 +25,7 @@ import frc.robot.commands.intake.IntakeCargo;
 import frc.robot.commands.intake.RollOutCargo;
 import frc.robot.commands.DriveToTargetVision;
 import frc.robot.commands.climber.ClimbOpenLoop;
+import frc.robot.commands.climber.ToggleSuction;
 import frc.robot.subsystems.Carriage;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
@@ -80,6 +80,9 @@ public class OI {
 	public POVButton level2 = new POVButton(manipulatorJoystick, BUTTON_DPAD_RIGHT);
 	public POVButton level1 = new POVButton(manipulatorJoystick, BUTTON_DPAD_DOWN);
 	public POVButton cargoShipCargo = new POVButton(manipulatorJoystick, BUTTON_DPAD_LEFT);
+	
+	public Button climbSwitch = new JoystickButton(manipulatorJoystick, BUTTON_BACK);
+	public Button toggleSuction = new JoystickButton(manipulatorJoystick, BUTTON_START);
 
 	// driver
 	public Button ejectThenHome = new JoystickButton(driverJoystick, BUTTON_RIGHT_BUMPER);
@@ -107,14 +110,13 @@ public class OI {
 		cargoShipCargo.whenPressed(new MoveToSetpoint(elevator, ElevatorState.CargoShipCargo, carriage));
 		zero.whenPressed(new MoveToSetpoint(elevator, ElevatorState.Zero, carriage));
 
+		climbSwitch.whileHeld(new ClimbOpenLoop(climber, manipulatorJoystick, AXIS_RIGHT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
+		toggleSuction.whenPressed(new ToggleSuction(climber));
+
 		// driver
 		ejectThenHome.whenPressed(new EjectThenHome(elevator, carriage, Constants.EJECT_TIMEOUT, driveTrain));
-		visionDriveToTarget.whenPressed(new DriveToTargetVision(driveTrain));
+		//visionDriveToTarget.whenPressed(new DriveToTargetVision(driveTrain));
 
-		//temp for climber test
-		Joystick joystickClimb = new Joystick(3);
-		Button climbSwitch = new JoystickButton(joystickClimb, BUTTON_Y);
-		climbSwitch.whileHeld(new ClimbOpenLoop(climber, manipulatorJoystick, AXIS_LEFT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
 
 	}
 

@@ -10,10 +10,13 @@ package frc.robot;
 import java.util.Optional;
 
 import badlog.lib.*;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.climber.HoldClimberPosition;
 import frc.robot.commands.driveTrain.arcadeDrive;
 import frc.robot.commands.elevator.HoldPosition;
 
@@ -60,13 +63,26 @@ public class Robot extends TimedRobot {
 
   private static boolean lockVisionValues;
 
+  private static boolean lockClimber;
+
   /**
    * This function is run when the robot is first started up and should be used
    * for any initialization code.
    */
+
+   DigitalOutput jetsonPower;
+
   @Override
   public void robotInit() {
     startTime = System.nanoTime();
+    jetsonPower = new DigitalOutput(5);
+    for (int i = 0; i < 10; i++) {
+      jetsonPower.set(true);
+  }
+  for (int i = 0; i < 10; i++) {
+      jetsonPower.set(false);
+  }
+  jetsonPower.set(true);
 
     lockVisionValues = false;
 
@@ -76,6 +92,8 @@ public class Robot extends TimedRobot {
 
     initializeSubsystems();
     initializeCommands();
+
+    SmartDashboard.putBoolean("Lock Climber", false);
 
     logger.finishInitialization();
   }
@@ -94,12 +112,16 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     subsystemManager.outputTelemetry();
     subsystemManager.zeroSensorsFromDashboard();
-    jetson.turnOffToggle();
+    //jetson.turnOffToggle();
+    
+    boolean jetsonPowerState = SmartDashboard.getBoolean("Jetson Power", true);
+    jetsonPower.set(jetsonPowerState);
   }
 
   private void matchInit() {
     jetson.turnOnLed();
     Scheduler.getInstance().run();
+    climber.openSuction();
   }
 
   private void matchPeriodic() {
@@ -113,6 +135,15 @@ public class Robot extends TimedRobot {
 
     if (!lockVisionValues) {
       updateVisionValues();
+    }
+
+    HoldClimberPosition holdClimberPosition = new HoldClimberPosition(climber);
+    lockClimber = SmartDashboard.getBoolean("Lock Climber", false);
+    if (lockClimber) {
+      holdClimberPosition.start();
+    } else {
+      holdClimberPosition.cancel();
+      holdClimberPosition.close();
     }
 
   }
@@ -185,9 +216,8 @@ public class Robot extends TimedRobot {
     elevator = new Elevator(RobotMap.elevatorMasterID, RobotMap.elevatorFollowerID);
     intake = new Intake(RobotMap.pcmID, RobotMap.intakeMotorID, RobotMap.intakeSolenoidOpen,
         RobotMap.intakeSolenoidClose, RobotMap.intakeBeamBreakID);
-    climber = new Climber(RobotMap.climberMotorID);
+    climber = new Climber(RobotMap.climberMotorID, RobotMap.suctionIDForward, RobotMap.suctionIDReverse);
     jetson = new Jetson(RobotMap.jetsonPowerDioID, RobotMap.relayID);
-
     subsystemManager = new SubsystemManager();
 
     subsystemManager.addSubsystems(carriage, driveTrain, elevator, intake, jetson, climber);

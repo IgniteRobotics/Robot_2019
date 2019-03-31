@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import badlog.lib.BadLog;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -18,6 +19,10 @@ import frc.robot.util.Util;
 public class Climber extends IgniteSubsystem {
 
     private WPI_TalonSRX climberMotor;
+
+    private DoubleSolenoid suction;
+
+    private boolean suctionState;
 
     private Command defaultCommand;
 
@@ -31,16 +36,17 @@ public class Climber extends IgniteSubsystem {
 
     private final int TOLERANCE = 100;
 
-    public Climber(int climberMotorID) {
+    public Climber(int climberMotorID, int suctionIDForward, int suctionIDReverse) {
 
         climberMotor = new WPI_TalonSRX(climberMotorID);
+        suction = new DoubleSolenoid(suctionIDForward, suctionIDReverse);
 
         climberMotor.setNeutralMode(NeutralMode.Brake);
 
         climberMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
         climberMotor.setSensorPhase(true);
-        //climberMotor.setInverted(true);
+        // climberMotor.setInverted(true);
 
         climberMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 20);
         climberMotor.setStatusFramePeriod(StatusFrame.Status_10_MotionMagic, 10, 20);
@@ -90,6 +96,7 @@ public class Climber extends IgniteSubsystem {
         SmartDashboard.putNumber("Climber/Percent out", this.getPercentOutput());
         SmartDashboard.putBoolean("Climber/Is fwd limit switch tripped?", this.isFwdLimitTripped());
         SmartDashboard.putBoolean("Climber/Is rev limit switch tripped?", this.isRevLimitTripped());
+        SmartDashboard.putBoolean("Climber/Is suction closed open?", this.isSuctionClosed());
     }
 
     @Override
@@ -148,6 +155,28 @@ public class Climber extends IgniteSubsystem {
 
     public void stop() {
         climberMotor.stopMotor();
+    }
+
+    public void openSuction() {
+        suction.set(DoubleSolenoid.Value.kForward);
+        suctionState = false;
+    }
+
+    public void closeSuction() {
+        suction.set(DoubleSolenoid.Value.kReverse);
+        suctionState = true;
+    }
+
+    public void toggleSuction() {
+        if (suctionState) {
+            openSuction();
+        } else {
+            closeSuction();
+        }
+    }
+
+    public boolean isSuctionClosed() {
+        return this.suctionState;
     }
 
 }

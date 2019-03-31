@@ -18,7 +18,7 @@ public class Jetson extends IgniteSubsystem {
     private boolean jetsonPowerState;
 
     public Jetson(int jetsonPowerDioID, int relayID) {
-        jetsonPower = new DigitalOutput(jetsonPowerDioID);
+       // jetsonPower = new DigitalOutput(jetsonPowerDioID);
         led = new Relay(relayID);
         SmartDashboard.putBoolean("Jetson Power", true);
     }
@@ -28,8 +28,8 @@ public class Jetson extends IgniteSubsystem {
     }
 
     public void turnOnLed() {
-        // led.set(Relay.Value.kOn);
-        led.set(Relay.Value.kForward); // TODO: FOR PRACTICE BOT ONLY
+        led.set(Relay.Value.kOn);
+        //led.set(Relay.Value.kForward); // TODO: FOR PRACTICE BOT ONLY
     }
 
     public double getTurn1() {

@@ -82,8 +82,8 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     leftMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     rightMaster.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
-    leftMaster.setSensorPhase(true);
-    rightMaster.setSensorPhase(true);
+    // leftMaster.setSensorPhase(true);
+    // rightMaster.setSensorPhase(true);
 
     leftMaster.setInverted(false);
     rightMaster.setInverted(true);

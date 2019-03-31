@@ -46,7 +46,7 @@ public class Climber extends IgniteSubsystem {
         climberMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
         climberMotor.setSensorPhase(true);
-        // climberMotor.setInverted(true);
+        climberMotor.setInverted(true);
 
         climberMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 20);
         climberMotor.setStatusFramePeriod(StatusFrame.Status_10_MotionMagic, 10, 20);

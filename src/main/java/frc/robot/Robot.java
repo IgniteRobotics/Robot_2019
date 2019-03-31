@@ -137,7 +137,7 @@ public class Robot extends TimedRobot {
       updateVisionValues();
     }
 
-    HoldClimberPosition holdClimberPosition = new HoldClimberPosition(climber);
+    HoldClimberPosition holdClimberPosition= new HoldClimberPosition(climber);
     lockClimber = SmartDashboard.getBoolean("Lock Climber", false);
     if (lockClimber) {
       holdClimberPosition.start();

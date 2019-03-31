@@ -42,7 +42,7 @@ public class ClimbOpenLoop extends Command {
   protected void execute() {
 
     double throttle = manipulatorJoystick.getRawAxis(THROTTLE_AXIS);
-    climber.setOpenLoop(-throttle, DEADBAND);
+    climber.setOpenLoop(throttle, DEADBAND);
 
   }
 

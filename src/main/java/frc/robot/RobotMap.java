@@ -37,12 +37,14 @@ public class RobotMap {
   public static final int elevatorFollowerID = 9;
 
   // Intake
-  public static final int intakeSolenoidOpen = 2;
+  public static final int intakeSolenoidOpen = 0;
   public static final int intakeSolenoidClose = 1;
   public static final int intakeMotorID = 10;
   public static final int intakeBeamBreakID = 1;
 
   // Climber
   public static final int climberMotorID = 15;
+  public static final int suctionIDForward = 2;
+  public static final int suctionIDReverse = 3;
 
 }

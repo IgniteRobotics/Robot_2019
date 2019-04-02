@@ -109,7 +109,7 @@ public class OI {
 
 		// driver
 		ejectThenHome.whenPressed(new EjectThenHome(elevator, carriage, Constants.EJECT_TIMEOUT, driveTrain));
-		visionDriveToTarget.whenPressed(new DriveToTargetVision(driveTrain));
+		//visionDriveToTarget.whenPressed(new DriveToTargetVision(driveTrain));
 
 		//temp for climber test
 		Joystick joystickClimb = new Joystick(3);

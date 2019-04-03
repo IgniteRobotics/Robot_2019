@@ -65,15 +65,16 @@ public class arcadeDrive extends Command {
     if (driverJoystick.getRawButton(1)) { //button pushed
       double targetAngle = 0;
       targetAngle = jetson.getTargetAngle(); //jetson.getDirectTurn();
+      if (throttle < maxPower)
+          throttle = maxPower; 
       if (targetAngle != 0) { // got a value in NT
         if (throttle > 0) {
             targetAngle = 0;
         }
         if (targetAngle >= -angleTolerance && targetAngle <= angleTolerance)
           targetAngle = 0;
-        double angle = limitOutput((kP * targetAngle), 0.55); 
-        if (throttle < maxPower)
-          throttle = maxPower; 
+        double angle = limitOutput((kP * targetAngle)/35, 0.55); 
+        
         driveTrain.arcadeDrive(-throttle, angle, DEADBAND);
       } else {
         driveTrain.arcadeDrive(-throttle, rotation, DEADBAND);

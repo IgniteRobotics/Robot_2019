@@ -58,17 +58,20 @@ public class arcadeDrive extends Command {
     double throttle = driverJoystick.getRawAxis(THROTTLE_AXIS);
     double rotation = driverJoystick.getRawAxis(TURN_AXIS);
     SmartDashboard.putNumber("VisionDrive/Throttle", throttle);
-    double maxPower = -0.60; //SmartDashboard.getNumber("VisionDrive/Max Power", );
-    double angleTolerance = 3.0; // SmartDashboard.getNumber("VisionDrive/Angle Tolerance");
+    double maxPower = -0.55; //SmartDashboard.getNumber("VisionDrive/Max Power", );
+    double angleTolerance = 2.0; // SmartDashboard.getNumber("VisionDrive/Angle Tolerance");
 
     
     if (driverJoystick.getRawButton(1)) { //button pushed
       double targetAngle = 0;
-      targetAngle = jetson.getDirectTurn();
+      targetAngle = jetson.getTargetAngle(); //jetson.getDirectTurn();
       if (targetAngle != 0) { // got a value in NT
+        if (throttle > 0) {
+            targetAngle = 0;
+        }
         if (targetAngle >= -angleTolerance && targetAngle <= angleTolerance)
           targetAngle = 0;
-        double angle = limitOutput((kP * targetAngle), 0.45); 
+        double angle = limitOutput((kP * targetAngle), 0.55); 
         if (throttle < maxPower)
           throttle = maxPower; 
         driveTrain.arcadeDrive(-throttle, angle, DEADBAND);

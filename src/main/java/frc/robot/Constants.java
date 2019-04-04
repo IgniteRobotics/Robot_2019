@@ -27,6 +27,6 @@ public class Constants {
 
     public static final int CARGO_SHIP_CARGO = -14500 - 4000 - 1000;
     public static final int CARGO_SHIP_HATCH = 0;
-    public static final int HATCH_PICKUP = -6000;
+    public static final int HATCH_PICKUP = -5000;   // was -6000
 
 }

@@ -28,8 +28,8 @@ public class Jetson extends IgniteSubsystem {
     }
 
     public void turnOnLed() {
-        // led.set(Relay.Value.kOn);
-        led.set(Relay.Value.kForward); // TODO: FOR PRACTICE BOT ONLY
+        led.set(Relay.Value.kOn);
+        //led.set(Relay.Value.kForward); // TODO: FOR PRACTICE BOT ONLY
     }
 
     public String gettimetable() {
@@ -64,17 +64,6 @@ public class Jetson extends IgniteSubsystem {
         return (double) table.getEntry("X_ANGLE").getNumber(0);
     }
     
-<<<<<<< HEAD
-    public boolean heartbeat(){
-      if (SmartDashboard.getString("timetable", "yeet") == "yeet"){
-        return false;
-      }
-      else{
-        return true;
-      }
-    }
-=======
->>>>>>> f892b7377381990c22443276317d45980e83261c
 
     public void turnOn() {
         for (int i = 0; i < 10; i++) {
@@ -92,23 +81,10 @@ public class Jetson extends IgniteSubsystem {
         jetsonPowerState = SmartDashboard.getBoolean("Jetson Power", true);
         jetsonPower.set(jetsonPowerState);
     }
-<<<<<<< HEAD
-    
-    public void outputTelemetry() {
-        SmartDashboard.putBoolean("heartbeat", false);
-        SmartDashboard.putNumber("turn 1", this.getTurn1());
-        SmartDashboard.putNumber("distance 1", this.getDistance1());
-        SmartDashboard.putNumber("turn 2", this.getTurn2());
-        SmartDashboard.putNumber("distance 2", this.getDistance2());
-        SmartDashboard.putNumber("direct distance", this.getDirectDistance());
-        SmartDashboard.putNumber("direct turn", this.getDirectTurn());
-        SmartDashboard.putString("timetable", this.gettimetable());
-=======
 
     public void outputTelemetry() {}
 
     public void zeroSensors() {
->>>>>>> f892b7377381990c22443276317d45980e83261c
     }
 
     public boolean checkSystem() {

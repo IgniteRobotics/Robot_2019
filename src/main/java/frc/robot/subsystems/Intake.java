@@ -36,7 +36,7 @@ public class Intake extends IgniteSubsystem {
 
     intakeMotor.setNeutralMode(NeutralMode.Brake);
 
-    intakeMotor.setInverted(true);
+    intakeMotor.setInverted(false);
 
     writeToLog();
 

@@ -21,15 +21,21 @@ public class Climber extends IgniteSubsystem {
 
     private Command defaultCommand;
 
-    private final double kP = 0;
+    private final double kP = 1;
     private final double kI = 0;
     private final double kD = 0;
     private final double kF = 0;
 
-    private final int CRUISE_VELOCITY = 0;
-    private final int MAX_ACCELERATION = 0;
+    private final int CRUISE_VELOCITY = 1000;
+    private final int MAX_ACCELERATION = 500;
 
     private final int TOLERANCE = 100;
+
+    /////////////////////////////////////////////////////
+    //
+    // Encoders go negative when raising the carriage.
+    // 
+    /////////////////////////////////////////////////////
 
     public Climber(int climberMotorID) {
 
@@ -40,7 +46,7 @@ public class Climber extends IgniteSubsystem {
         climberMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
         climberMotor.setSensorPhase(true);
-        //climberMotor.setInverted(true);
+        climberMotor.setInverted(true);
 
         climberMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 20);
         climberMotor.setStatusFramePeriod(StatusFrame.Status_10_MotionMagic, 10, 20);

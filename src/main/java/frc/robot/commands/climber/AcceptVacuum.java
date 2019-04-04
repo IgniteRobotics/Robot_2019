@@ -9,30 +9,24 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Elevator;
 
-public class ClimbOpenLoop extends Command {
+public class AcceptVacuum extends Command {
+
 
   private Climber climber;
-
   private Joystick manipulatorJoystick;
   private final int THROTTLE_AXIS;
   private final double DEADBAND;
-  private double throttle = 0; 
-  
+  private int acceptButtonId;
 
-  public ClimbOpenLoop(Climber climber, Joystick manipulatorJoystick, int throttleId, double deadband) {
-
-    this.climber = climber;
+  public AcceptVacuum(Climber climber, Joystick manipulatorJoystick, int throttleId, int acceptButtonId, double deadband) {
 
     this.THROTTLE_AXIS = throttleId;
     this.DEADBAND = deadband;
-
+    this.acceptButtonId = acceptButtonId;
     this.manipulatorJoystick = manipulatorJoystick;
-
+    this.climber = climber;
     requires(this.climber);
 
   }
@@ -45,27 +39,24 @@ public class ClimbOpenLoop extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-
-    throttle = manipulatorJoystick.getRawAxis(THROTTLE_AXIS);
-    SmartDashboard.putNumber("Climber/Throttle",throttle);
+    double throttle = manipulatorJoystick.getRawAxis(THROTTLE_AXIS);
     climber.setOpenLoop(throttle, DEADBAND);
-
   }
 
-  // Make this return true when this Command no longer needs to run execute()
+  // End command when the accept button is pushed.
   @Override
   protected boolean isFinished() {
-
-    // if (!isAllowedToMove())
-    //   return true;
-
-    return false;
-
+    boolean accepted = manipulatorJoystick.getRawButton(acceptButtonId);
+    boolean atLimit = (climber.isRevLimitTripped() || climber.isFwdLimitTripped());
+    return accepted || atLimit;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    if (climber.isFwdLimitTripped()) {
+      climber.zeroSensors();
+    }
     climber.stop();
   }
 
@@ -77,4 +68,5 @@ public class ClimbOpenLoop extends Command {
   }
 
 
+  
 }

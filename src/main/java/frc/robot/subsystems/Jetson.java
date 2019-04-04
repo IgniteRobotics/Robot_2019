@@ -28,13 +28,13 @@ public class Jetson extends IgniteSubsystem {
     }
 
     public void turnOnLed() {
-        led.set(Relay.Value.kOn);
-        //led.set(Relay.Value.kForward); // TODO: FOR PRACTICE BOT ONLY
+        led.set(Relay.Value.kOn); // TODO: FOR COMP BOT
+        // led.set(Relay.Value.kForward); // TODO: FOR PRACTICE BOT
     }
 
-    public String gettimetable() {
-        return (String)table.getEntry("timetable").getString("yeet");
-    }
+//     public String gettimetable() {
+//         return (String)table.getEntry("timetable").getString("yeet");
+//     }
 
     public double getTurn1() {
         return (double) table.getEntry("TURN_1").getNumber(0);

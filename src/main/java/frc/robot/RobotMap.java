@@ -45,6 +45,8 @@ public class RobotMap {
 
   // Climber
   public static final int climberMotorID = 15;
+  public static final int suctionIDForward = 2;
+  public static final int suctionIDReverse = 3;
   public static final int climberVacuumId = 99;
 
 }

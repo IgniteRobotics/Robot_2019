@@ -2,13 +2,13 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import badlog.lib.BadLog;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -18,6 +18,10 @@ import frc.robot.util.Util;
 public class Climber extends IgniteSubsystem {
 
     private WPI_TalonSRX climberMotor;
+
+    private DoubleSolenoid suction;
+
+    private boolean suctionState;
 
     private Command defaultCommand;
 
@@ -31,15 +35,19 @@ public class Climber extends IgniteSubsystem {
 
     private final int TOLERANCE = 100;
 
+    public Climber(int climberMotorID, int suctionIDForward, int suctionIDReverse) {
+
     /////////////////////////////////////////////////////
     //
     // Encoders go negative when raising the carriage.
     // 
     /////////////////////////////////////////////////////
 
-    public Climber(int climberMotorID) {
+    //public Climber(int climberMotorID) {
+
 
         climberMotor = new WPI_TalonSRX(climberMotorID);
+        suction = new DoubleSolenoid(suctionIDForward, suctionIDReverse);
 
         climberMotor.setNeutralMode(NeutralMode.Brake);
 
@@ -75,17 +83,18 @@ public class Climber extends IgniteSubsystem {
 
     public void writeToLog() {
         BadLog.createTopic("Climber/Master Percent Output", BadLog.UNITLESS, () -> this.getPercentOutput(), "hide",
-                "join:Elevator/Output percents");
+                "join:Climber/Output percents");
         BadLog.createTopic("Climber/Master Voltage", "V", () -> this.getMasterVoltage(), "hide",
-                "join:Elevator/Output Voltages");
+                "join:Climber/Output Voltages");
         BadLog.createTopic("Climber/Master Current", "A", () -> this.getMasterCurrent(), "hide",
-                "join:Elevator/Output Current");
+                "join:Climber/Output Current");
         BadLog.createTopic("Climber/Position", "ticks", () -> (double) this.getEncoderPos(), "hide",
-                "join:Elevator/Position");
+                "join:Climber/Position");
         BadLog.createTopic("Climber/Velocity", "ticks", () -> (double) this.getEncoderVel(), "hide",
-                "join:Elevator/Velocity");
+                "join:Climber/Velocity");
         BadLog.createTopicStr("Climber/Fwd limit", "bool", () -> LogUtil.fromBool(this.isFwdLimitTripped()));
         BadLog.createTopicStr("Climber/Rev limit", "bool", () -> LogUtil.fromBool(this.isRevLimitTripped()));
+        BadLog.createTopicStr("Climber/Is suction open?", "bool", () -> LogUtil.fromBool(this.isSuctionOpen()));
     }
 
     public void outputTelemetry() {
@@ -96,6 +105,7 @@ public class Climber extends IgniteSubsystem {
         SmartDashboard.putNumber("Climber/Percent out", this.getPercentOutput());
         SmartDashboard.putBoolean("Climber/Is fwd limit switch tripped?", this.isFwdLimitTripped());
         SmartDashboard.putBoolean("Climber/Is rev limit switch tripped?", this.isRevLimitTripped());
+        SmartDashboard.putBoolean("Climber/Is suction open?", this.isSuctionOpen());
     }
 
     @Override
@@ -154,6 +164,28 @@ public class Climber extends IgniteSubsystem {
 
     public void stop() {
         climberMotor.stopMotor();
+    }
+
+    public void closeSuction() {
+        suction.set(DoubleSolenoid.Value.kForward);
+        suctionState = false;
+    }
+
+    public void openSuction() {
+        suction.set(DoubleSolenoid.Value.kReverse);
+        suctionState = true;
+    }
+
+    public void toggleSuction() {
+        if (suctionState) {
+            closeSuction();
+        } else {
+            openSuction();
+        }
+    }
+
+    public boolean isSuctionOpen() {
+        return this.suctionState;
     }
 
 }

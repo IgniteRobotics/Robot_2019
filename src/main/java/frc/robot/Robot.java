@@ -113,7 +113,7 @@ public class Robot extends TimedRobot {
     logger.log();
 
     if (!lockVisionValues) {
-      updateVisionValues();
+      //updateVisionValues();
     }
 
   }
@@ -169,7 +169,7 @@ public class Robot extends TimedRobot {
     oi = new OI(driveTrain, carriage, elevator, intake, climber);
 
     arcadeDrive = new arcadeDrive(driveTrain, oi.driverJoystick, oi.AXIS_LEFT_STICK_Y, oi.AXIS_RIGHT_STICK_X,
-        Constants.DRIVE_DEADBAND);
+        Constants.DRIVE_DEADBAND, jetson);
     driveTrain.establishDefaultCommand(arcadeDrive);
 
     holdPosition = new HoldPosition(elevator);

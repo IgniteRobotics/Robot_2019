@@ -85,7 +85,7 @@ public class OI {
 
 	// driver
 	public Button ejectThenHome = new JoystickButton(driverJoystick, BUTTON_RIGHT_BUMPER);
-	public Button visionDriveToTarget = new JoystickButton(driverJoystick, BUTTON_A);
+	//public Button visionDriveToTarget = new JoystickButton(driverJoystick, BUTTON_A);
 
 	public OI(DriveTrain driveTrain, Carriage carriage, Elevator elevator, Intake intake, Climber climber) {
 
@@ -114,7 +114,12 @@ public class OI {
 
 		// driver
 		ejectThenHome.whenPressed(new EjectThenHome(elevator, carriage, Constants.EJECT_TIMEOUT, driveTrain));
-		// visionDriveToTarget.whenPressed(new DriveToTargetVision(driveTrain));
+		//visionDriveToTarget.whenPressed(new DriveToTargetVision(driveTrain));
+
+		//temp for climber test
+		Joystick joystickClimb = new Joystick(3);
+		Button climbSwitch = new JoystickButton(joystickClimb, BUTTON_Y);
+		climbSwitch.whileHeld(new ClimbOpenLoop(climber, manipulatorJoystick, AXIS_LEFT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
 
 	}
 

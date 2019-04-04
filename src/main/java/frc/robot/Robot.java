@@ -72,10 +72,10 @@ public class Robot extends TimedRobot {
 
     logger = BadLog.init("/home/lvuser/log/" + LogUtil.genSessionName() + ".bag");
 
-    writeSystemLog();
-
     initializeSubsystems();
     initializeCommands();
+
+    writeSystemLog();
 
     logger.finishInitialization();
   }
@@ -100,6 +100,7 @@ public class Robot extends TimedRobot {
   private void matchInit() {
     jetson.turnOnLed();
     Scheduler.getInstance().run();
+    climber.closeSuction();
   }
 
   private void matchPeriodic() {
@@ -185,7 +186,7 @@ public class Robot extends TimedRobot {
     elevator = new Elevator(RobotMap.elevatorMasterID, RobotMap.elevatorFollowerID);
     intake = new Intake(RobotMap.pcmID, RobotMap.intakeMotorID, RobotMap.intakeSolenoidOpen,
         RobotMap.intakeSolenoidClose, RobotMap.intakeBeamBreakID);
-    climber = new Climber(RobotMap.climberMotorID);
+    climber = new Climber(RobotMap.climberMotorID, RobotMap.suctionIDForward, RobotMap.suctionIDReverse);
     jetson = new Jetson(RobotMap.jetsonPowerDioID, RobotMap.relayID);
 
     subsystemManager = new SubsystemManager();

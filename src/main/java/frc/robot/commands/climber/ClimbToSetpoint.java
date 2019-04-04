@@ -40,7 +40,7 @@ public class ClimbToSetpoint extends Command {
   @Override
   protected boolean isFinished() {
     if (setpoint == 0) {
-      return climber.isMotionMagicDone() || climber.isFwdLimitTripped(); // TODO: DETERMINE IF FWD IS BOTTON
+      return climber.isMotionMagicDone() || climber.isFwdLimitTripped();
     } else {
       return climber.isMotionMagicDone();
     }

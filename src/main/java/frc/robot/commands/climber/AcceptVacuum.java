@@ -7,51 +7,48 @@
 
 package frc.robot.commands.climber;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.Climber;
 
-public class ClimbToSetpoint extends Command {
+public class AcceptVacuum extends Command {
+
 
   private Climber climber;
+  private Joystick manipulatorJoystick;
+  private final int THROTTLE_AXIS;
+  private final double DEADBAND;
+  private int acceptButtonId;
 
-  private int setpoint;
-  private int startingSetPoint;
-  public ClimbToSetpoint(Climber climber, int setpoint) {
+  public AcceptVacuum(Climber climber, Joystick manipulatorJoystick, int throttleId, int acceptButtonId, double deadband) {
 
+    this.THROTTLE_AXIS = throttleId;
+    this.DEADBAND = deadband;
+    this.acceptButtonId = acceptButtonId;
+    this.manipulatorJoystick = manipulatorJoystick;
     this.climber = climber;
-    this.setpoint = setpoint;
-    this.startingSetPoint = 0;
     requires(this.climber);
+
   }
-  
+
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    this.startingSetPoint = climber.getEncoderPos(); 
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    climber.setMotionMagicPosition(setpoint);
+    double throttle = manipulatorJoystick.getRawAxis(THROTTLE_AXIS);
+    climber.setOpenLoop(throttle, DEADBAND);
   }
 
-  // Make this return true when this Command no longer needs to run execute()
+  // End command when the accept button is pushed.
   @Override
   protected boolean isFinished() {
-//<<<<<<< develop
-    if (setpoint == 0) {
-      return climber.isMotionMagicDone() || climber.isFwdLimitTripped();
-// =======
-
-//     boolean isRising  = (this.startingSetPoint < this.setpoint);
-
-//     if (isRising) {
-//       return climber.isMotionMagicDone() || climber.isRevLimitTripped();
-// >>>>>>> climb
-    } else {
-      return climber.isMotionMagicDone() || climber.isFwdLimitTripped();
-    }
+    boolean accepted = manipulatorJoystick.getRawButton(acceptButtonId);
+    boolean atLimit = (climber.isRevLimitTripped() || climber.isFwdLimitTripped());
+    return accepted || atLimit;
   }
 
   // Called once after isFinished returns true
@@ -69,5 +66,7 @@ public class ClimbToSetpoint extends Command {
   protected void interrupted() {
     end();
   }
+
+
   
 }

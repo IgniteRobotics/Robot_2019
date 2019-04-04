@@ -10,24 +10,25 @@ package frc.robot.commands.climber;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.Climber;
 
-public class ClimbToSetpoint extends Command {
+public class LiftRobot extends Command {
+
 
   private Climber climber;
-
   private int setpoint;
-  private int startingSetPoint;
-  public ClimbToSetpoint(Climber climber, int setpoint) {
+
+  public LiftRobot(Climber climber) {
 
     this.climber = climber;
-    this.setpoint = setpoint;
-    this.startingSetPoint = 0;
+
+    this.setpoint = 0;
+
     requires(this.climber);
+
   }
-  
+
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    this.startingSetPoint = climber.getEncoderPos(); 
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -39,20 +40,9 @@ public class ClimbToSetpoint extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-//<<<<<<< develop
-    if (setpoint == 0) {
-      return climber.isMotionMagicDone() || climber.isFwdLimitTripped();
-// =======
-
-//     boolean isRising  = (this.startingSetPoint < this.setpoint);
-
-//     if (isRising) {
-//       return climber.isMotionMagicDone() || climber.isRevLimitTripped();
-// >>>>>>> climb
-    } else {
-      return climber.isMotionMagicDone() || climber.isFwdLimitTripped();
+ 
+      return climber.isMotionMagicDone() || climber.isFwdLimitTripped(); 
     }
-  }
 
   // Called once after isFinished returns true
   @Override
@@ -69,5 +59,7 @@ public class ClimbToSetpoint extends Command {
   protected void interrupted() {
     end();
   }
+
+
   
 }

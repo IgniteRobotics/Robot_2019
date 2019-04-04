@@ -9,6 +9,8 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Climber;
 
 public class ClimbOpenLoop extends Command {
@@ -18,6 +20,8 @@ public class ClimbOpenLoop extends Command {
   private Joystick manipulatorJoystick;
   private final int THROTTLE_AXIS;
   private final double DEADBAND;
+  private double throttle = 0; 
+  
 
   public ClimbOpenLoop(Climber climber, Joystick manipulatorJoystick, int throttleId, double deadband) {
 
@@ -41,7 +45,8 @@ public class ClimbOpenLoop extends Command {
   @Override
   protected void execute() {
 
-    double throttle = manipulatorJoystick.getRawAxis(THROTTLE_AXIS);
+    throttle = manipulatorJoystick.getRawAxis(THROTTLE_AXIS);
+    SmartDashboard.putNumber("Climber/Throttle",throttle);
     climber.setOpenLoop(throttle, DEADBAND);
 
   }
@@ -49,7 +54,12 @@ public class ClimbOpenLoop extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
+
+    // if (!isAllowedToMove())
+    //   return true;
+
     return false;
+
   }
 
   // Called once after isFinished returns true
@@ -64,4 +74,6 @@ public class ClimbOpenLoop extends Command {
   protected void interrupted() {
     end();
   }
+
+
 }

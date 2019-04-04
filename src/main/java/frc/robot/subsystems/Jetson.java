@@ -32,6 +32,10 @@ public class Jetson extends IgniteSubsystem {
         // led.set(Relay.Value.kForward); // TODO: FOR PRACTICE BOT
     }
 
+//     public String gettimetable() {
+//         return (String)table.getEntry("timetable").getString("yeet");
+//     }
+
     public double getTurn1() {
         return (double) table.getEntry("TURN_1").getNumber(0);
     }

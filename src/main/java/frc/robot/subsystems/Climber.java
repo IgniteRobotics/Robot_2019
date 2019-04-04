@@ -25,17 +25,26 @@ public class Climber extends IgniteSubsystem {
 
     private Command defaultCommand;
 
-    private final double kP = 0;
+    private final double kP = 1;
     private final double kI = 0;
     private final double kD = 0;
     private final double kF = 0;
 
-    private final int CRUISE_VELOCITY = 0;
-    private final int MAX_ACCELERATION = 0;
+    private final int CRUISE_VELOCITY = 1000;
+    private final int MAX_ACCELERATION = 500;
 
     private final int TOLERANCE = 100;
 
     public Climber(int climberMotorID, int suctionIDForward, int suctionIDReverse) {
+
+    /////////////////////////////////////////////////////
+    //
+    // Encoders go negative when raising the carriage.
+    // 
+    /////////////////////////////////////////////////////
+
+    //public Climber(int climberMotorID) {
+
 
         climberMotor = new WPI_TalonSRX(climberMotorID);
         suction = new DoubleSolenoid(suctionIDForward, suctionIDReverse);

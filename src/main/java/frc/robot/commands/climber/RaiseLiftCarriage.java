@@ -10,24 +10,29 @@ package frc.robot.commands.climber;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.subsystems.Climber;
 
-public class ClimbToSetpoint extends Command {
+public class RaiseLiftCarriage extends Command {
+
 
   private Climber climber;
+  private final int ticksPerRevolution = 4096;
+  private final double inchesPerRevolution = 4.5;
+  private double targetInches = -4.0;
 
   private int setpoint;
-  private int startingSetPoint;
-  public ClimbToSetpoint(Climber climber, int setpoint) {
+
+  public RaiseLiftCarriage(Climber climber) {
 
     this.climber = climber;
-    this.setpoint = setpoint;
-    this.startingSetPoint = 0;
+
+    this.setpoint = -4096;//(int)((targetInches / inchesPerRevolution) * ticksPerRevolution);
+
     requires(this.climber);
+
   }
-  
+
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    this.startingSetPoint = climber.getEncoderPos(); 
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -39,25 +44,17 @@ public class ClimbToSetpoint extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-//<<<<<<< develop
     if (setpoint == 0) {
-      return climber.isMotionMagicDone() || climber.isFwdLimitTripped();
-// =======
-
-//     boolean isRising  = (this.startingSetPoint < this.setpoint);
-
-//     if (isRising) {
-//       return climber.isMotionMagicDone() || climber.isRevLimitTripped();
-// >>>>>>> climb
+      return climber.isMotionMagicDone() || climber.isRevLimitTripped(); 
     } else {
-      return climber.isMotionMagicDone() || climber.isFwdLimitTripped();
+      return climber.isMotionMagicDone();
     }
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    if (climber.isFwdLimitTripped()) {
+    if (climber.isRevLimitTripped()) {
       climber.zeroSensors();
     }
     climber.stop();
@@ -69,5 +66,7 @@ public class ClimbToSetpoint extends Command {
   protected void interrupted() {
     end();
   }
+
+
   
 }

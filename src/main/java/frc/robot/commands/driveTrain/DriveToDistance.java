@@ -13,26 +13,26 @@ import frc.robot.subsystems.DriveTrain;
 public class DriveToDistance extends Command {
 
   private DriveTrain driveTrain;
-  
+
   private int setpointInches;
 
   public DriveToDistance(DriveTrain driveTrain, int setpointInches) {
     this.driveTrain = driveTrain;
     this.setpointInches = setpointInches;
-    
+
     requires(this.driveTrain);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    driveTrain.zeroSensors(); 
+    driveTrain.zeroSensors();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-   driveTrain.setMotionMagicPosition(setpointInches);
+    driveTrain.setMotionMagicPosition(setpointInches);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -53,5 +53,5 @@ public class DriveToDistance extends Command {
   protected void interrupted() {
     end();
   }
-  
+
 }

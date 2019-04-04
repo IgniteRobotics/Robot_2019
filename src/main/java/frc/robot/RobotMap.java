@@ -16,7 +16,7 @@ package frc.robot;
 public class RobotMap {
 
   public static final int pcmID = 0;
-  
+
   public static final int relayID = 0;
 
   public static final int jetsonPowerDioID = 5;
@@ -30,7 +30,7 @@ public class RobotMap {
   public static final int leftMasterID = 1;
   public static final int leftFollowerID = 2;
   public static final int rightMasterID = 4;
-  public static final int rightFollowerID= 5;
+  public static final int rightFollowerID = 5;
 
   // Elevator
   public static final int elevatorMasterID = 8;
@@ -41,5 +41,8 @@ public class RobotMap {
   public static final int intakeSolenoidClose = 1;
   public static final int intakeMotorID = 10;
   public static final int intakeBeamBreakID = 1;
+
+  // Climber
+  public static final int climberMotorID = 15;
 
 }

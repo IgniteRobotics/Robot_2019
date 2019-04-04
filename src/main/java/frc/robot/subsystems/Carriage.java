@@ -32,8 +32,10 @@ public class Carriage extends IgniteSubsystem {
     beak = new Solenoid(pcmID, beakSolenoid);
     beamBreak = new DigitalInput(beamBreakID);
 
+    writeToLog();
+
   }
-  
+
   public void establishDefaultCommand(Command command) {
     this.defaultCommand = command;
     initDefaultCommand();
@@ -57,7 +59,7 @@ public class Carriage extends IgniteSubsystem {
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(this.defaultCommand);  
+    setDefaultCommand(this.defaultCommand);
   }
 
   private void pollCargoEject() {

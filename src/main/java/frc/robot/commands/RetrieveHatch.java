@@ -20,7 +20,7 @@ import frc.robot.subsystems.Elevator;
 public class RetrieveHatch extends CommandGroup {
 
   public RetrieveHatch(Elevator elevator, Carriage carriage, DriveTrain driveTrain) {
-  
+
     setInterruptible(true);
 
     addSequential(new OpenBeak(carriage));
@@ -28,6 +28,6 @@ public class RetrieveHatch extends CommandGroup {
     addSequential(new MoveToSetpoint(elevator, ElevatorState.HatchPickup, carriage));
     addSequential(new DriveToDistanceTimed(driveTrain, 0.5, -0.3));
     addSequential(new MoveToSetpoint(elevator, ElevatorState.Zero, carriage));
-    
+
   }
 }

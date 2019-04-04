@@ -19,7 +19,7 @@ public class CloseBeak extends Command {
     this.carriage = carriage;
 
     requires(this.carriage);
-    
+
   }
 
   // Called just before this Command runs the first time
@@ -50,5 +50,5 @@ public class CloseBeak extends Command {
   protected void interrupted() {
     end();
   }
-  
+
 }

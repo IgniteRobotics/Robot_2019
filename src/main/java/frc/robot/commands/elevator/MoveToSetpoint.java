@@ -23,11 +23,10 @@ public class MoveToSetpoint extends Command {
     this.elevator = elevator;
     this.level = level;
     this.carriage = carriage;
-    
-    requires(this.elevator);
-    
-  }
 
+    requires(this.elevator);
+
+  }
 
   // Called just before this Command runs the first time
   @Override

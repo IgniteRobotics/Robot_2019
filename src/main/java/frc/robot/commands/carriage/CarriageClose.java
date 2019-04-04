@@ -19,7 +19,7 @@ public class CarriageClose extends Command {
     this.carriage = carriage;
 
     requires(this.carriage);
-    
+
   }
 
   // Called just before this Command runs the first time
@@ -30,8 +30,8 @@ public class CarriageClose extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-      carriage.retractBeak();
-      carriage.retractEjectCargo();
+    carriage.retractBeak();
+    carriage.retractEjectCargo();
   }
 
   // Make this return true when this Command no longer needs to run execute()

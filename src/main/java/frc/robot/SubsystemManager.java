@@ -12,10 +12,10 @@ public class SubsystemManager {
 	private List<IgniteSubsystem> subsystems;
 	private boolean zeroSensors;
 
-    public SubsystemManager() {
+	public SubsystemManager() {
 		subsystems = new ArrayList<>();
 		SmartDashboard.putBoolean("Zero sensors", false);
-    }
+	}
 
 	public void addSubsystems(IgniteSubsystem... subsystems) {
 		this.subsystems.addAll(Arrays.asList(subsystems));
@@ -27,7 +27,7 @@ public class SubsystemManager {
 			zeroAllSensors();
 		}
 	}
- 
+
 	public void zeroAllSensors() {
 		for (IgniteSubsystem s : subsystems) {
 			s.zeroSensors();
@@ -39,6 +39,5 @@ public class SubsystemManager {
 			s.outputTelemetry();
 		}
 	}
-
 
 }

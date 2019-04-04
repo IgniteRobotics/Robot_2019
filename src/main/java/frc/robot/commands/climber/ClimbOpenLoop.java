@@ -5,24 +5,32 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.climber;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.subsystems.Carriage;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Elevator;
 
-public class CloseIntake extends Command {
+public class ClimbOpenLoop extends Command {
 
-  private Intake intake;
-  private Carriage carriage;
+  private Climber climber;
 
-  public CloseIntake(Intake intake, Carriage carriage) {
+  private Joystick manipulatorJoystick;
+  private final int THROTTLE_AXIS;
+  private final double DEADBAND;
 
-    this.intake = intake;
-    this.carriage = carriage;
+  public ClimbOpenLoop(Climber climber, Joystick manipulatorJoystick, int throttleId, double deadband) {
 
-    requires(this.intake);
-    requires(this.carriage);
+    this.climber = climber;
+
+    this.THROTTLE_AXIS = throttleId;
+    this.DEADBAND = deadband;
+
+    this.manipulatorJoystick = manipulatorJoystick;
+
+    requires(this.climber);
+
   }
 
   // Called just before this Command runs the first time
@@ -33,18 +41,22 @@ public class CloseIntake extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    intake.closeIntake();
+
+    double throttle = manipulatorJoystick.getRawAxis(THROTTLE_AXIS);
+    climber.setOpenLoop(throttle, DEADBAND);
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return !intake.isIntakeOpen();
+    return false;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    climber.stop();
   }
 
   // Called when another command which requires one or more of the same
@@ -53,5 +65,4 @@ public class CloseIntake extends Command {
   protected void interrupted() {
     end();
   }
-
 }

@@ -12,7 +12,7 @@ public abstract class IgniteSubsystem extends Subsystem {
 
     public void zeroSensors() {
     }
-    
+
     public void establishDefaultCommand() {
     }
 

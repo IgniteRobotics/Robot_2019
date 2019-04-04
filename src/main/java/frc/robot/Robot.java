@@ -18,6 +18,7 @@ import frc.robot.commands.driveTrain.arcadeDrive;
 import frc.robot.commands.elevator.HoldPosition;
 
 import frc.robot.subsystems.Carriage;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -38,6 +39,7 @@ public class Robot extends TimedRobot {
   private static DriveTrain driveTrain;
   private static Elevator elevator;
   private static Intake intake;
+  private static Climber climber;
 
   private static arcadeDrive arcadeDrive;
   private static HoldPosition holdPosition;
@@ -59,8 +61,8 @@ public class Robot extends TimedRobot {
   private static boolean lockVisionValues;
 
   /**
-   * This function is run when the robot is first started up and should be
-   * used for any initialization code.
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
    */
   @Override
   public void robotInit() {
@@ -79,12 +81,13 @@ public class Robot extends TimedRobot {
   }
 
   /**
-   * This function is called every robot packet, no matter the mode. Use
-   * this for items like diagnostics that you want ran during disabled,
-   * autonomous, teleoperated and test.
+   * This function is called every robot packet, no matter the mode. Use this for
+   * items like diagnostics that you want ran during disabled, autonomous,
+   * teleoperated and test.
    *
-   * <p>This runs after the mode specific periodic functions, but before
-   * LiveWindow and SmartDashboard integrated updating.
+   * <p>
+   * This runs after the mode specific periodic functions, but before LiveWindow
+   * and SmartDashboard integrated updating.
    */
 
   @Override
@@ -101,7 +104,7 @@ public class Robot extends TimedRobot {
 
   private void matchPeriodic() {
     double currentTime = ((double) (System.nanoTime() - startTime)) / 1_000_000_000d;
-		BadLog.publish("Time", currentTime);
+    BadLog.publish("Time", currentTime);
 
     Scheduler.getInstance().run();
 
@@ -109,15 +112,15 @@ public class Robot extends TimedRobot {
     logger.log();
 
     if (!lockVisionValues) {
-      updateVisionValues();
+      //updateVisionValues();
     }
 
   }
 
   /**
-   * This function is called once each time the robot enters Disabled mode.
-   * You can use it to reset any subsystem information you want to clear when
-   * the robot is disabled.
+   * This function is called once each time the robot enters Disabled mode. You
+   * can use it to reset any subsystem information you want to clear when the
+   * robot is disabled.
    */
   @Override
   public void disabledInit() {
@@ -129,7 +132,6 @@ public class Robot extends TimedRobot {
     if (elevator.isFwdLimitTripped()) {
       elevator.zeroSensors();
     }
-
     Scheduler.getInstance().run();
   }
 
@@ -148,7 +150,6 @@ public class Robot extends TimedRobot {
     matchPeriodic();
   }
 
-
   @Override
   public void teleopInit() {
     matchInit();
@@ -164,9 +165,10 @@ public class Robot extends TimedRobot {
 
   private void initializeCommands() {
 
-    oi = new OI(driveTrain, carriage, elevator, intake);
+    oi = new OI(driveTrain, carriage, elevator, intake, climber);
 
-    arcadeDrive = new arcadeDrive(driveTrain, oi.driverJoystick, oi.AXIS_LEFT_STICK_Y, oi.AXIS_RIGHT_STICK_X, Constants.DRIVE_DEADBAND);
+    arcadeDrive = new arcadeDrive(driveTrain, oi.driverJoystick, oi.AXIS_LEFT_STICK_Y, oi.AXIS_RIGHT_STICK_X,
+        Constants.DRIVE_DEADBAND, jetson);
     driveTrain.establishDefaultCommand(arcadeDrive);
 
     holdPosition = new HoldPosition(elevator);
@@ -176,15 +178,19 @@ public class Robot extends TimedRobot {
 
   private void initializeSubsystems() {
 
-    carriage = new Carriage(RobotMap.pcmID, RobotMap.cargoEjectSolenoid, RobotMap.beakSolenoid, RobotMap.carriageBeamBreakID);
-    driveTrain =  new DriveTrain(RobotMap.leftMasterID, RobotMap.leftFollowerID, RobotMap.rightMasterID, RobotMap.rightFollowerID);
+    carriage = new Carriage(RobotMap.pcmID, RobotMap.cargoEjectSolenoid, RobotMap.beakSolenoid,
+        RobotMap.carriageBeamBreakID);
+    driveTrain = new DriveTrain(RobotMap.leftMasterID, RobotMap.leftFollowerID, RobotMap.rightMasterID,
+        RobotMap.rightFollowerID);
     elevator = new Elevator(RobotMap.elevatorMasterID, RobotMap.elevatorFollowerID);
-    intake = new Intake(RobotMap.pcmID, RobotMap.intakeMotorID, RobotMap.intakeSolenoidOpen, RobotMap.intakeSolenoidClose, RobotMap.intakeBeamBreakID);
+    intake = new Intake(RobotMap.pcmID, RobotMap.intakeMotorID, RobotMap.intakeSolenoidOpen,
+        RobotMap.intakeSolenoidClose, RobotMap.intakeBeamBreakID);
+    climber = new Climber(RobotMap.climberMotorID);
     jetson = new Jetson(RobotMap.jetsonPowerDioID, RobotMap.relayID);
 
     subsystemManager = new SubsystemManager();
 
-    subsystemManager.addSubsystems(carriage, driveTrain, elevator, intake, jetson);
+    subsystemManager.addSubsystems(carriage, driveTrain, elevator, intake, jetson, climber);
 
     subsystemManager.zeroAllSensors();
     subsystemManager.zeroSensorsFromDashboard();

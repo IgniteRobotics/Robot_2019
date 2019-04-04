@@ -5,24 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.subsystems.Carriage;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Climber;
 
-public class CloseIntake extends Command {
+public class ClimbToSetpoint extends Command {
 
-  private Intake intake;
-  private Carriage carriage;
+  private Climber climber;
 
-  public CloseIntake(Intake intake, Carriage carriage) {
+  private int setpoint;
 
-    this.intake = intake;
-    this.carriage = carriage;
+  public ClimbToSetpoint(Climber climber, int setpoint) {
 
-    requires(this.intake);
-    requires(this.carriage);
+    this.climber = climber;
+    this.setpoint = setpoint;
+
+    requires(this.climber);
+
   }
 
   // Called just before this Command runs the first time
@@ -33,18 +33,26 @@ public class CloseIntake extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    intake.closeIntake();
+    climber.setMotionMagicPosition(setpoint);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return !intake.isIntakeOpen();
+    if (setpoint == 0) {
+      return climber.isMotionMagicDone() || climber.isFwdLimitTripped(); // TODO: DETERMINE IF FWD IS BOTTON
+    } else {
+      return climber.isMotionMagicDone();
+    }
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    if (climber.isFwdLimitTripped()) {
+      climber.zeroSensors();
+    }
+    climber.stop();
   }
 
   // Called when another command which requires one or more of the same
@@ -53,5 +61,5 @@ public class CloseIntake extends Command {
   protected void interrupted() {
     end();
   }
-
+  
 }

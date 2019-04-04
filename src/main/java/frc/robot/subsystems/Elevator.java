@@ -33,8 +33,8 @@ public class Elevator extends IgniteSubsystem {
   private WPI_VictorSPX elevatorFollower;
 
   private Command defaultCommand;
-  
-  private final double kF  = 0;
+
+  private final double kF = 0;
   private final double kP = 1;
   private final double kI = 0;
   private final double kD = 0;
@@ -55,7 +55,7 @@ public class Elevator extends IgniteSubsystem {
 
     elevatorMaster = new WPI_TalonSRX(elevatorMasterID);
     elevatorFollower = new WPI_VictorSPX(elevatorFollowerID);
-    
+
     elevatorMaster.setNeutralMode(NeutralMode.Brake);
     elevatorFollower.setNeutralMode(NeutralMode.Brake);
 
@@ -70,13 +70,13 @@ public class Elevator extends IgniteSubsystem {
 
     elevatorMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 20);
     elevatorMaster.setStatusFramePeriod(StatusFrame.Status_10_MotionMagic, 10, 20);
-   
+
     elevatorMaster.selectProfileSlot(0, 0);
     elevatorMaster.config_kF(0, kF, 10);
     elevatorMaster.config_kP(0, kP, 10);
     elevatorMaster.config_kI(0, kI, 10);
     elevatorMaster.config_kD(0, kD, 10);
-  
+
     elevatorMaster.configMotionCruiseVelocity(CRUISE_VELOCITY, 10);
     elevatorMaster.configMotionAcceleration(MAX_ACCELERATION, 10);
 
@@ -96,12 +96,18 @@ public class Elevator extends IgniteSubsystem {
   }
 
   public void writeToLog() {
-    BadLog.createTopic("Elevator/Master Percent Output", BadLog.UNITLESS, () -> this.getPercentOutput(), "hide", "join:Elevator/Output percents");
-    BadLog.createTopic("Elevator/Master Voltage", "V", () -> this.getMasterVoltage(), "hide", "join:Elevator/Output Voltages");
-    BadLog.createTopic("Elevator/Follower Voltage", "V", () -> this.getFollowerVoltage(), "hide", "join:Elevator/Output Voltages");
-    BadLog.createTopic("Elevator/Master Current", "A", () -> this.getMasterCurrent(), "hide", "join:Elevator/Output Current");
-    BadLog.createTopic("Elevator/Position", "ticks", () -> (double)this.getEncoderPos(), "hide", "join:Elevator/Position");
-    BadLog.createTopic("Elevator/Velocity", "ticks", () -> (double)this.getEncoderVel(), "hide", "join:Elevator/Velocity");
+    BadLog.createTopic("Elevator/Master Percent Output", BadLog.UNITLESS, () -> this.getPercentOutput(), "hide",
+        "join:Elevator/Output percents");
+    BadLog.createTopic("Elevator/Master Voltage", "V", () -> this.getMasterVoltage(), "hide",
+        "join:Elevator/Output Voltages");
+    BadLog.createTopic("Elevator/Follower Voltage", "V", () -> this.getFollowerVoltage(), "hide",
+        "join:Elevator/Output Voltages");
+    BadLog.createTopic("Elevator/Master Current", "A", () -> this.getMasterCurrent(), "hide",
+        "join:Elevator/Output Current");
+    BadLog.createTopic("Elevator/Position", "ticks", () -> (double) this.getEncoderPos(), "hide",
+        "join:Elevator/Position");
+    BadLog.createTopic("Elevator/Velocity", "ticks", () -> (double) this.getEncoderVel(), "hide",
+        "join:Elevator/Velocity");
     BadLog.createTopicStr("Elevator/Fwd limit", "bool", () -> LogUtil.fromBool(this.isFwdLimitTripped()));
     BadLog.createTopicStr("Elevator/Rev limit", "bool", () -> LogUtil.fromBool(this.isRevLimitTripped()));
   }
@@ -120,7 +126,7 @@ public class Elevator extends IgniteSubsystem {
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(this.defaultCommand);  
+    setDefaultCommand(this.defaultCommand);
   }
 
   public void setOpenLoop(double percentage) {
@@ -155,11 +161,11 @@ public class Elevator extends IgniteSubsystem {
   public double getFollowerVoltage() {
     return elevatorFollower.getMotorOutputVoltage();
   }
-  
+
   public double getPercentOutput() {
     return elevatorMaster.getMotorOutputPercent();
   }
-  
+
   public double getMasterCurrent() {
     return elevatorMaster.getOutputCurrent();
   }
@@ -167,7 +173,7 @@ public class Elevator extends IgniteSubsystem {
   public void zeroSensors() {
     elevatorMaster.setSelectedSensorPosition(0);
   }
-  
+
   public boolean isFwdLimitTripped() {
     return elevatorMaster.getSensorCollection().isFwdLimitSwitchClosed();
   }

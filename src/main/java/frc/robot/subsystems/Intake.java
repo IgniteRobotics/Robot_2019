@@ -19,7 +19,7 @@ import frc.robot.subsystems.IgniteSubsystem;
 import badlog.lib.*;
 
 public class Intake extends IgniteSubsystem {
-  
+
   private WPI_TalonSRX intakeMotor;
   private DoubleSolenoid intake;
   private DigitalInput intakeBeamBreak;
@@ -35,7 +35,7 @@ public class Intake extends IgniteSubsystem {
     intakeBeamBreak = new DigitalInput(intakeBeamBreakID);
 
     intakeMotor.setNeutralMode(NeutralMode.Brake);
-    
+
     intakeMotor.setInverted(true);
 
     writeToLog();
@@ -52,7 +52,8 @@ public class Intake extends IgniteSubsystem {
   }
 
   public void writeToLog() {
-    BadLog.createTopic("Intake/Percent Output", BadLog.UNITLESS, () -> this.getPercentOutput(), "hide", "join:Intake/Output percents");
+    BadLog.createTopic("Intake/Percent Output", BadLog.UNITLESS, () -> this.getPercentOutput(), "hide",
+        "join:Intake/Output percents");
     BadLog.createTopic("Intake/Voltage", "V", () -> this.getVoltage(), "hide", "join:Intake/Output voltage");
     BadLog.createTopic("Intake/Current", "A", () -> this.getCurrent(), "hide", "join:Intake/Output current");
   }
@@ -67,7 +68,7 @@ public class Intake extends IgniteSubsystem {
 
   @Override
   protected void initDefaultCommand() {
-    setDefaultCommand(this.defaultCommand);  
+    setDefaultCommand(this.defaultCommand);
   }
 
   public void setOpenLoop(double power) {
@@ -94,7 +95,7 @@ public class Intake extends IgniteSubsystem {
     intake.set(DoubleSolenoid.Value.kForward);
     intakeState = true;
   }
-  
+
   public void closeIntake() {
     intake.set(DoubleSolenoid.Value.kReverse);
     intakeState = false;
@@ -107,5 +108,5 @@ public class Intake extends IgniteSubsystem {
   public boolean hasCargo() {
     return !intakeBeamBreak.get();
   }
-  
+
 }

@@ -111,13 +111,13 @@ public class OI {
 		cargoShipCargo.whenPressed(new MoveToSetpoint(elevator, ElevatorState.CargoShipCargo, carriage));
 		zero.whenPressed(new MoveToSetpoint(elevator, ElevatorState.Zero, carriage));
 
-		climbSwitch.whileHeld(new ClimbOpenLoop(climber, manipulatorJoystick, AXIS_RIGHT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
+		//climbSwitch.whileHeld(new ClimbOpenLoop(climber, manipulatorJoystick, AXIS_RIGHT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
 		toggleSuction.whenPressed(new ToggleSuction(climber));
 
 		// driver
 		ejectThenHome.whenPressed(new EjectThenHome(elevator, carriage, Constants.EJECT_TIMEOUT, driveTrain));
 
-		//driverAllowClimb.whileHeld(new ClimbOpenLoop(climber, manipulatorJoystick, AXIS_RIGHT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
+		driverAllowClimb.whileHeld(new ClimbOpenLoop(climber, manipulatorJoystick, AXIS_RIGHT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
 		//driverAllowClimb.(new RaiseLiftCarriage(climber));
 
 	}

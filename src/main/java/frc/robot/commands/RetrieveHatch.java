@@ -26,8 +26,8 @@ public class RetrieveHatch extends CommandGroup {
     addSequential(new OpenBeak(carriage));
     addSequential(new CloseBeak(carriage));
     addSequential(new MoveToSetpoint(elevator, ElevatorState.HatchPickup, carriage));
-    addSequential(new DriveToDistanceTimed(driveTrain, 0.5, -0.3));
-    addSequential(new MoveToSetpoint(elevator, ElevatorState.Zero, carriage));
+    // addSequential(new DriveToDistanceTimed(driveTrain, 0.5, -0.3));
+    // addSequential(new MoveToSetpoint(elevator, ElevatorState.Zero, carriage));
 
   }
 }

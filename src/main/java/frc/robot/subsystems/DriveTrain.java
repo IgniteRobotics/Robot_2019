@@ -122,6 +122,9 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
     turnController.setAbsoluteTolerance(TURN_TOLERANCE);
     turnController.setContinuous(true);
 
+    leftMaster.configOpenloopRamp(0.15);
+    rightMaster.configOpenloopRamp(0.15);
+
     writeToLog();
     
   }

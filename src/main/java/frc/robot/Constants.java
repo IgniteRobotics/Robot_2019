@@ -7,7 +7,8 @@ public class Constants {
     public static final double INTAKE_POWER = -0.5;
 
     // drivetrain
-    public static final double DRIVE_DEADBAND = 0.03;
+    public static final double DRIVE_DEADBAND = 0.03; 
+    public static final double EXP_BASE = 5.0;
     public static final double EJECT_THEN_HOME_DRIVE_TIME = 0.5;
     public static final double EJECT_THEN_HOME_DRIVE_POWER = -0.2;
 

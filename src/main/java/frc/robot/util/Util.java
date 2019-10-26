@@ -5,13 +5,27 @@ public class Util {
 	private static int ENCODER_TICKS_PER_REVOLUTION = 8192;
 	private static int WHEEL_DIAMETER = 6;
 
-	public static double applyDeadband(double value, double deadband) {
+	public static double linearThrottle(double value, double deadband) {
 		if (Math.abs(value) > deadband) {
-			if (value > 0.0) {
+			if (value > 0.0) { 
 				return (value - deadband) / (1.0 - deadband);
 			} else {
-				return (value + deadband) / (1.0 - deadband);
+				return (value + deadband) / (1.0 - deadband); 
 			}
+		} else {
+			return 0.0;
+		}
+	}
+
+	public static double expThrottle(double value, double base, double deadband) {
+
+		double sign = Math.signum(value);
+        value = Math.abs(value);
+
+		if (value > deadband) {
+			//Exponentially scale	
+			value = (Math.pow(base, value) - 1.) / (base - 1.);
+			return sign * value;
 		} else {
 			return 0.0;
 		}

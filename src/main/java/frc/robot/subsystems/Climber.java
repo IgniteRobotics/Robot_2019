@@ -118,7 +118,7 @@ public class Climber extends IgniteSubsystem {
     }
 
     public void setOpenLoop(double percentage, double deadband) {
-        percentage = Util.linearThrottle(percentage, Constants.ELEVATOR_JOG_DEADBAND);
+        percentage = Util.applyDeadband(percentage, Constants.ELEVATOR_JOG_DEADBAND);
         setOpenLoop(percentage);
     }
 

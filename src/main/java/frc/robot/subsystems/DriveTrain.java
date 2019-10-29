@@ -23,7 +23,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
 import frc.robot.subsystems.IgniteSubsystem;
 import frc.robot.util.Util;
 
@@ -187,10 +186,10 @@ public class DriveTrain extends IgniteSubsystem implements PIDOutput {
   public void arcadeDrive(double throttle, double rotation, double deadband) {
 
     throttle = limit(throttle);
-    throttle = Util.expThrottle(throttle, Constants.EXP_BASE, deadband);
+    throttle = Util.applyDeadband(throttle, deadband);
 
     rotation = limit(rotation);
-    rotation = Util.expThrottle(rotation, Constants.EXP_BASE, deadband);
+    rotation = Util.applyDeadband(rotation, deadband);
 
     throttle = Math.copySign(throttle * throttle, throttle);
     rotation = Math.copySign(rotation * rotation, rotation);

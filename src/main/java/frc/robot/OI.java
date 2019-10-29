@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.buttons.POVButton;
@@ -66,6 +67,7 @@ public class OI {
 
 	public Joystick driverJoystick = new Joystick(DRIVER_JOYSTICK);
 	public Joystick manipulatorJoystick = new Joystick(MANIPULATOR_JOYSTICK);
+	
 
 	// manipulator
 	public Button openBeak = new JoystickButton(manipulatorJoystick, BUTTON_A);
@@ -115,7 +117,7 @@ public class OI {
 		toggleSuction.whenPressed(new ToggleSuction(climber));
 
 		// driver
-		ejectThenHome.whenPressed(new EjectThenHome(elevator, carriage, Constants.EJECT_TIMEOUT, driveTrain));
+		ejectThenHome.whenPressed(new EjectThenHome(elevator, carriage, Constants.EJECT_TIMEOUT, driveTrain, driverJoystick));
 
 		driverAllowClimb.whileHeld(new ClimbOpenLoop(climber, manipulatorJoystick, AXIS_RIGHT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
 		//driverAllowClimb.(new RaiseLiftCarriage(climber));

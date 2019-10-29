@@ -7,6 +7,7 @@
 
 package frc.robot.commands.elevator;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.DoNothing;
@@ -19,14 +20,15 @@ import frc.robot.subsystems.Elevator;
 
 public class EjectThenHome extends CommandGroup {
 
-  public EjectThenHome(Elevator elevator, Carriage carriage, double ejectTimeout, DriveTrain driveTrain) {
+  public EjectThenHome(Elevator elevator, Carriage carriage, double ejectTimeout, DriveTrain driveTrain, Joystick joystick) {
 
     setInterruptible(true);
 
     addSequential(new CarriageOpen(carriage));
-    addSequential(new DoNothing(ejectTimeout));
-    addSequential(new DriveToDistanceTimedConditional(driveTrain, carriage, Constants.EJECT_THEN_HOME_DRIVE_TIME,
-        Constants.EJECT_THEN_HOME_DRIVE_POWER));
+    //addSequential(new DoNothing(ejectTimeout));
+    // addSequential(new DriveToDistanceTimedConditional(driveTrain, carriage, Constants.EJECT_THEN_HOME_DRIVE_TIME,
+    //     Constants.EJECT_THEN_HOME_DRIVE_POWER));
+    addSequential(new RumbleJoystick(joystick, 0.5));
     addSequential(new CarriageClose(carriage));
     addSequential(new MoveToSetpoint(elevator, ElevatorState.Zero, carriage));
 

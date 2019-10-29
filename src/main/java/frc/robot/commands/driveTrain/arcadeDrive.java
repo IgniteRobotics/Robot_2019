@@ -79,6 +79,8 @@ public class arcadeDrive extends Command {
       } else {
         driveTrain.arcadeDrive(-throttle, rotation, DEADBAND);
       }      
+    } else if (driverJoystick.getRawButton(5)) { //left bumper.  GO SLOW!
+      driveTrain.arcadeDrive(limitOutput(-throttle, 0.4), rotation, DEADBAND);
     } else {
       driveTrain.arcadeDrive(-throttle, rotation, DEADBAND); 
     }

@@ -52,13 +52,14 @@ public class Jetson extends IgniteSubsystem {
         return (double) table.getEntry("DISTANCE_2").getNumber(0);
     }
 
-    public double getDirectTurn() {
-        return (double) table.getEntry("DIRECT_TURN").getNumber(0);
-    }
+    // public double getDirectTurn() {
+    //     return (double) table.getEntry("DIRECT_TURN").getNumber(0);
+    // }
 
-    public double getDirectDistance() {
-        return (double) table.getEntry("DIRECT_DISTANCE").getNumber(0);
-    }
+    // public double getDirectDistance() {
+
+    //     return (double) table.getEntry("DIRECT_DISTANCE").getNumber(0);
+    // }
 
     public double getTargetAngle() {
         return (double) table.getEntry("X_ANGLE").getNumber(0);

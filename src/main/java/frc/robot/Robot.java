@@ -166,7 +166,7 @@ public class Robot extends TimedRobot {
 
   private void initializeCommands() {
 
-    oi = new OI(driveTrain, carriage, elevator, intake, climber);
+    oi = new OI(driveTrain, carriage, elevator, intake, climber, jetson);
 
     arcadeDrive = new arcadeDrive(driveTrain, oi.driverJoystick, oi.AXIS_LEFT_STICK_Y, oi.AXIS_RIGHT_STICK_X,
         Constants.DRIVE_DEADBAND, jetson);

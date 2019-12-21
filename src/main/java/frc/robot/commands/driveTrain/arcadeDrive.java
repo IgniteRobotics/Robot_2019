@@ -61,7 +61,7 @@ public class arcadeDrive extends Command {
     double maxPower = -0.55; //SmartDashboard.getNumber("VisionDrive/Max Power", );
     double angleTolerance = 2.0; // SmartDashboard.getNumber("VisionDrive/Angle Tolerance");
 
-    
+    /*
     if (driverJoystick.getRawButton(1)) { //button pushed
       double targetAngle = 0;
       targetAngle = jetson.getTargetAngle(); //jetson.getDirectTurn();
@@ -85,7 +85,7 @@ public class arcadeDrive extends Command {
       driveTrain.arcadeDrive(-throttle, rotation, DEADBAND); 
     }
 
-  
+   */
 
     
 

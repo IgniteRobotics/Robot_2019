@@ -15,33 +15,41 @@ import frc.robot.subsystems.Jetson;
 public class DriveTrack extends Command {
 
   private DriveTrain driveTrain;
-  private Joystick driverJoystick;
+
   private Jetson jetson;
+  private double targetAngle = 0;
 
 
-  public DriveTrack(DriveTrain driveTrain, Joystick driverJoystick, Jetson jetson) {
+  public DriveTrack(DriveTrain driveTrain, Jetson jetson) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     this.driveTrain = driveTrain;
-    this.driverJoystick = driverJoystick; //only need A botton
     this.jetson = jetson;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    
+   targetAngle = jetson.getTargetAngle();
+   driveTrain.enableTurnController(targetAngle);
   }
 
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    driveTrain.turnToAngle();  
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
+    if (driveTrain.getAngle() == targetAngle) {
+      return true;
+    }
+
+
+
     return false;
   }
 

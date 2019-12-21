@@ -32,7 +32,8 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
-
+import frc.robot.subsystems.Jetson;
+import frc.robot.commands.driveTrain.DriveTrack;
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -89,9 +90,10 @@ public class OI {
 	// driver
 	public Button ejectThenHome = new JoystickButton(driverJoystick, BUTTON_RIGHT_BUMPER);
 	public Button driverAllowClimb = new JoystickButton(driverJoystick, BUTTON_Y);
+	public Button driveAngle = new JoystickButton(driverJoystick, BUTTON_A);
 
 
-	public OI(DriveTrain driveTrain, Carriage carriage, Elevator elevator, Intake intake, Climber climber) {
+	public OI(DriveTrain driveTrain, Carriage carriage, Elevator elevator, Intake intake, Climber climber, Jetson jetson) {
 
 		// manipulator
 		openBeak.whenPressed(new ToggleBeak(carriage));
@@ -118,7 +120,7 @@ public class OI {
 
 		// driver
 		ejectThenHome.whenPressed(new EjectThenHome(elevator, carriage, Constants.EJECT_TIMEOUT, driveTrain, driverJoystick));
-
+		driveAngle.whenPressed( new DriveTrack(driveTrain,  jetson));
 		driverAllowClimb.whileHeld(new ClimbOpenLoop(climber, manipulatorJoystick, AXIS_RIGHT_STICK_Y, Constants.ELEVATOR_JOG_DEADBAND));
 		//driverAllowClimb.(new RaiseLiftCarriage(climber));
 
